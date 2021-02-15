@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../block-game-js"
+		}
+	],
+	"settings": {}
+}
