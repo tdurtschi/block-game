@@ -1,9 +1,9 @@
 describe("Block Game", () => {
     beforeEach(() => {
-        cy.visit('http://localhost:5000/');
+        cy.visit('http://localhost:3000/');
     });
 
-    it("Displays the name of the game and new game button.", () => {
+    it("Displays the name of the game", () => {
         cy.contains("Block Game");
     });
 
@@ -12,8 +12,10 @@ describe("Block Game", () => {
             cy.get("[data-new-game]").click();
         });
 
-        it("changes the message", () => {
-            cy.contains("Hello!");
+        it("Shows a gameboard and game pieces", () => {
+            cy.get("[data-game-board]");
+            cy.get("[data-player-pieces]");
+            cy.get("[data-new-game]").should("not.exist");
         })
     });
 });
