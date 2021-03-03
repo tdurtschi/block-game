@@ -1,4 +1,37 @@
 body {
-  background-color: #eddeda;
-  color: #11110f;
+  background-color: #EEFFDE;
+  color: #10110f;
+  font-family: "Exo", sans-serif;
+}
+
+h1 {
+  font-family: "Krona One", sans-serif;
+}
+
+.btn-primary {
+  font-family: "Exo", sans-serif;
+  border: 2px solid #10110f;
+  border-radius: 3px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  outline: none;
+  background-color: #A4F558;
+}
+.btn-primary:active {
+  position: relative;
+  top: 2px;
+}
+
+.btn-secondary {
+  font-family: "Exo", sans-serif;
+  border: 2px solid #10110f;
+  border-radius: 3px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  outline: none;
+  background-color: #EDCDF1;
+}
+.btn-secondary:active {
+  position: relative;
+  top: 2px;
 }

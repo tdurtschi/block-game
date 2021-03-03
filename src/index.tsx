@@ -13,12 +13,16 @@ function blockGame({ server }: { server: server }) {
 
   return (
     <div>
-      <div>Block Game</div>
-      {game ? <>
-        <div data-game-board>GameBoard</div>
-        <div data-player-pieces>PlayerPieces</div>
-      </> :
-        <button data-new-game onClick={startGame}>New Game</button>}
+      <header>
+        <h1>Block Game</h1>
+      </header>
+      <button className="btn-primary" data-new-game onClick={startGame}>New Game</button>
+      {
+        game && <>
+          <div data-game-board>GameBoard</div>
+          <div data-player-pieces>PlayerPieces</div>
+        </>
+      }
     </div>
   )
 };
