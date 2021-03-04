@@ -12,10 +12,11 @@ describe("Block Game", () => {
             cy.get("[data-new-game]").click();
         });
 
-        it("Shows a gameboard and game pieces", () => {
+        it("Shows a gameboard and all game pieces", () => {
             cy.get("[data-game-board]");
             cy.get("[data-player-pieces]");
-            cy.get("[data-new-game]").should("not.exist");
-        })
+            cy.get(".player-1-color .game-piece")
+            cy.get("[data-new-game]").should("be.disabled");
+        });
     });
 });

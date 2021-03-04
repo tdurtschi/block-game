@@ -2,12 +2,12 @@ const browserSync = require("browser-sync").create();
 const fs = require("fs");
 const sass = require("sass");
 const isWatch = process.argv.find(arg => arg.includes("--watch")) !== undefined;
-const CSS_INPUT_PATH = "./src/index.scss";
+const CSS_INPUT_PATH = "./src/styles";
 const CSS_OUTPUT_PATH = "./dist/styles.css";
 
 function compileSass() {
     var result = sass.renderSync({
-        file: CSS_INPUT_PATH,
+        file: `${CSS_INPUT_PATH}/index.scss`,
         outFile: CSS_OUTPUT_PATH
     });
 

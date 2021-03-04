@@ -1,0 +1,38 @@
+.game-pieces {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.game-piece {
+    padding: 0.5rem;
+
+    .row {
+        display: flex;
+
+        div {
+            box-sizing: border-box;
+            width: 2rem;
+            height: 2rem;
+        }
+    }
+}
+
+.player-1-color .filled {
+    background-color:#F00;
+    border: 1px solid rgb(255, 140, 140);
+}
+
+.player-2-color .filled {
+	background-color:#0C0;
+    border: 1px solid rgb(116, 245, 116);
+}
+
+.player-3-color .filled {
+	background-color:#00F;
+    border: 1px solid rgb(137, 137, 254);
+}
+
+.player-4-color .filled {
+	background-color:#EBEB00;
+    border: 1px solid #fefeb8;
+}
