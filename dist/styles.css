@@ -4,6 +4,7 @@
   border-radius: 3px;
   padding: 1rem;
   max-width: 1024px;
+  background-color: #f9f9f9;
 }
 
 .game-pieces {
@@ -39,7 +40,7 @@
 }
 
 .player-4-color .filled {
-  background-color: #EBEB00;
+  background-color: #f0e000;
   border: 1px solid #fefeb8;
 }
 

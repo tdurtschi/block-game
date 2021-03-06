@@ -32,7 +32,7 @@ describe("Game Pieces", () => {
     ]
 
     act(() => {
-      ReactDOM.render(<GamePieces gamePieces={gamePieces} />, container);
+      ReactDOM.render(<GamePieces playerId={1} gamePieces={gamePieces} />, container);
     });
     const pieces = container.querySelectorAll('[data-game-piece]');
     expect(pieces.length).toBe(3);

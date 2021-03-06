@@ -1,9 +1,10 @@
 import React = require("react");
 import GamePiece from "./server/GamePiece";
+import PlayerId from "./server/PlayerId";
 
 interface GamePiecesProps {
     gamePieces: GamePiece[]
-    playerId: 1 | 2 | 3 | 4
+    playerId: PlayerId
 }
 
 export default function (props: GamePiecesProps) {

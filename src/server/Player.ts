@@ -1,13 +1,19 @@
 import GamePiece from "./GamePiece";
+import PlayerId from "./PlayerId";
 
 class Player {
     public playerPieces: GamePiece[];
+    public hasPassed: boolean = false;
 
     constructor(
-        public playerId: 1 | 2 | 3 | 4,
+        public playerId: PlayerId,
 
     ) {
         this.playerPieces = this.pieces();
+    }
+
+    public pass() {
+        this.hasPassed = true;
     }
 
     private pieces = () =>

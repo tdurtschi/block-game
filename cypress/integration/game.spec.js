@@ -18,5 +18,17 @@ describe("Block Game", () => {
             cy.get(".player-1-color .game-piece")
             cy.get("[data-new-game]").should("be.disabled");
         });
+
+        it("Completes a game where everyone passes", () => {
+            cy.contains("Player 1");
+            cy.get("[data-player-pass-button]").click();
+            cy.contains("Player 2");
+            cy.get("[data-player-pass-button]").click();
+            cy.contains("Player 3");
+            cy.get("[data-player-pass-button]").click();
+            cy.contains("Player 4");
+            cy.get("[data-player-pass-button]").click();
+            cy.get("[data-game-over]");
+        })
     });
 });
