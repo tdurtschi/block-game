@@ -3,28 +3,35 @@ import GamePiece, { GamePiecesData } from "../types/GamePiece";
 import PlayerId from "../server/PlayerId";
 
 interface GamePiecesProps {
-    gamePieces: GamePiece[]
-    playerId: PlayerId
+    gamePieces: GamePiece[];
+    playerId: PlayerId;
+    onClickPiece: (pieceId: number) => any;
 }
 
 function GamePieces(props: GamePiecesProps) {
-    return (<div data-player-pieces className={`game-pieces player-${props.playerId}-color`}>
-        {
-            props.gamePieces.map((piece, idx) =>
-                <div className={"game-piece"} key={idx} data-game-piece>
-                    <Piece pieceId={piece.pieceId} />
-                </div>)
-        }
-    </div>);
+    return (
+        <div data-player-pieces
+            className={`game-pieces player-${props.playerId}-color`}>
+            {
+                props.gamePieces.map((piece, idx) =>
+                    <Piece key={idx} pieceId={piece.pieceId} onClick={props.onClickPiece} />)
+            }
+        </div>);
 }
 
-function Piece({ pieceId }: { pieceId: number }) {
+function Piece({ pieceId, onClick }: { pieceId: number, onClick: (pieceId: number) => any }) {
     const piece = GamePiecesData[pieceId];
     if (!piece) throw new Error(`Piece ID ${pieceId} invalid.`);
 
-    return <>{
-        piece.map((row, idx) => <PieceRow key={idx} row={row} />)
-    }</>;
+    return <div
+        className={"game-piece"}
+        data-game-piece
+        onClick={() => onClick(pieceId)}
+    >
+        {
+            piece.map((row, idx) => <PieceRow key={idx} row={row} />)
+        }
+    </div>;
 }
 
 function PieceRow({ row }: { row: number[] }) {

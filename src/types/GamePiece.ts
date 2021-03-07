@@ -4,10 +4,10 @@ export default interface GamePiece {
 
 export const GamePiecesData = [
     [		//0
-        [0, 1],
-        [0, 1],
+        [1, 0],
+        [1, 0],
         [1, 1],
-        [1, 0]],
+        [0, 1]],
 
     [		//1
         [0, 1],

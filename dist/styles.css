@@ -1,10 +1,21 @@
-.game-container {
-  margin: 1rem auto 0 0;
-  border: 2px solid #10110f;
-  border-radius: 3px;
-  padding: 1rem;
-  max-width: 1024px;
-  background-color: #f9f9f9;
+.player-1-color .filled, .player-1-color.filled {
+  background-color: #F00;
+  border: 1px solid #ff8c8c;
+}
+
+.player-2-color .filled, .player-2-color.filled {
+  background-color: #0C0;
+  border: 1px solid #74f574;
+}
+
+.player-3-color .filled, .player-3-color.filled {
+  background-color: #00F;
+  border: 1px solid #8989fe;
+}
+
+.player-4-color .filled, .player-4-color.filled {
+  background-color: #f0e000;
+  border: 1px solid #fefeb8;
 }
 
 .game-pieces {
@@ -22,26 +33,6 @@
   box-sizing: border-box;
   width: 2rem;
   height: 2rem;
-}
-
-.player-1-color .filled {
-  background-color: #F00;
-  border: 1px solid #ff8c8c;
-}
-
-.player-2-color .filled {
-  background-color: #0C0;
-  border: 1px solid #74f574;
-}
-
-.player-3-color .filled {
-  background-color: #00F;
-  border: 1px solid #8989fe;
-}
-
-.player-4-color .filled {
-  background-color: #f0e000;
-  border: 1px solid #fefeb8;
 }
 
 .game-container {

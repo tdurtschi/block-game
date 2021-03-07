@@ -3,8 +3,9 @@ describe("Block Game", () => {
         cy.visit('http://localhost:3000/');
     });
 
-    it("Displays the name of the game", () => {
+    it("Displays the Header text and has a button to start the game.", () => {
         cy.contains("Block Game");
+        cy.get("[data-new-game]")
     });
 
     describe("Gameplay", () => {
@@ -31,5 +32,15 @@ describe("Block Game", () => {
             cy.get("[data-player-pass-button]").click();
             cy.get("[data-game-over]");
         });
+
+        describe("Playing Pieces", () => {
+            it("Can play a piece by clicking it and clicking the game board", () => {
+                cy.get("[data-game-piece]").eq(0).click(); // Piece 0 looks like ` ` | .
+                cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='0']").click();
+                cy.get("[data-confirm-action]").click();
+
+                cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='0'].player-1-color");
+            })
+        })
     });
 });

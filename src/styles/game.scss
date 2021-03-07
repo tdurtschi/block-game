@@ -1,9 +1,19 @@
-.game-container {
-    margin: 1rem auto 0 0;
-    border: 2px solid #10110f;
-    border-radius: 3px;
-    padding: 1rem;
+.player-1-color .filled, .player-1-color.filled {
+    background-color:#F00;
+    border: 1px solid rgb(255, 140, 140);
+}
 
-    max-width: 1024px;
-    background-color: #f9f9f9;
+.player-2-color .filled, .player-2-color.filled  {
+	background-color:#0C0;
+    border: 1px solid rgb(116, 245, 116);
+}
+
+.player-3-color .filled, .player-3-color.filled {
+	background-color:#00F;
+    border: 1px solid rgb(137, 137, 254);
+}
+
+.player-4-color .filled, .player-4-color.filled {
+	background-color:#f0e000;
+    border: 1px solid #fefeb8;
 }
