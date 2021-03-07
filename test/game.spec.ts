@@ -56,6 +56,15 @@ describe("Game", () => {
             expectError(() => {
                 game.action(gameMove(2, 0, { x: 0, y: 0 }))
             });
+        });
+
+        it("A player's piece is removed from inventory after playing it", () => {
+            const game = new Game(0);
+            const pieceToPlay = 0;
+            game.action(gameMove(1, pieceToPlay, { x: 0, y: 0 }))
+
+            const state = game.getState();
+            expect(state.players[0].playerPieces.find(piece => piece.pieceId == pieceToPlay)).toBeFalsy();
         })
     });
 

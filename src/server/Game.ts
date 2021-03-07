@@ -92,8 +92,8 @@ class Game {
         return isValid;
     }
 
-    applyPiece({ x, y }: { x: number, y: number }, piece: number, playerId: PlayerId) {
-        var pieceData = GamePiecesData[piece];
+    applyPiece({ x, y }: { x: number, y: number }, pieceId: number, playerId: PlayerId) {
+        var pieceData = GamePiecesData[pieceId];
         for (var i = 0; i < pieceData.length; i++) {
             for (var j = 0; j < pieceData[i].length; j++) {
                 if (pieceData[i][j] == 1) {
@@ -101,6 +101,9 @@ class Game {
                 }
             }
         }
+
+        const player = this.getPlayer(playerId);
+        player.playerPieces = player.playerPieces.filter(playerPiece => playerPiece.pieceId != pieceId);
     }
 }
 
