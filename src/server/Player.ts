@@ -1,4 +1,4 @@
-import GamePiece from "./GamePiece";
+import GamePiece from "../types/GamePiece";
 import PlayerId from "./PlayerId";
 
 class Player {

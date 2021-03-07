@@ -1,4 +1,7 @@
+import { GamePlayAction } from "../src/types/Actions";
 import Game from "../src/server/Game";
+import GameStatus from "../src/types/GameStatus";
+import PlayerId from "../src/server/PlayerId";
 
 describe("Game", () => {
     it("Has 4 players", () => {
@@ -9,7 +12,7 @@ describe("Game", () => {
     describe("Initial Gameplay", () => {
         it("Game isn't over", () => {
             const game = new Game(0);
-            expect(game.isOver).toBeFalsy();
+            expect(game.status).toBe(GameStatus.CREATED);
         });
 
         it("Player 1 can make a move", () => {
@@ -27,14 +30,7 @@ describe("Game", () => {
         it("Player 2 cannot move", () => {
             const game = new Game(0);
             expectError(() => {
-                game.action(
-                    {
-                        kind: "GamePlay",
-                        playerId: 2,
-                        piece: 0,
-                        location: { x: 0, y: 0 }
-                    }
-                )
+                game.action(gameMove(2, 0, { x: 0, y: 0 }))
             });
         });
     });
@@ -58,8 +54,16 @@ describe("Game", () => {
                 playerId: 4,
                 kind: "Pass"
             })
-            expect(game.isOver).toBe(true);
+            expect(game.status).toBe(GameStatus.OVER);
         });
+
+        it("Two players can't play in the same spot", () => {
+            const game = new Game(0);
+            game.action(gameMove(1, 0, { x: 0, y: 0 }))
+            expectError(() => {
+                game.action(gameMove(2, 0, { x: 0, y: 0 }))
+            });
+        })
     });
 });
 
@@ -68,5 +72,14 @@ function expectError(fn: Function): void {
         fn();
         fail("Expected exception but was none");
     } catch {
+    }
+}
+
+function gameMove(playerId: PlayerId, piece: number, location: { x: number, y: number }): GamePlayAction {
+    return {
+        kind: "GamePlay",
+        playerId,
+        piece,
+        location
     }
 }

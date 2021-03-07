@@ -1,5 +1,6 @@
 enum GameStatus {
-    CREATED
+    CREATED,
+    OVER
 }
 
 export default GameStatus;

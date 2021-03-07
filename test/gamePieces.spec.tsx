@@ -1,8 +1,8 @@
 import React = require("react");
 import ReactDOM = require("react-dom");
 import { act } from 'react-dom/test-utils';
-import GamePiece from "../src/server/GamePiece";
-import GamePieces from '../src/gamePieces';
+import GamePiece from "../src/types/GamePiece";
+import GamePieces from '../src/components/gamePieces';
 
 let container: HTMLDivElement;
 

@@ -1,60 +1,49 @@
 import { useState } from "react";
 import React = require("react");
 import ReactDOM = require("react-dom");
-import GamePieces from "./gamePieces";
+import GameContainer from "./components/gameContainer";
 import server from "./server";
-import Game from "./server/Game";
+import { GameState } from "./server/Game";
+import GameStatus from "./types/GameStatus";
 
-function blockGame({ server }: { server: server }) {
-  const [game, setGame] = useState<Game | undefined>();
-  const [gameState, setGameState] = useState<any>();
+function BlockGame({ server }: { server: server }) {
+  const [gameState, setGameState] = useState<GameState>();
 
   const startGame = () => {
-    setGame(server.newGame());
+    const initialGameState = server.newGame();
+    setGameState(initialGameState);
+
+    server.subscribe(setGameState);
   }
 
-  const { currentPlayer } = gameState ?? { currentPlayer: 1 };
-
   return (
-    <div>
+    <>
       <header>
         <h1>Block Game</h1>
-      </header>
-      <button
-        className="btn-primary"
-        disabled={!!(game && !game.isOver)}
-        data-new-game onClick={startGame}>
-        New Game
+        <button
+          className="btn-primary"
+          disabled={gameState && gameState.status !== GameStatus.OVER}
+          data-new-game
+          onClick={startGame}
+        >
+          New Game
       </button>
+      </header>
       {
-        game && <div className="game-container">
-          {!game.isOver && <div>
-            <h2>Player {currentPlayer}'s Turn</h2>
-            <GamePieces gamePieces={game.players[0].playerPieces} playerId={game.getPlayer(currentPlayer).playerId}></GamePieces>
-            <button
-              className="btn-secondary"
-              data-player-pass-button
-              data-new-game onClick={() => {
-                game.action({ playerId: currentPlayer, kind: "Pass" })
-                setGameState(game.getState())
-              }}>
-              Pass
-          </button>
-          </div>}
-          {game.isOver && <h2 data-game-over>
-            Game Over
-            </h2>}
-          <div data-game-board>GameBoard</div>
-        </div>
+        gameState && <GameContainer
+          gameState={gameState}
+          action={(id, action) => server.action(id, action)}
+        />
       }
-    </div >
+    </>
   )
 };
 
 const container = document.createElement('div');
+container.className = "app-container";
 document.body.appendChild(container);
 
 ReactDOM.render(
-  React.createElement(blockGame, { server: new server() }),
+  React.createElement(BlockGame, { server: new server() }),
   container
 );

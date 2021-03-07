@@ -7,16 +7,17 @@ describe("Block Game", () => {
         cy.contains("Block Game");
     });
 
-    describe("Starting a new game", () => {
+    describe("Gameplay", () => {
         beforeEach(() => {
             cy.get("[data-new-game]").click();
         });
 
         it("Shows a gameboard and all game pieces", () => {
+            cy.get("[data-new-game]").should("be.disabled");
             cy.get("[data-game-board]");
+            cy.get("[data-game-board] .board-cell");
             cy.get("[data-player-pieces]");
             cy.get(".player-1-color .game-piece")
-            cy.get("[data-new-game]").should("be.disabled");
         });
 
         it("Completes a game where everyone passes", () => {
@@ -29,6 +30,6 @@ describe("Block Game", () => {
             cy.contains("Player 4");
             cy.get("[data-player-pass-button]").click();
             cy.get("[data-game-over]");
-        })
+        });
     });
 });

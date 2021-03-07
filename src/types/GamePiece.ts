@@ -1,40 +1,8 @@
-import React = require("react");
-import GamePiece from "./server/GamePiece";
-import PlayerId from "./server/PlayerId";
-
-interface GamePiecesProps {
-    gamePieces: GamePiece[]
-    playerId: PlayerId
+export default interface GamePiece {
+    pieceId: number
 }
 
-export default function (props: GamePiecesProps) {
-    return (<div data-player-pieces className={`game-pieces player-${props.playerId}-color`}>
-        {
-            props.gamePieces.map((piece, idx) =>
-                <div className={"game-piece"} key={idx} data-game-piece>
-                    <Piece pieceId={piece.pieceId} />
-                </div>)
-        }
-    </div>);
-}
-
-const PieceRow = ({ row }: { row: number[] }) => <div className={"row"}>
-    {
-        row.map((col, idx2) => <div className={`${col === 1 ? "filled" : ''}`} key={idx2}></div>)
-    }
-</div>;
-
-function Piece({ pieceId }: { pieceId: number }) {
-    const piece = gamePiecesData[pieceId];
-    if (!piece) throw new Error(`Piece ID ${pieceId} invalid.`);
-
-    return (<>{
-        piece.map((row, idx) => <PieceRow key={idx} row={row} />)
-    }</>);
-}
-
-
-const gamePiecesData = [
+export const GamePiecesData = [
     [		//0
         [0, 1],
         [0, 1],
