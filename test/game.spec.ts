@@ -17,15 +17,8 @@ describe("Game", () => {
 
         it("Player 1 can make a move", () => {
             const game = new Game(0);
-            game.action(
-                {
-                    kind: "GamePlay",
-                    playerId: 1,
-                    piece: 0,
-                    location: { x: 0, y: 0 }
-                }
-            );
-        })
+            game.action(gameMove(1, 0, { x: 0, y: 0 }));
+        });
 
         it("Player 2 cannot move", () => {
             const game = new Game(0);
@@ -64,6 +57,17 @@ describe("Game", () => {
                 game.action(gameMove(2, 0, { x: 0, y: 0 }))
             });
         })
+    });
+
+    it("Regression Test: Player 2 can move after making an invalid attempt", () => {
+        const game = new Game(0);
+        game.action(gameMove(1, 0, { x: 0, y: 0 }));
+
+        try {
+            game.action(gameMove(2, 0, { x: 0, y: 0 }));
+        } catch (error) { }
+
+        game.action(gameMove(2, 0, { x: 2, y: 0 }));
     });
 });
 

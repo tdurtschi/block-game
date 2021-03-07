@@ -14,8 +14,19 @@ describe("server", () => {
         expect(game.status).toBe(GameStatus.CREATED);
     });
 
-    it("Retrieves an existing game", () => {
-        const game = subject.newGame();
-        expect(subject.getGame(game.id)).toEqual(game);
+    describe("Subscribers", () => {
+        it("A subscriber gets updated gameState after a successful action", () => {
+            const { id } = subject.newGame();
+            const subSpy = jasmine.createSpy("subscription");
+
+            subject.subscribe(subSpy);
+            subject.action(id, {
+                kind: "Pass",
+                playerId: 1
+            });
+
+            expect(subSpy).toHaveBeenCalled();
+            expect(subSpy.calls.first().args[0]["currentPlayer"]).toEqual(2);
+        })
     });
 });

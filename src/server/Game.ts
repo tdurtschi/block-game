@@ -35,12 +35,8 @@ class Game {
     }
 
     public action(payload: Action) {
-        console.log("Action!");
-        console.log(payload);
-        console.log(this.currentPlayer);
         const action = payload;
         if (this.currentPlayer == payload.playerId) {
-            this.currentPlayer = ((this.currentPlayer % 4) + 1 as PlayerId);
             if (action.kind == "Pass") {
                 this.getPlayer(action.playerId).pass();
                 if (this.allPlayersPassed()) {
@@ -53,6 +49,7 @@ class Game {
                     throw new InvalidActionError();
                 }
             }
+            this.currentPlayer = ((this.currentPlayer % 4) + 1 as PlayerId);
         }
         else {
             throw new InvalidActionError();

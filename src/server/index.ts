@@ -13,15 +13,11 @@ class GameServer {
     newGame() {
         const game = new Game(0);
         this.games.set(game.id, game);
-        return game;
+        return game.getState();
     }
 
     subscribe(onUpdate: (gameState: Readonly<GameState>) => any) {
         this.onUpdate = onUpdate;
-    }
-
-    getGame(id: number) {
-        return this.games.get(id);
     }
 
     action(id: number, payload: Action) {
