@@ -1,9 +1,10 @@
-import Action from "../types/Actions";
-import GameStatus from "../types/GameStatus";
+import Action, { BoardLocation } from "../shared/types/Actions";
+import GameStatus from "../shared/types/GameStatus";
 import InvalidActionError from "./errors/InvalidActionError";
 import Player from "./Player";
 import PlayerId from "./PlayerId";
-import { GamePiecesData } from "../types/GamePiece";
+import { GamePiecesData } from "../shared/types/GamePiece";
+import applyPieceToBoard from "../shared/applyPiece";
 
 type BoardState = (PlayerId | undefined)[][];
 
@@ -92,15 +93,8 @@ class Game {
         return isValid;
     }
 
-    applyPiece({ x, y }: { x: number, y: number }, pieceId: number, playerId: PlayerId) {
-        var pieceData = GamePiecesData[pieceId];
-        for (var i = 0; i < pieceData.length; i++) {
-            for (var j = 0; j < pieceData[i].length; j++) {
-                if (pieceData[i][j] == 1) {
-                    this.boardState[y + i][x + j] = playerId;
-                }
-            }
-        }
+    applyPiece({ x, y }: BoardLocation, pieceId: number, playerId: PlayerId) {
+        this.boardState = applyPieceToBoard({ x, y }, pieceId, playerId, this.boardState);
 
         const player = this.getPlayer(playerId);
         player.playerPieces = player.playerPieces.filter(playerPiece => playerPiece.pieceId != pieceId);

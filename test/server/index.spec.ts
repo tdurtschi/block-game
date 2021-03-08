@@ -1,5 +1,5 @@
 import server from "../../src/server";
-import GameStatus from "../../src/types/GameStatus";
+import GameStatus from "../../src/shared/types/GameStatus";
 
 describe("server", () => {
     let subject: server;

@@ -1,6 +1,6 @@
-import { GamePlayAction } from "../src/types/Actions";
+import { GamePlayAction } from "../src/shared/types/Actions";
 import Game from "../src/server/Game";
-import GameStatus from "../src/types/GameStatus";
+import GameStatus from "../src/shared/types/GameStatus";
 import PlayerId from "../src/server/PlayerId";
 
 describe("Game", () => {

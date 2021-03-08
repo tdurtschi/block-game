@@ -1,4 +1,4 @@
-import Action from "../types/Actions";
+import Action from "../shared/types/Actions";
 import Game, { GameState } from "./Game";
 import GameNotFoundError from "./errors/GameNotFoundError";
 
@@ -21,10 +21,10 @@ class GameServer {
     }
 
     action(id: number, payload: Action) {
-        const game = this.games.get(id)
+        const game = this.games.get(id);
         if (game) {
             game.action(payload);
-            this.onUpdate(game.getState())
+            this.onUpdate(game.getState());
         } else {
             throw new GameNotFoundError();
         }

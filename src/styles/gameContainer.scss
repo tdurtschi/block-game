@@ -9,3 +9,11 @@
     max-width: 1008px;
     background-color: #f9f9f9;
 }
+
+.hide-cursor {
+    cursor: none;
+}
+
+.active-piece{
+    pointer-events: none;
+}

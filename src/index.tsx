@@ -4,7 +4,7 @@ import ReactDOM = require("react-dom");
 import GameContainer from "./components/gameContainer";
 import server from "./server";
 import { GameState } from "./server/Game";
-import GameStatus from "./types/GameStatus";
+import GameStatus from "./shared/types/GameStatus";
 
 function BlockGame({ server }: { server: server }) {
   const [gameState, setGameState] = useState<GameState>();
