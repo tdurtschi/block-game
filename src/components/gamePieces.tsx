@@ -12,12 +12,12 @@ interface GamePiecesProps {
 function GamePieces(props: GamePiecesProps) {
     return (
         <div data-player-pieces
-            className={`game-pieces `}>
+            className={`game-pieces`}>
             {
                 props.gamePieces.map((piece, idx) =>
                     <Piece
                         key={idx}
-                        pieceId={piece.pieceId}
+                        piece={piece}
                         playerId={props.playerId}
                         onClick={props.onClickPiece} />)
             }

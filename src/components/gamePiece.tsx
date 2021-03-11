@@ -1,24 +1,21 @@
 import React = require("react");
 import PlayerId from "../server/PlayerId";
-import { GamePiecesData } from "../shared/types/GamePiece";
+import GamePieceModel from "../shared/types/GamePiece";
 
 interface GamePieceProps {
-    pieceId: number,
+    piece: GamePieceModel,
     playerId: PlayerId,
     onClick: (pieceId: number) => any
 }
 
-function GamePiece({ pieceId, onClick, playerId }: GamePieceProps) {
-    const piece = GamePiecesData[pieceId];
-    if (!piece) throw new Error(`Piece ID ${pieceId} invalid.`);
-
+function GamePiece({ piece, onClick, playerId }: GamePieceProps) {
     return <div
         className={`game-piece player-${playerId}-color`}
         data-game-piece
-        onClick={() => onClick(pieceId)}
+        onClick={() => onClick(piece.id)}
     >
         {
-            piece.map((row, idx) => <PieceRow key={idx} row={row} />)
+            piece.pieceData.map((row, idx) => <PieceRow key={idx} row={row} />)
         }
     </div>;
 }

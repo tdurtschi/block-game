@@ -1,5 +1,6 @@
 export default interface GamePiece {
-    pieceId: number
+    pieceData: number[][];
+    id: number;
 }
 
 export const GamePiecesData = [

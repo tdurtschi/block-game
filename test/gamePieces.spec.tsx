@@ -1,7 +1,7 @@
 import React = require("react");
 import ReactDOM = require("react-dom");
 import { act } from 'react-dom/test-utils';
-import GamePiece from "../src/shared/types/GamePiece";
+import GamePiece, { GamePiecesData } from "../src/shared/types/GamePiece";
 import GamePieces from '../src/components/gamePieces';
 
 let container: HTMLDivElement;
@@ -21,13 +21,16 @@ describe("Game Pieces", () => {
   it("Shows one piece for each input", () => {
     const gamePieces: GamePiece[] = [
       {
-        pieceId: 0
+        id: 0,
+        pieceData: GamePiecesData[0]
       },
       {
-        pieceId: 1
+        id: 1,
+        pieceData: GamePiecesData[1]
       },
       {
-        pieceId: 2
+        id: 2,
+        pieceData: GamePiecesData[2]
       }
     ]
 
@@ -41,5 +44,5 @@ describe("Game Pieces", () => {
     });
     const pieces = container.querySelectorAll('[data-game-piece]');
     expect(pieces.length).toBe(3);
-  })
-})
+  });
+});

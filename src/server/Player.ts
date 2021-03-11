@@ -1,4 +1,4 @@
-import GamePiece from "../shared/types/GamePiece";
+import GamePiece, { GamePiecesData } from "../shared/types/GamePiece";
 import PlayerId from "./PlayerId";
 
 class Player {
@@ -18,7 +18,8 @@ class Player {
 
     private pieces = () =>
         new Array(21).fill(0).map((_, idx) => ({
-            pieceId: idx
+            id: idx,
+            pieceData: GamePiecesData[idx]
         }));
 }
 

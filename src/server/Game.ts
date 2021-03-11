@@ -4,7 +4,7 @@ import InvalidActionError from "./errors/InvalidActionError";
 import Player from "./Player";
 import PlayerId from "./PlayerId";
 import { GamePiecesData } from "../shared/types/GamePiece";
-import applyPieceToBoard from "../shared/applyPiece";
+import { applyPieceToBoard } from "../shared/pieceUtils";
 
 type BoardState = (PlayerId | undefined)[][];
 
@@ -94,7 +94,7 @@ class Game {
     }
 
     applyPiece({ x, y }: BoardLocation, pieceId: number, playerId: PlayerId) {
-        this.boardState = applyPieceToBoard({ x, y }, pieceId, playerId, this.boardState);
+        this.boardState = applyPieceToBoard({ x, y }, GamePiecesData[pieceId], playerId, this.boardState);
 
         const player = this.getPlayer(playerId);
         player.playerPieces = player.playerPieces.filter(playerPiece => playerPiece.pieceId != pieceId);
