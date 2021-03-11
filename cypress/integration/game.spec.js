@@ -48,7 +48,7 @@ describe("Block Game", () => {
 
             it("Can rotate a piece with the mouse wheel", () => {
                 cy.get("[data-game-piece]").eq(0).click();
-                cy.get("[data-game-board]").trigger("wheel", { deltaY: 4 });
+                cy.get("[data-game-board]").trigger("wheel", { deltaY: -4 });
                 cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='0']").click();
                 cy.get("[data-confirm-action]").click();
 
@@ -61,9 +61,3 @@ describe("Block Game", () => {
         })
     });
 });
-
-const tmp = [		//0
-    [1, 0],
-    [1, 0],
-    [1, 1],
-    [0, 1]];

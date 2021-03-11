@@ -25,7 +25,10 @@ function GameContainer({ gameState, action }: GameContainerProps) {
         const result = {
             id: piece?.id,
             pieceData: reverse ? pieceUtils.rotateReverse(piece.pieceData)
-                : pieceUtils.rotate(piece.pieceData)
+                : pieceUtils.rotate(piece.pieceData),
+            rotate: reverse ? piece.rotate + 3 % 4 as 0 | 1 | 2 | 3
+                : piece.rotate + 1 % 4 as 0 | 1 | 2 | 3,
+            flip: piece.flip
         };
         setActivePiece(result);
     }
@@ -35,7 +38,9 @@ function GameContainer({ gameState, action }: GameContainerProps) {
 
         const stagedPiece = activePiece !== undefined ? {
             pieceData: activePiece.pieceData,
-            id: activePiece.id
+            id: activePiece.id,
+            rotate: activePiece.rotate,
+            flip: activePiece.flip
         }
             : undefined;
 
@@ -46,7 +51,9 @@ function GameContainer({ gameState, action }: GameContainerProps) {
     const handlePlayerPieceClick = (pieceId: number) => {
         setActivePiece({
             pieceData: GamePiecesData[pieceId],
-            id: pieceId
+            id: pieceId,
+            rotate: 0 as 0 | 1 | 2 | 3,
+            flip: false
         });
         setStagedPiece(undefined);
         setBoardTarget(undefined);
@@ -57,7 +64,9 @@ function GameContainer({ gameState, action }: GameContainerProps) {
             kind: "GamePlay",
             playerId: gameState.currentPlayer,
             piece: stagedPiece?.id ?? -1,
-            location: boardTarget ?? { x: -1, y: -1 }
+            location: boardTarget ?? { x: -1, y: -1 },
+            rotate: stagedPiece?.rotate ?? 0,
+            flip: stagedPiece?.flip ?? false
         });
         setBoardTarget(undefined);
         setActivePiece(undefined);

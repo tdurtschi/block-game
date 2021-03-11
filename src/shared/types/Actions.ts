@@ -6,7 +6,9 @@ export type GamePlayAction = {
     kind: "GamePlay",
     playerId: PlayerId,
     piece: number,
-    location: BoardLocation
+    location: BoardLocation,
+    rotate: 0 | 1 | 2 | 3,
+    flip: boolean
 }
 
 export type PassAction = {

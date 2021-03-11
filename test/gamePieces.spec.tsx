@@ -22,15 +22,21 @@ describe("Game Pieces", () => {
     const gamePieces: GamePiece[] = [
       {
         id: 0,
-        pieceData: GamePiecesData[0]
+        pieceData: GamePiecesData[0],
+        rotate: 0,
+        flip: false
       },
       {
         id: 1,
-        pieceData: GamePiecesData[1]
+        pieceData: GamePiecesData[1],
+        rotate: 0,
+        flip: false
       },
       {
         id: 2,
-        pieceData: GamePiecesData[2]
+        pieceData: GamePiecesData[2],
+        rotate: 0,
+        flip: false
       }
     ]
 

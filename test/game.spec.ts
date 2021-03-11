@@ -64,8 +64,8 @@ describe("Game", () => {
             game.action(gameMove(1, pieceToPlay, { x: 0, y: 0 }))
 
             const state = game.getState();
-            expect(state.players[0].playerPieces.find(piece => piece.pieceId == pieceToPlay)).toBeFalsy();
-        })
+            expect(state.players[0].playerPieces.find(piece => piece.id == pieceToPlay)).toBeFalsy();
+        });
     });
 
     it("Regression Test: Player 2 can move after making an invalid attempt", () => {
@@ -88,11 +88,13 @@ function expectError(fn: Function): void {
     }
 }
 
-function gameMove(playerId: PlayerId, piece: number, location: { x: number, y: number }): GamePlayAction {
+function gameMove(playerId: PlayerId, piece: number, location: { x: number, y: number }, rotate: 0 | 1 | 2 | 3 = 0): GamePlayAction {
     return {
         kind: "GamePlay",
         playerId,
         piece,
-        location
+        location,
+        rotate,
+        flip: false
     }
 }

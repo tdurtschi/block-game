@@ -1,10 +1,10 @@
-import Action, { BoardLocation } from "../shared/types/Actions";
+import Action, { BoardLocation, GamePlayAction } from "../shared/types/Actions";
 import GameStatus from "../shared/types/GameStatus";
 import InvalidActionError from "./errors/InvalidActionError";
 import Player from "./Player";
 import PlayerId from "./PlayerId";
 import { GamePiecesData } from "../shared/types/GamePiece";
-import { applyPieceToBoard } from "../shared/pieceUtils";
+import { applyPieceToBoard, clone, rotate } from "../shared/pieceUtils";
 
 type BoardState = (PlayerId | undefined)[][];
 
@@ -44,8 +44,8 @@ class Game {
                     this.status = GameStatus.OVER;
                 }
             } else if (action.kind == "GamePlay") {
-                if (this.moveIsValid(action.location, action.piece)) {
-                    this.applyPiece(action.location, action.piece, action.playerId);
+                if (this.moveIsValid(action)) {
+                    this.applyPiece(action);
                 } else {
                     throw new InvalidActionError();
                 }
@@ -78,9 +78,9 @@ class Game {
         }
     }
 
-    moveIsValid(location: { x: number, y: number }, piece: number) {
+    moveIsValid({ location, piece, rotate, flip }: GamePlayAction) {
         let isValid = true;
-        const pieceData = GamePiecesData[piece];
+        const pieceData = applyPieceModifications(GamePiecesData[piece], rotate, flip);
         var pieceY = pieceData.length;
         var pieceX = pieceData[0].length;
         for (var i = 0; i < pieceY; i++) {
@@ -93,11 +93,12 @@ class Game {
         return isValid;
     }
 
-    applyPiece({ x, y }: BoardLocation, pieceId: number, playerId: PlayerId) {
-        this.boardState = applyPieceToBoard({ x, y }, GamePiecesData[pieceId], playerId, this.boardState);
+    applyPiece({ location, piece, playerId, rotate, flip }: GamePlayAction) {
+        const modifiedPiece = applyPieceModifications(GamePiecesData[piece], rotate, flip);
+        this.boardState = applyPieceToBoard(location, modifiedPiece, playerId, this.boardState);
 
         const player = this.getPlayer(playerId);
-        player.playerPieces = player.playerPieces.filter(playerPiece => playerPiece.pieceId != pieceId);
+        player.playerPieces = player.playerPieces.filter(playerPiece => playerPiece.id != piece);
     }
 }
 
@@ -110,4 +111,17 @@ function createInitialBoardState(): BoardState {
     const rowArray: PlayerId[][] = new Array(rows).fill([]);
     const result = rowArray.map(() => new Array(columns).fill(undefined));
     return result;
+}
+
+function applyPieceModifications(pieceData: number[][], rotation: 0 | 1 | 2 | 3, flip: boolean = false) {
+    let result = clone(pieceData);
+    if (rotation == 0) {
+        return result;
+    } else if (rotation == 1) {
+        return rotate(result);
+    } else if (rotation == 2) {
+        return rotate(rotate(result));
+    } else {
+        return rotate(rotate(rotate(result)));
+    }
 }

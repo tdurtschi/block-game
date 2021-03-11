@@ -47,9 +47,22 @@ function flip(pieceData: number[][]): number[][] {
     return newPiece;
 }
 
+function clone(pieceData: number[][]): number[][] {
+    var newPiece: number[][] = [];
+    for (var i = 0; i < pieceData.length; i++) {
+        newPiece[i] = [];
+        for (var j = 0; j < pieceData[0].length; j++) {
+            newPiece[i][j] = pieceData[i][j];
+        }
+    }
+
+    return newPiece;
+}
+
 export {
     applyPieceToBoard,
     rotate,
     rotateReverse,
-    flip
+    flip,
+    clone
 };

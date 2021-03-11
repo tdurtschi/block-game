@@ -1,6 +1,8 @@
 export default interface GamePiece {
     pieceData: number[][];
     id: number;
+    rotate: 0 | 1 | 2 | 3;
+    flip: boolean
 }
 
 export const GamePiecesData = [
