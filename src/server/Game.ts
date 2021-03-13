@@ -50,7 +50,7 @@ class Game {
                     throw new InvalidActionError();
                 }
             }
-            this.currentPlayer = ((this.currentPlayer % 4) + 1 as PlayerId);
+            this.currentPlayer = this.getPlayerForNextTurn();
         }
         else {
             throw new InvalidActionError();
@@ -99,6 +99,15 @@ class Game {
 
         const player = this.getPlayer(playerId);
         player.playerPieces = player.playerPieces.filter(playerPiece => playerPiece.id != piece);
+    }
+
+    getPlayerForNextTurn(): PlayerId {
+        const validPlayers = [1, 2, 3, 4].filter(playerId =>
+            playerId === this.currentPlayer ||
+            !this.getPlayer(playerId as PlayerId).hasPassed);
+        const playerIdx = validPlayers.findIndex(playerId => playerId === this.currentPlayer);
+        const nextPlayer = validPlayers[(playerIdx + 1) % validPlayers.length] as PlayerId;
+        return nextPlayer;
     }
 }
 

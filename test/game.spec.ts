@@ -50,6 +50,24 @@ describe("Game", () => {
             expect(game.status).toBe(GameStatus.OVER);
         });
 
+        it("Skips a player who's already passed", () => {
+            const game = new Game(0);
+            game.action({
+                playerId: 1,
+                kind: "Pass"
+            })
+            game.action({
+                playerId: 2,
+                kind: "Pass"
+            })
+            game.action({
+                playerId: 3,
+                kind: "Pass"
+            })
+            game.action(gameMove(4, 0, { x: 0, y: 0 }))
+            expect(game.getState().currentPlayer).toEqual(4);
+        });
+
         it("Two players can't play in the same spot", () => {
             const game = new Game(0);
             game.action(gameMove(1, 0, { x: 0, y: 0 }))
