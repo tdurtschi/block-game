@@ -43,19 +43,25 @@ function GameContainer({ gameState, action }: GameContainerProps) {
         setActivePiece(result);
     }
 
-    const handleGameBoardClick = (yCoord: number, xCoord: number) => {
-        setBoardTarget({ x: xCoord, y: yCoord });
-
-        const stagedPiece = activePiece !== undefined ? {
-            pieceData: activePiece.pieceData,
-            id: activePiece.id,
-            rotate: activePiece.rotate,
-            flip: activePiece.flip
-        }
-            : undefined;
-
-        setStagedPiece(stagedPiece);
+    const pass = () => {
+        action(gameState.id, { playerId: gameState.currentPlayer, kind: "Pass" });
+        setStagedPiece(undefined);
         setActivePiece(undefined);
+    }
+
+    const handleGameBoardClick = (yCoord: number, xCoord: number) => {
+        if (activePiece !== undefined) {
+            const stagedPiece = {
+                pieceData: activePiece.pieceData,
+                id: activePiece.id,
+                rotate: activePiece.rotate,
+                flip: activePiece.flip
+            };
+
+            setBoardTarget({ x: xCoord, y: yCoord });
+            setStagedPiece(stagedPiece);
+            setActivePiece(undefined);
+        }
     }
 
     const handlePlayerPieceClick = (pieceId: number) => {
@@ -98,9 +104,7 @@ function GameContainer({ gameState, action }: GameContainerProps) {
                     <button
                         className="btn-secondary"
                         data-player-pass-button
-                        onClick={() => {
-                            action(gameState.id, { playerId: gameState.currentPlayer, kind: "Pass" });
-                        }}
+                        onClick={pass}
                     >
                         Pass
                 </button>

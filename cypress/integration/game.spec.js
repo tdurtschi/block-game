@@ -33,6 +33,17 @@ describe("Block Game", () => {
             cy.get("[data-game-over]");
         });
 
+        describe("Passing", () => {
+            it("Clears a staged piece from the game board and the active piece", () => {
+                cy.get("[data-game-piece]").eq(0).click();
+                cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='0']").click();
+                cy.get("[data-player-pass-button]").click();
+                cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='0'].player-1-color").should("not.exist");
+                cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='0'].player-2-color").should("not.exist");
+                cy.get('[data-active-piece]').should("not.exist");
+            });
+        });
+
         describe("Playing Pieces", () => {
             it("Can play a piece by clicking it and clicking the game board", () => {
                 cy.get("[data-game-piece]").eq(0).click();
@@ -71,6 +82,6 @@ describe("Block Game", () => {
                 cy.get("[data-game-board] [data-coord-x='1'][data-coord-y='2'].player-1-color");
                 cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='3'].player-1-color");
             })
-        })
+        });
     });
 });
