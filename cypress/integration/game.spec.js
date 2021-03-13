@@ -58,6 +58,19 @@ describe("Block Game", () => {
                 cy.get("[data-game-board] [data-coord-x='2'][data-coord-y='1'].player-1-color");
                 cy.get("[data-game-board] [data-coord-x='3'][data-coord-y='0'].player-1-color");
             })
+
+            it("Can flip a piece with a right click", () => {
+                cy.get("[data-game-piece]").eq(0).click();
+                cy.get("[data-game-board]").trigger("mousedown", { button: 2 });
+                cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='0']").click();
+                cy.get("[data-confirm-action]").click();
+
+                cy.get("[data-game-board] [data-coord-x='1'][data-coord-y='0'].player-1-color");
+                cy.get("[data-game-board] [data-coord-x='1'][data-coord-y='1'].player-1-color");
+                cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='2'].player-1-color");
+                cy.get("[data-game-board] [data-coord-x='1'][data-coord-y='2'].player-1-color");
+                cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='3'].player-1-color");
+            })
         })
     });
 });

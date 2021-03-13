@@ -1,10 +1,10 @@
-import Action, { BoardLocation, GamePlayAction } from "../shared/types/Actions";
+import Action, { GamePlayAction } from "../shared/types/Actions";
 import GameStatus from "../shared/types/GameStatus";
 import InvalidActionError from "./errors/InvalidActionError";
 import Player from "./Player";
 import PlayerId from "./PlayerId";
 import { GamePiecesData } from "../shared/types/GamePiece";
-import { applyPieceToBoard, clone, rotate } from "../shared/pieceUtils";
+import { applyPieceToBoard, clone, rotate as applyRotate, flip as applyFlip } from "../shared/pieceUtils";
 
 type BoardState = (PlayerId | undefined)[][];
 
@@ -115,13 +115,16 @@ function createInitialBoardState(): BoardState {
 
 function applyPieceModifications(pieceData: number[][], rotation: 0 | 1 | 2 | 3, flip: boolean = false) {
     let result = clone(pieceData);
+
+    if (flip) result = applyFlip(result);
+
     if (rotation == 0) {
         return result;
     } else if (rotation == 1) {
-        return rotate(result);
+        return applyRotate(result);
     } else if (rotation == 2) {
-        return rotate(rotate(result));
+        return applyRotate(applyRotate(result));
     } else {
-        return rotate(rotate(rotate(result)));
+        return applyRotate(applyRotate(applyRotate(result)));
     }
 }

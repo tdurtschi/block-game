@@ -1,3 +1,4 @@
+import { flip } from "cypress/types/lodash";
 import React = require("react");
 import PlayerId from "../server/PlayerId";
 import GamePiece from "../shared/types/GamePiece";
@@ -7,6 +8,7 @@ interface ActivePieceProps {
     piece: GamePiece;
     playerId: PlayerId;
     rotate: (piece: GamePiece, reverse?: boolean) => any;
+    flip: (piece: GamePiece) => any;
 }
 
 
@@ -22,6 +24,7 @@ function ActivePiece(props: ActivePieceProps) {
     const removeHooks = () => {
         document.removeEventListener("mousemove", mouseMoveListener)
         document.removeEventListener("wheel", mouseWheelListener)
+        document.removeEventListener("mousedown", mouseDownListener)
     }
 
     const mouseMoveListener = (e: MouseEvent) => {
@@ -30,16 +33,25 @@ function ActivePiece(props: ActivePieceProps) {
     }
 
     const mouseWheelListener = (e: WheelEvent) => {
-        if (e.deltaY > 0) {
+        e.preventDefault();
+        if (e.deltaY < 0) {
             props.rotate(windowListenerRef.current);
         } else {
             props.rotate(windowListenerRef.current, true);
         }
     }
 
+    const mouseDownListener = (e: MouseEvent) => {
+        if (e.button == 2) {
+            e.preventDefault();
+            props.flip(windowListenerRef.current);
+        }
+    }
+
     React.useEffect(() => {
         document.addEventListener("mousemove", mouseMoveListener);
-        document.addEventListener("wheel", mouseWheelListener);
+        document.addEventListener("wheel", mouseWheelListener, { passive: false });
+        document.addEventListener("mousedown", mouseDownListener);
 
         return removeHooks;
     }, [])
