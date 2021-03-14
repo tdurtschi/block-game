@@ -1,20 +1,20 @@
-$background-color: #EEFFDE;
-$text-color: #10110f;
+$background-color: #232422;
+$text-color: #d8d8d8;
 $game-border-color: $text-color;
 $btn-border-color: $text-color;
-$btn-primary-color: #A4F558;
-$btn-secondary-color: #EDCDF1;
-$p1-color: #F00;
-$p2-color: #0C0;
-$p3-color: #00F;
-$p4-color: #f0e000;
-$p1-border-color: rgba(232, 232, 232, 0.454);
+$btn-primary-color: #0068c4;
+$btn-secondary-color: #88009a;
+$p1-color: rgba(254, 12, 12, 0.68);
+$p2-color: rgba(0, 204, 0, 0.748);
+$p3-color: rgba(0, 0, 255, 0.568);
+$p4-color: #f0e000c4;
+$p1-border-color: rgba(103, 0, 0, 0.865);
 $p2-border-color: rgba(6, 87, 6, 0.577);
 $p3-border-color: rgba(9, 9, 75, 0.365);
 $p4-border-color: rgba(99, 93, 12, 0.515);
 
-$game-container-color: #f9f9f9;
-$game-board-color: #ebebeb;
+$game-container-color: #747474;
+$game-board-color: #9d9d9d;
 $game-board-squares-color: #8c8c8c;
 
 @mixin tmp {

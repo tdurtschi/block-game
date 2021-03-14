@@ -30,6 +30,7 @@ h1 {
     font-size: 1.5rem;
     cursor: pointer;
     outline: none;
+    color: $text-color;
     
     &:active {
         position: relative;

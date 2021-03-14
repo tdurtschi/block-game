@@ -33,6 +33,7 @@ class Game {
         ];
 
         this.boardState = createInitialBoardState();
+        console.log(this.boardState)
     }
 
     public action(payload: Action) {

@@ -88,58 +88,61 @@ function GameContainer({ gameState, action }: GameContainerProps) {
         setActivePiece(undefined);
     }
 
+    if (gameOver) {
+        return <h2 data-game-over>
+            Game Over
+        </h2>
+    }
+
     return (
         <div
             className={`game-container ${activePiece !== undefined ? 'hide-cursor' : ''}`}
             onContextMenu={(e) => { e.preventDefault(); return false }}
         >
-            {!gameOver &&
-                <div>
-                    <h2>Player {gameState.currentPlayer}'s Turn</h2>
-                    <GamePieces
-                        gamePieces={gameState.players[gameState.currentPlayer - 1].playerPieces}
-                        playerId={gameState.currentPlayer}
-                        onClickPiece={handlePlayerPieceClick}
+            <div className={`left-pane`}>
+                {stagedPiece !== undefined && boardTarget ?
+                    <GameBoard
+                        boardState={applyPieceToBoard(boardTarget, stagedPiece.pieceData, gameState.currentPlayer, gameState.boardState)}
+                        onClick={handleGameBoardClick}
                     />
+                    : <GameBoard
+                        boardState={gameState.boardState}
+                        onClick={handleGameBoardClick}
+                    />
+                }
+                <div className={"action-buttons-container"}>
                     <button
                         className="btn-secondary"
                         data-player-pass-button
                         onClick={pass}
                     >
                         Pass
-                </button>
+                    </button>
                     <button
                         className="btn-primary"
                         data-confirm-action
                         onClick={confirmMove}
                     >
                         Confirm Move
-                </button>
-                    {activePiece != undefined &&
-                        <ActivePiece
-                            piece={activePiece}
-                            playerId={gameState.currentPlayer}
-                            rotate={rotate}
-                            flip={flip}
-                        />
-                    }
+                    </button>
                 </div>
-            }
-            {gameOver &&
-                <h2 data-game-over>
-                    Game Over
-              </h2>
-            }
-            {stagedPiece !== undefined && boardTarget ?
-                <GameBoard
-                    boardState={applyPieceToBoard(boardTarget, stagedPiece.pieceData, gameState.currentPlayer, gameState.boardState)}
-                    onClick={handleGameBoardClick}
+            </div>
+            <div className={`right-pane`}>
+                <h2>Player {gameState.currentPlayer}'s Turn</h2>
+                <GamePieces
+                    gamePieces={gameState.players[gameState.currentPlayer - 1].playerPieces}
+                    playerId={gameState.currentPlayer}
+                    onClickPiece={handlePlayerPieceClick}
                 />
-                : <GameBoard
-                    boardState={gameState.boardState}
-                    onClick={handleGameBoardClick}
-                />
-            }
+                {activePiece != undefined &&
+                    <ActivePiece
+                        piece={activePiece}
+                        playerId={gameState.currentPlayer}
+                        rotate={rotate}
+                        flip={flip}
+                    />
+                }
+            </div>
         </div>
     )
 }

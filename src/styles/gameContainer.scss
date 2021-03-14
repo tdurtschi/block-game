@@ -2,14 +2,27 @@
 
 .game-container {
     display: flex;
-    flex-direction: column;
-    margin: 1rem auto 0 0;
+    flex-direction: row;
+    margin: 1rem auto 0 auto;
     border: 2px solid $game-border-color;
     border-radius: 3px;
-    padding: 1rem;
 
-    max-width: 1008px;
+    min-width: 900px;
+    max-width: 1000px;
+    max-height: 750px;
     background-color: $game-container-color;
+}
+
+.right-pane {
+    padding: 0 0rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.left-pane {
+    padding: 2rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .hide-cursor {
@@ -18,4 +31,15 @@
 
 .active-piece{
     pointer-events: none;
+    z-index: 100;
+}
+
+.action-buttons-container{
+    padding: 1rem 0rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    button:nth-child(1) {
+        margin: 0rem 1rem;
+    }
 }
