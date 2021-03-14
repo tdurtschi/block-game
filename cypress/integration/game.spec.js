@@ -50,11 +50,12 @@ describe("Block Game", () => {
                 cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='0']").click();
                 cy.get("[data-confirm-action]").click();
 
-                cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='0'].player-1-color");
-                cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='1'].player-1-color");
-                cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='2'].player-1-color");
-                cy.get("[data-game-board] [data-coord-x='1'][data-coord-y='2'].player-1-color");
-                cy.get("[data-game-board] [data-coord-x='1'][data-coord-y='3'].player-1-color");
+                verifyBoardArea(0, 0, [
+                    [1, 0],
+                    [1, 0],
+                    [1, 1],
+                    [0, 1],
+                ]);
             })
 
             it("Can rotate a piece with the mouse wheel", () => {
@@ -63,11 +64,10 @@ describe("Block Game", () => {
                 cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='0']").click();
                 cy.get("[data-confirm-action]").click();
 
-                cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='1'].player-1-color");
-                cy.get("[data-game-board] [data-coord-x='1'][data-coord-y='1'].player-1-color");
-                cy.get("[data-game-board] [data-coord-x='2'][data-coord-y='0'].player-1-color");
-                cy.get("[data-game-board] [data-coord-x='2'][data-coord-y='1'].player-1-color");
-                cy.get("[data-game-board] [data-coord-x='3'][data-coord-y='0'].player-1-color");
+                verifyBoardArea(0, 0, [
+                    [0, 0, 1, 1],
+                    [1, 1, 1, 0]
+                ]);
             })
 
             it("Can flip a piece with a right click", () => {
@@ -76,12 +76,25 @@ describe("Block Game", () => {
                 cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='0']").click();
                 cy.get("[data-confirm-action]").click();
 
-                cy.get("[data-game-board] [data-coord-x='1'][data-coord-y='0'].player-1-color");
-                cy.get("[data-game-board] [data-coord-x='1'][data-coord-y='1'].player-1-color");
-                cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='2'].player-1-color");
-                cy.get("[data-game-board] [data-coord-x='1'][data-coord-y='2'].player-1-color");
-                cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='3'].player-1-color");
+                verifyBoardArea(0, 0, [
+                    [0, 1],
+                    [0, 1],
+                    [1, 1],
+                    [1, 0],
+                ]);
             })
         });
     });
 });
+
+function verifyBoardArea(xCoord, yCoord, data) {
+    data.forEach((row, yIdx) => {
+        row.forEach((cell, xIdx) => {
+            let selector = `[data-game-board] [data-coord-x='${xCoord + xIdx}'][data-coord-y='${yCoord + yIdx}']`;
+            if (cell > 0) {
+                selector = selector + `.player-${cell}-color`;
+            }
+            cy.get(selector);
+        })
+    })
+}

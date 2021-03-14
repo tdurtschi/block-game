@@ -1,4 +1,3 @@
-* Refactor game board piece location expectations in cypress
 * Message for invalid move
 * Player must make first move at corner.
 * Played piece cannot extend past the edges of the board.
