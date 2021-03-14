@@ -1,35 +1,31 @@
+@import "./colors.scss";
+
 @import "./game.scss";
 @import "./gamePieces.scss";
 @import "./gameContainer.scss";
 @import "./gameBoard.scss";
 
-@mixin krona-one {
+@mixin krona-one-font {
     font-family: 'Krona One', sans-serif;
 }
 
-@mixin exo {
+@mixin exo-font {
     font-family: 'Exo', sans-serif;
 }
 
-@mixin tmp {
-    color: #B8FF75;
-    background-color: #9A1BA8;
-    border-color: #E558F5;
-}
-
 body {
-    background-color: #EEFFDE;
-    color: #10110f;
-    @include exo();
+    background-color: $background-color;
+    color: $text-color;
+    @include exo-font();
 }
 
 h1 {
-    @include krona-one();
+    @include krona-one-font();
 }
 
 @mixin button {
-    @include exo();
-    border: 2px solid #10110f;
+    @include exo-font();
+    border: 2px solid $btn-border-color;
     border-radius: 3px;
     font-size: 1.5rem;
     cursor: pointer;
@@ -44,11 +40,11 @@ h1 {
 .btn-primary {
     @include button();
 
-    background-color: #A4F558;
+    background-color: $btn-primary-color;
 }
 
 .btn-secondary {
     @include button();
 
-    background-color: #EDCDF1;
+    background-color: $btn-secondary-color;
 }
