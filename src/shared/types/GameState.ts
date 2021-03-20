@@ -1,6 +1,7 @@
 import BoardState from "./BoardState";
 import GameStatus from "./GameStatus";
 import PlayerId from "./PlayerId";
+import PlayerState from "./PlayerState";
 
 type GameState = {
     id: number,

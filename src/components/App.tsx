@@ -1,22 +1,32 @@
 import { useState } from "react";
 import React = require("react");
-import GameClient from "../gameClient";
+import { IGameClient } from "../gameClient";
+import Action from "../shared/types/Actions";
 import GameState from "../shared/types/GameState";
-import GameStatus from "../shared/types/GameStatus";
 import GameContainer from "./gameContainer";
 
 export interface BlockGameProps {
-    gameClient: GameClient
+    gameClient: IGameClient
 }
 
 function BlockGame({ gameClient }: BlockGameProps) {
     const [gameState, setGameState] = useState<GameState>();
+    const [error, setError] = useState<string>();
 
     const startGame = () => {
         const initialGameState = gameClient.newGame();
         setGameState(initialGameState);
 
         gameClient.subscribe(setGameState);
+    }
+
+    const submitAction = (action: Action) => {
+        const result = gameClient.action(action);
+
+        if (result.errorMessage) {
+            setError(result.errorMessage);
+        }
+        return result;
     }
 
     return (
@@ -32,7 +42,7 @@ function BlockGame({ gameClient }: BlockGameProps) {
                 {!gameState &&
                     <>
                         <h2>Click here to start a new game:</h2>
-                        <div style={{ width: "16px" }}/>
+                        <div style={{ width: "16px" }} />
                         <button
                             className="btn-primary"
                             data-new-game
@@ -43,14 +53,14 @@ function BlockGame({ gameClient }: BlockGameProps) {
                     </>
                 }
 
-            {gameState &&
-                <GameContainer
-                    gameState={gameState}
-                    action={(id, action) => gameClient.action(id, action)}
-                />
-            }
-
-        </div>
+                {gameState &&
+                    <GameContainer
+                        gameState={gameState}
+                        action={submitAction}
+                    />
+                }
+            </div>
+            {error && <div className={`error-message-container`}>Error: {error}</div>}
         </>
     )
 };

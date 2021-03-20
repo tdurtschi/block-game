@@ -14,7 +14,7 @@ describe("Block Game", () => {
         });
 
         it("Shows a gameboard and all game pieces", () => {
-            cy.get("[data-new-game]").should("be.disabled");
+            cy.get("[data-new-game]").should("not.exist");
             cy.get("[data-game-board]");
             cy.get("[data-game-board] .board-cell");
             cy.get("[data-player-pieces]");

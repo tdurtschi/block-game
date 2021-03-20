@@ -11,7 +11,7 @@ import GameState from "../shared/types/GameState";
 
 interface GameContainerProps {
     gameState: GameState;
-    action: (gameId: number, action: Action) => any;
+    action: (action: Action) => any;
 }
 
 function GameContainer({ gameState, action }: GameContainerProps) {
@@ -32,7 +32,6 @@ function GameContainer({ gameState, action }: GameContainerProps) {
                 : (piece.rotate + 1) % 4,
             flip: piece.flip
         } as GamePiece;
-        console.log(result)
         setActivePiece(result);
     }
 
@@ -43,12 +42,11 @@ function GameContainer({ gameState, action }: GameContainerProps) {
             rotate: piece.rotate > 0 ? 4 - piece.rotate : 0,
             flip: !piece.flip
         } as GamePiece;
-        console.log(result)
         setActivePiece(result);
     }
 
     const pass = () => {
-        action(gameState.id, { playerId: gameState.currentPlayer, kind: "Pass" });
+        action({ playerId: gameState.currentPlayer, kind: "Pass" });
         setStagedPiece(undefined);
         setActivePiece(undefined);
     }
@@ -80,7 +78,7 @@ function GameContainer({ gameState, action }: GameContainerProps) {
     }
 
     const confirmMove = () => {
-        action(gameState.id, {
+        action({
             kind: "GamePlay",
             playerId: gameState.currentPlayer,
             piece: stagedPiece?.id ?? -1,

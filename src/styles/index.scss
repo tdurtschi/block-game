@@ -49,3 +49,14 @@ h1 {
 
     background-color: $btn-secondary-color;
 }
+
+.error-message-container {
+    user-select: none;
+    min-width: 900px;
+    max-width: 1000px;
+    padding: 8px;
+    color: red;
+    font-size: 30px;
+    margin-left:auto;
+    margin-right:auto;
+}

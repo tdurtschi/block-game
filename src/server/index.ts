@@ -1,6 +1,5 @@
 import Action from "../shared/types/Actions";
 import Game from "./Game";
-import GameNotFoundError from "./errors/GameNotFoundError";
 import GameState from "../shared/types/GameState";
 
 class GameServer {
@@ -21,13 +20,22 @@ class GameServer {
         this.onUpdate = onUpdate;
     }
 
-    action(id: number, payload: Action) {
-        const game = this.games.get(id);
+    action(gameId: number, payload: Action) {
+        const game = this.games.get(gameId);
         if (game) {
-            game.action(payload);
-            this.onUpdate(game.getState());
+            try {
+                game.action(payload);
+                this.onUpdate(game.getState());
+                return {};
+            } catch (error) {
+                return {
+                    errorMessage: error.message ?? "Unknown Error Occured"
+                }
+            }
         } else {
-            throw new GameNotFoundError();
+            return {
+                errorMessage: "Game Not Found!"
+            }
         }
     }
 }

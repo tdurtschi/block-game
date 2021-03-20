@@ -2,20 +2,32 @@ import GameServer from "./server";
 import Action from "./shared/types/Actions";
 import GameState from "./shared/types/GameState";
 
-class GameClient {
+export interface IGameClient {
+    newGame: () => any
+    subscribe: (onUpdate: (gameState: Readonly<GameState>) => any) => any
+    action: (payload: Action) => any
+}
+
+class GameClient implements IGameClient {
+    private gameId: number | undefined;
+
     constructor(private server: GameServer) {
     }
 
     newGame() {
-        return this.server.newGame();
+        const result = this.server.newGame();
+        this.gameId = result.id;
+        return result;
     }
 
     subscribe(onUpdate: (gameState: Readonly<GameState>) => any) {
         return this.server.subscribe(onUpdate);
     }
 
-    action(id: number, payload: Action) {
-        this.server.action(id, payload);
+    action(payload: Action) {
+        if (this.gameId == undefined) throw new Error("No Game Exists!");
+
+        return this.server.action(this.gameId, payload);
     }
 }
 

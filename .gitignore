@@ -105,3 +105,4 @@ dist/*.css
 .tern-port
 
 cypress/videos/
+cypress/screenshots/
