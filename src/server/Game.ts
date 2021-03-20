@@ -2,19 +2,11 @@ import Action, { GamePlayAction } from "../shared/types/Actions";
 import GameStatus from "../shared/types/GameStatus";
 import InvalidActionError from "./errors/InvalidActionError";
 import Player from "./Player";
-import PlayerId from "./PlayerId";
+import PlayerId from "../shared/types/PlayerId";
 import { GamePiecesData } from "../shared/types/GamePiece";
 import { applyPieceToBoard, clone, rotate as applyRotate, flip as applyFlip } from "../shared/pieceUtils";
-
-type BoardState = (PlayerId | undefined)[][];
-
-type GameState = {
-    id: number,
-    boardState: Readonly<BoardState>,
-    currentPlayer: Readonly<PlayerId>,
-    players: Readonly<Player[]>,
-    status: GameStatus
-}
+import GameState from "../shared/types/GameState";
+import BoardState from "../shared/types/BoardState";
 
 class Game {
     public currentPlayer: PlayerId = 1;
@@ -33,7 +25,6 @@ class Game {
         ];
 
         this.boardState = createInitialBoardState();
-        console.log(this.boardState)
     }
 
     public action(payload: Action) {
@@ -73,7 +64,7 @@ class Game {
         return {
             id: this.id,
             currentPlayer: this.currentPlayer,
-            players: this.players,
+            players: this.players.map(player => player.getState()),
             boardState: this.boardState,
             status: this.status
         }
@@ -112,7 +103,6 @@ class Game {
     }
 }
 
-export type { GameState, BoardState };
 export default Game;
 
 function createInitialBoardState(): BoardState {

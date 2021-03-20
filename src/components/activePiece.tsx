@@ -1,6 +1,6 @@
 import { flip } from "cypress/types/lodash";
 import React = require("react");
-import PlayerId from "../server/PlayerId";
+import PlayerId from "../shared/types/PlayerId";
 import GamePiece from "../shared/types/GamePiece";
 import Piece from "./gamePiece";
 

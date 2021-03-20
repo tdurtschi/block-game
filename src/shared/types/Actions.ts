@@ -1,4 +1,4 @@
-import PlayerId from "../../server/PlayerId";
+import PlayerId from "./PlayerId";
 
 type Action = GamePlayAction | PassAction;
 

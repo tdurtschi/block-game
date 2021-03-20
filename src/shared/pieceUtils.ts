@@ -1,6 +1,6 @@
-import { BoardState } from "../server/Game";
-import PlayerId from "../server/PlayerId";
+import PlayerId from "./types/PlayerId";
 import { BoardLocation } from "./types/Actions";
+import BoardState from "./types/BoardState";
 
 function applyPieceToBoard(
     { x, y }: BoardLocation,

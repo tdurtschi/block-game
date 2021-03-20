@@ -9,6 +9,7 @@
     "build": "node build.js",
     "start": "npm run build && serve dist/",
     "e2e": "cypress open",
+    "e2e:ci": "cypress run",
     "test": "jest",
     "watch": "node build.js --watch"
   },

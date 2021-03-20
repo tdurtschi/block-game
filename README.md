@@ -10,5 +10,5 @@
 * Calculate & Display score at end of game.
 * Full Game smoke test - happy path
 * CSS Fixes
-* Create Client, dont connect to server from component
 * Move server to backend with websockets.
+* Debounce mouse wheel for rotation

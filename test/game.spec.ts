@@ -1,7 +1,8 @@
 import { GamePlayAction } from "../src/shared/types/Actions";
 import Game from "../src/server/Game";
 import GameStatus from "../src/shared/types/GameStatus";
-import PlayerId from "../src/server/PlayerId";
+import PlayerId from "../src/shared/types/PlayerId";
+import GamePiece from "../src/shared/types/GamePiece";
 
 describe("Game", () => {
     it("Has 4 players", () => {
@@ -82,7 +83,7 @@ describe("Game", () => {
             game.action(gameMove(1, pieceToPlay, { x: 0, y: 0 }))
 
             const state = game.getState();
-            expect(state.players[0].playerPieces.find(piece => piece.id == pieceToPlay)).toBeFalsy();
+            expect(state.players[0].playerPieces.find((piece: GamePiece) => piece.id == pieceToPlay)).toBeFalsy();
         });
     });
 

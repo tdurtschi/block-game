@@ -1,6 +1,6 @@
 import React = require("react");
-import { BoardState } from "../server/Game";
-import PlayerId from "../server/PlayerId";
+import BoardState from "../shared/types/BoardState";
+import PlayerId from "../shared/types/PlayerId";
 
 interface GameBoardProps {
     boardState: Readonly<BoardState>;
@@ -11,7 +11,7 @@ function GameBoard({ boardState, onClick }: GameBoardProps) {
     return (<div className="game-board">
         <div className={"game-underlay"}>
             {
-                gameBoardData.map((row, rowIdx) =>
+                gameBoardUnderlayData.map((row, rowIdx) =>
                     <BoardRow
                         row={row}
                         key={rowIdx}
@@ -73,7 +73,7 @@ function getCellColorClass(playerId: PlayerId | undefined) {
     else return ``;
 }
 
-const gameBoardData = [
+const gameBoardUnderlayData = [
     [
         undefined,
         undefined,

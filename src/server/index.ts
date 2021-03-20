@@ -1,6 +1,7 @@
 import Action from "../shared/types/Actions";
-import Game, { GameState } from "./Game";
+import Game from "./Game";
 import GameNotFoundError from "./errors/GameNotFoundError";
+import GameState from "../shared/types/GameState";
 
 class GameServer {
     private games: Map<number, Game> = new Map<number, Game>()

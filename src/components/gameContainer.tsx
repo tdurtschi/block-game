@@ -1,6 +1,5 @@
 import React = require("react");
 import Action, { BoardLocation } from "../shared/types/Actions";
-import { GameState } from "../server/Game";
 import GameStatus from "../shared/types/GameStatus";
 import GameBoard from "./gameBoard";
 import GamePieces from "./gamePieces";
@@ -8,6 +7,7 @@ import ActivePiece from "./activePiece";
 import { applyPieceToBoard } from "../shared/pieceUtils";
 import GamePiece, { GamePiecesData } from "../shared/types/GamePiece";
 import * as pieceUtils from "../shared/pieceUtils"
+import GameState from "../shared/types/GameState";
 
 interface GameContainerProps {
     gameState: GameState;

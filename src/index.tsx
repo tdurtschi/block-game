@@ -1,49 +1,16 @@
-import { useState } from "react";
 import React = require("react");
 import ReactDOM = require("react-dom");
-import GameContainer from "./components/gameContainer";
-import server from "./server";
-import { GameState } from "./server/Game";
-import GameStatus from "./shared/types/GameStatus";
-
-function BlockGame({ server }: { server: server }) {
-  const [gameState, setGameState] = useState<GameState>();
-
-  const startGame = () => {
-    const initialGameState = server.newGame();
-    setGameState(initialGameState);
-
-    server.subscribe(setGameState);
-  }
-
-  return (
-    <>
-      <header>
-        <h1>Block Game</h1>
-        <button
-          className="btn-primary"
-          disabled={gameState && gameState.status !== GameStatus.OVER}
-          data-new-game
-          onClick={startGame}
-        >
-          New Game
-      </button>
-      </header>
-      {
-        gameState && <GameContainer
-          gameState={gameState}
-          action={(id, action) => server.action(id, action)}
-        />
-      }
-    </>
-  )
-};
+import App from "./components/App";
+import GameClient from "./gameClient";
+import GameServer from "./server";
 
 const container = document.createElement('div');
 container.className = "app-container";
 document.body.appendChild(container);
 
+const gameClient = new GameClient(new GameServer());
+
 ReactDOM.render(
-  React.createElement(BlockGame, { server: new server() }),
+  React.createElement(App, { gameClient }),
   container
 );

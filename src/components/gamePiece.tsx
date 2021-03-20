@@ -1,5 +1,5 @@
 import React = require("react");
-import PlayerId from "../server/PlayerId";
+import PlayerId from "../shared/types/PlayerId";
 import GamePieceModel from "../shared/types/GamePiece";
 
 interface GamePieceProps {
