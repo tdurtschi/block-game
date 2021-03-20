@@ -88,17 +88,13 @@ function GameContainer({ gameState, action }: GameContainerProps) {
         setActivePiece(undefined);
     }
 
-    if (gameOver) {
-        return <h2 data-game-over>
-            Game Over
-        </h2>
-    } else {
-        return (
-            <div
-                className={`game-container ${activePiece !== undefined ? 'hide-cursor' : ''}`}
-                onContextMenu={(e) => { e.preventDefault(); return false }}
-            >
-                <div className={`left-pane`}>
+    return <>
+        {gameOver &&
+            <h2 data-game-over>Game Over</h2>
+        }
+        {!gameOver &&
+            <>
+                <div className={`left-pane ${activePiece !== undefined ? 'hide-cursor' : ''}`}>
                     {stagedPiece !== undefined && boardTarget ?
                         <GameBoard
                             boardState={applyPieceToBoard(boardTarget, stagedPiece.pieceData, gameState.currentPlayer, gameState.boardState)}
@@ -110,23 +106,11 @@ function GameContainer({ gameState, action }: GameContainerProps) {
                         />
                     }
                     <div className={"action-buttons-container"}>
-                        <button
-                            className="btn-secondary"
-                            data-player-pass-button
-                            onClick={pass}
-                        >
-                            Pass
-                    </button>
-                        <button
-                            className="btn-primary"
-                            data-confirm-action
-                            onClick={confirmMove}
-                        >
-                            Confirm Move
-                    </button>
+                        <PassButton pass={pass} />
+                        <ConfirmButton confirmMove={confirmMove} />
                     </div>
                 </div>
-                <div className={`right-pane`}>
+                <div className={`right-pane ${activePiece !== undefined ? 'hide-cursor' : ''}`}>
                     <GamePieces
                         gamePieces={gameState.players[gameState.currentPlayer - 1].playerPieces}
                         playerId={gameState.currentPlayer}
@@ -139,9 +123,27 @@ function GameContainer({ gameState, action }: GameContainerProps) {
                     rotate={rotate}
                     flip={flip}
                 />
-            </div>
-        )
-    }
+            </>
+        }
+    </>
 }
+
+const PassButton = ({ pass }: { pass: () => void }) =>
+    <button
+        className="btn-secondary"
+        data-player-pass-button
+        onClick={pass}
+    >
+        Pass
+    </button>
+
+const ConfirmButton = ({ confirmMove }: { confirmMove: () => void }) =>
+    <button
+        className="btn-primary"
+        data-confirm-action
+        onClick={confirmMove}
+    >
+        Confirm Move
+    </button>
 
 export default GameContainer;

@@ -1,4 +1,6 @@
 * New game button is in game board - goes away after starting.
+* Bug rotate->flip->rotate->confirm
+* Pick up staged piece from board & fix cursor to pointer on staged piece
 * Message for invalid move - server validation
 * Message for invalid move - client validation
 * Player must make first move at corner.

@@ -23,21 +23,34 @@ function BlockGame({ gameClient }: BlockGameProps) {
         <>
             <header>
                 <h1>Block Game</h1>
-                <button
-                    className="btn-primary"
-                    disabled={gameState && gameState.status !== GameStatus.OVER}
-                    data-new-game
-                    onClick={startGame}
-                >
-                    New Game
-        </button>
+
             </header>
-            {
-                gameState && <GameContainer
+            <div
+                className={`game-container`}
+                onContextMenu={(e) => { e.preventDefault(); return false }}
+            >
+                {!gameState &&
+                    <>
+                        <h2>Click here to start a new game:</h2>
+                        <div style={{ width: "16px" }}/>
+                        <button
+                            className="btn-primary"
+                            data-new-game
+                            onClick={startGame}
+                        >
+                            New Game
+                        </button>
+                    </>
+                }
+
+            {gameState &&
+                <GameContainer
                     gameState={gameState}
                     action={(id, action) => gameClient.action(id, action)}
                 />
             }
+
+        </div>
         </>
     )
 };
