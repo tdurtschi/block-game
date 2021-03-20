@@ -1,24 +1,30 @@
-import { flip } from "cypress/types/lodash";
 import React = require("react");
 import PlayerId from "../shared/types/PlayerId";
 import GamePiece from "../shared/types/GamePiece";
 import Piece from "./gamePiece";
 
 interface ActivePieceProps {
-    piece: GamePiece;
+    piece: GamePiece | undefined;
     playerId: PlayerId;
     rotate: (piece: GamePiece, reverse?: boolean) => any;
     flip: (piece: GamePiece) => any;
 }
 
+function ActivePieceContainer(props: ActivePieceProps) {
+    if (props.piece) {
+        return <ActivePiece {...props} />
+    } else {
+        return <></>
+    }
+}
 
 function ActivePiece(props: ActivePieceProps) {
     const [x, setX] = React.useState<number>(-1000);
     const [y, setY] = React.useState<number>(0);
-    const windowListenerRef = React.useRef(props.piece);
+    const windowListenerRef = React.useRef(props.piece!);
 
     React.useEffect(() => {
-        windowListenerRef.current = props.piece;
+        windowListenerRef.current = props.piece!;
     })
 
     const removeHooks = () => {
@@ -65,11 +71,11 @@ function ActivePiece(props: ActivePieceProps) {
             left: `${x - 24}px`,
         }}>
         <Piece
-            piece={props.piece}
+            piece={props.piece!}
             onClick={() => { }}
             playerId={props.playerId}
         />
     </div>
 }
 
-export default ActivePiece;
+export default ActivePieceContainer;
