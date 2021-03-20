@@ -24,12 +24,15 @@ function GameContainer({ gameState, action }: GameContainerProps) {
     const rotate = (piece: GamePiece, reverse: boolean = false) => {
         const result = {
             id: piece?.id,
-            pieceData: reverse ? pieceUtils.rotateReverse(piece.pieceData)
+            pieceData: reverse
+                ? pieceUtils.rotateReverse(piece.pieceData)
                 : pieceUtils.rotate(piece.pieceData),
-            rotate: reverse ? piece.rotate + 3 % 4
-                : piece.rotate + 1,
+            rotate: reverse
+                ? (piece.rotate + 3) % 4
+                : (piece.rotate + 1) % 4,
             flip: piece.flip
         } as GamePiece;
+        console.log(result)
         setActivePiece(result);
     }
 
@@ -40,6 +43,7 @@ function GameContainer({ gameState, action }: GameContainerProps) {
             rotate: piece.rotate > 0 ? 4 - piece.rotate : 0,
             flip: !piece.flip
         } as GamePiece;
+        console.log(result)
         setActivePiece(result);
     }
 
