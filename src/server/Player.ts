@@ -1,6 +1,8 @@
 import GamePiece, { GamePiecesData } from "../shared/types/GamePiece";
 import PlayerId from "../shared/types/PlayerId";
 
+const NUM_PIECES = 21;
+
 class Player {
     public playerPieces: GamePiece[];
     public hasPassed: boolean = false;
@@ -25,12 +27,16 @@ class Player {
     }
 
     private pieces = () =>
-        new Array(21).fill(0).map((_, idx) => ({
+        new Array(NUM_PIECES).fill(0).map((_, idx) => ({
             id: idx,
             pieceData: GamePiecesData[idx],
             rotate: 0 as 0 | 1 | 2 | 3,
             flip: false
         }));
+
+    isFirstTurn() {
+        return this.playerPieces.length === NUM_PIECES;
+    }
 }
 
 export default Player;

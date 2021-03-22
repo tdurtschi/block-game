@@ -91,8 +91,30 @@ class Game {
 
         const pieceData = applyPieceModifications(GamePiecesData[piece], rotate, flip);
 
+        this.validate_ifFirstMove_pieceIsInCorner(action, pieceData);
         this.validate_pieceDoesntOverlapExistingPiece(action, pieceData);
         this.validate_pieceFitsOnBoard(action, pieceData);
+    }
+
+    private validate_ifFirstMove_pieceIsInCorner({ location: { x, y }, playerId }: GamePlayAction, pieceData: number[][]) {
+        if (!this.getPlayer(playerId).isFirstTurn()) {
+            return
+        }
+        
+        var pieceY = pieceData.length;
+        var pieceX = pieceData[0].length;
+        if (!((pieceData[0][0] == 1 && x == 0 && y == 0) ||
+            (pieceData[pieceY - 1][pieceX - 1] == 1 &&
+                x + pieceX == GAMEBOARD_SIZE &&
+                y + pieceY == GAMEBOARD_SIZE) ||
+            (pieceData[0][pieceX - 1] == 1 &&
+                x + pieceX == GAMEBOARD_SIZE &&
+                y == 0) ||
+            (pieceData[pieceY - 1][0] == 1 &&
+                y + pieceY == GAMEBOARD_SIZE &&
+                x == 0))) {
+            throw new InvalidActionError("If it is your first turn, make sure your piece touches a corner.")
+        }
     }
 
     private validate_pieceDoesntOverlapExistingPiece({ location }: GamePlayAction, pieceData: number[][]) {
@@ -107,12 +129,12 @@ class Game {
         }
     }
 
-    private validate_pieceFitsOnBoard(action: GamePlayAction, pieceData: number[][]) {
+    private validate_pieceFitsOnBoard({ location }: GamePlayAction, pieceData: number[][]) {
         var pieceY = pieceData.length;
         var pieceX = pieceData[0].length;
 
-        if (GAMEBOARD_SIZE < action.location.y + pieceY ||
-            GAMEBOARD_SIZE < action.location.x + pieceX) {
+        if (GAMEBOARD_SIZE < location.y + pieceY ||
+            GAMEBOARD_SIZE < location.x + pieceX) {
             throw new InvalidActionError("Invalid action: Piece must fully fit on game board.");
         }
     }

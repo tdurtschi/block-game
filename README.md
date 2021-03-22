@@ -1,5 +1,4 @@
 * Pick up staged piece from board & fix cursor to pointer on staged piece
-* Player must make first move at corner.
 * Played piece must touch same player's piece diagonally at least once.
 * Played piece cannot touch same player's piece directly.
 * Message for invalid move - client validation

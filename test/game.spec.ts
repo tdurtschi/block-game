@@ -99,6 +99,35 @@ describe("Game", () => {
                 game.action(gameMove(1, 0, { x: 0, y: 19 }))
             });
         });
+
+        describe("First piece in the corner", () => {
+            // Piece 20 is the 1x1 piece
+            let game: Game;
+            beforeEach(() => game = new Game(0))
+
+            describe("Happy path, everyone claims a corner", () => {
+                it("Lets all four players play in a corner", () => {
+                    game.action(gameMove(1, 20, { x: 0, y: 0 }))
+                    game.action(gameMove(2, 20, { x: 19, y: 0 }))
+                    game.action(gameMove(3, 20, { x: 0, y: 19 }))
+                    game.action(gameMove(4, 20, { x: 19, y: 19 }))
+                })
+
+                it("Allows next play to be outside of corner", () => {
+                    game.action(gameMove(1, 20, { x: 0, y: 0 }))
+                    game.action(gameMove(2, 20, { x: 19, y: 0 }))
+                    game.action(gameMove(3, 20, { x: 0, y: 19 }))
+                    game.action(gameMove(4, 20, { x: 19, y: 19 }))
+                    game.action(gameMove(1, 0, { x: 1, y: 1 }))
+                })
+            })
+
+            it("Throw error if first play not in the corner", () => {
+                expectError(() => {
+                    game.action(gameMove(1, 20, { x: 1, y: 0 }))
+                });
+            })
+        })
     })
 
     it("Regression Test: Player 2 can move after making an invalid attempt", () => {
@@ -109,7 +138,7 @@ describe("Game", () => {
             game.action(gameMove(2, 0, { x: 0, y: 0 }));
         } catch (error) { }
 
-        game.action(gameMove(2, 0, { x: 2, y: 0 }));
+        game.action(gameMove(2, 20, { x: 19, y: 0 }));
     });
 });
 

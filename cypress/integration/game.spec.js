@@ -71,10 +71,10 @@ describe("Block Game", () => {
             it("Can rotate a piece with the mouse wheel", () => {
                 cy.get("[data-game-piece]").eq(0).click();
                 cy.get("[data-game-board]").trigger("wheel", { deltaY: -4 });
-                cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='0']").click();
+                cy.get("[data-game-board] [data-coord-x='16'][data-coord-y='0']").click();
                 cy.get("[data-confirm-action]").click();
 
-                verifyBoardArea(0, 0, [
+                verifyBoardArea(16, 0, [
                     [0, 0, 1, 1],
                     [1, 1, 1, 0]
                 ]);
@@ -83,10 +83,10 @@ describe("Block Game", () => {
             it("Can flip a piece with a right click", () => {
                 cy.get("[data-game-piece]").eq(0).click();
                 cy.get("[data-game-board]").trigger("mousedown", { button: 2 });
-                cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='0']").click();
+                cy.get("[data-game-board] [data-coord-x='18'][data-coord-y='0']").click();
                 cy.get("[data-confirm-action]").click();
 
-                verifyBoardArea(0, 0, [
+                verifyBoardArea(18, 0, [
                     [0, 1],
                     [0, 1],
                     [1, 1],
