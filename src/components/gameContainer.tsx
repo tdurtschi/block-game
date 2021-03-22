@@ -91,42 +91,35 @@ function GameContainer({ gameState, action }: GameContainerProps) {
     }
 
     return <>
-        {gameOver &&
-            <h2 data-game-over>Game Over</h2>
-        }
-        {!gameOver &&
-            <>
-                <div className={`left-pane ${activePiece !== undefined ? 'hide-cursor' : ''}`}>
-                    {stagedPiece !== undefined && boardTarget ?
-                        <GameBoard
-                            boardState={applyPieceToBoard(boardTarget, stagedPiece.pieceData, gameState.currentPlayer, gameState.boardState)}
-                            onClick={handleGameBoardClick}
-                        />
-                        : <GameBoard
-                            boardState={gameState.boardState}
-                            onClick={handleGameBoardClick}
-                        />
-                    }
-                    <div className={"action-buttons-container"}>
-                        <PassButton pass={pass} />
-                        <ConfirmButton confirmMove={confirmMove} />
-                    </div>
-                </div>
-                <div className={`right-pane ${activePiece !== undefined ? 'hide-cursor' : ''}`}>
-                    <GamePieces
-                        gamePieces={gameState.players[gameState.currentPlayer - 1].playerPieces}
-                        playerId={gameState.currentPlayer}
-                        onClickPiece={handlePlayerPieceClick}
-                    />
-                </div>
-                <ActivePieceContainer
-                    piece={activePiece}
-                    playerId={gameState.currentPlayer}
-                    rotate={rotate}
-                    flip={flip}
+        <div className={`left-pane ${activePiece !== undefined ? 'hide-cursor' : ''}`}>
+            {stagedPiece !== undefined && boardTarget ?
+                <GameBoard
+                    boardState={applyPieceToBoard(boardTarget, stagedPiece.pieceData, gameState.currentPlayer, gameState.boardState)}
+                    onClick={handleGameBoardClick}
                 />
-            </>
-        }
+                : <GameBoard
+                    boardState={gameState.boardState}
+                    onClick={handleGameBoardClick}
+                />
+            }
+            <div className={"action-buttons-container"}>
+                <PassButton pass={pass} />
+                <ConfirmButton confirmMove={confirmMove} />
+            </div>
+        </div>
+        <div className={`right-pane`}>
+            <GamePieces
+                gamePieces={gameState.players[gameState.currentPlayer - 1].playerPieces}
+                playerId={gameState.currentPlayer}
+                onClickPiece={handlePlayerPieceClick}
+            />
+        </div>
+        <ActivePieceContainer
+            piece={activePiece}
+            playerId={gameState.currentPlayer}
+            rotate={rotate}
+            flip={flip}
+        />
     </>
 }
 

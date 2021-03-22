@@ -3,6 +3,7 @@ import React = require("react");
 import { IGameClient } from "../gameClient";
 import Action from "../shared/types/Actions";
 import GameState from "../shared/types/GameState";
+import GameStatus from "../shared/types/GameStatus";
 import GameContainer from "./gameContainer";
 
 export interface BlockGameProps {
@@ -39,30 +40,41 @@ function BlockGame({ gameClient }: BlockGameProps) {
                 className={`game-container`}
                 onContextMenu={(e) => { e.preventDefault(); return false }}
             >
-                {!gameState &&
-                    <>
-                        <h2>Click here to start a new game:</h2>
-                        <div style={{ width: "16px" }} />
-                        <button
-                            className="btn-primary"
-                            data-new-game
-                            onClick={startGame}
-                        >
-                            New Game
-                        </button>
-                    </>
-                }
-
-                {gameState &&
+                {(gameState && gameState.status !== GameStatus.OVER) &&
                     <GameContainer
                         gameState={gameState}
                         action={submitAction}
                     />
                 }
+                {(gameState && gameState.status === GameStatus.OVER) && <div>
+                    <h2 data-game-over>Game Over!</h2>
+                    <h2>Click here to start a new game:</h2>
+                    <div style={{ width: "16px" }} />
+                    <NewGameButton startGame={startGame} />
+                </div>}
+                {!gameState && <>
+                    <h2>Click here to start a new game:</h2>
+                    <div style={{ width: "16px" }} />
+                    <NewGameButton startGame={startGame} />
+                </>}
             </div>
             {error && <div className={`error-message-container`}>Error: {error}</div>}
         </>
     )
 };
 
+
+
 export default BlockGame;
+
+function NewGameButton({ startGame }: { startGame: () => void }) {
+    return <>
+        <button
+            className="btn-primary"
+            data-new-game
+            onClick={startGame}
+        >
+            New Game
+        </button>
+    </>;
+}

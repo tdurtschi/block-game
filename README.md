@@ -12,3 +12,4 @@
 * CSS Fixes
 * Move server to backend with websockets.
 * Debounce mouse wheel for rotation
+* Page Object pattern for cypress

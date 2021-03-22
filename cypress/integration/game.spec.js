@@ -21,17 +21,27 @@ describe("Block Game", () => {
             cy.get(".player-1-color.game-piece")
         });
 
-        it("Completes a game where everyone passes", () => {
-            cy.contains("Player 1");
-            cy.get("[data-player-pass-button]").click();
-            cy.contains("Player 2");
-            cy.get("[data-player-pass-button]").click();
-            cy.contains("Player 3");
-            cy.get("[data-player-pass-button]").click();
-            cy.contains("Player 4");
-            cy.get("[data-player-pass-button]").click();
-            cy.get("[data-game-over]");
-        });
+        describe("End of the game", () => {
+            beforeEach(() => {
+                cy.contains("Player 1");
+                cy.get("[data-player-pass-button]").click();
+                cy.contains("Player 2");
+                cy.get("[data-player-pass-button]").click();
+                cy.contains("Player 3");
+                cy.get("[data-player-pass-button]").click();
+                cy.contains("Player 4");
+                cy.get("[data-player-pass-button]").click();
+            })
+
+            it("Completes a game where everyone passes", () => {
+                cy.get("[data-game-over]");
+            });
+
+            it("Allows a player to start a new game", () => {
+                cy.get("[data-new-game]").click();
+                cy.contains("Player 1");
+            })
+        })
 
         describe("Passing", () => {
             it("Clears a staged piece from the game board and the active piece", () => {
