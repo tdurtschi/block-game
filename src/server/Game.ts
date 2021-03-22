@@ -8,6 +8,8 @@ import { applyPieceToBoard, clone, rotate as applyRotate, flip as applyFlip } fr
 import GameState from "../shared/types/GameState";
 import BoardState from "../shared/types/BoardState";
 
+const GAMEBOARD_SIZE = 20;
+
 class Game {
     public currentPlayer: PlayerId = 1;
     public boardState: (PlayerId | undefined)[][];
@@ -36,16 +38,13 @@ class Game {
                     this.status = GameStatus.OVER;
                 }
             } else if (action.kind == "GamePlay") {
-                if (this.moveIsValid(action)) {
-                    this.applyPiece(action);
-                } else {
-                    throw new InvalidActionError();
-                }
+                this.throwErrorIfActionInvalid(action)
+                this.applyPieceToGameBoard(action)
             }
             this.currentPlayer = this.getPlayerForNextTurn();
         }
         else {
-            throw new InvalidActionError();
+            throw new InvalidActionError(`It is player ${this.currentPlayer}'s turn.`);
         }
     }
 
@@ -70,22 +69,7 @@ class Game {
         }
     }
 
-    moveIsValid({ location, piece, rotate, flip }: GamePlayAction) {
-        let isValid = true;
-        const pieceData = applyPieceModifications(GamePiecesData[piece], rotate, flip);
-        var pieceY = pieceData.length;
-        var pieceX = pieceData[0].length;
-        for (var i = 0; i < pieceY; i++) {
-            for (var j = 0; j < pieceX; j++) {
-                if (pieceData[i][j] !== 0 && this.boardState[location.y + i][location.x + j] !== undefined) {
-                    return false;
-                }
-            }
-        }
-        return isValid;
-    }
-
-    applyPiece({ location, piece, playerId, rotate, flip }: GamePlayAction) {
+    applyPieceToGameBoard({ location, piece, playerId, rotate, flip }: GamePlayAction) {
         const modifiedPiece = applyPieceModifications(GamePiecesData[piece], rotate, flip);
         this.boardState = applyPieceToBoard(location, modifiedPiece, playerId, this.boardState);
 
@@ -101,13 +85,44 @@ class Game {
         const nextPlayer = validPlayers[(playerIdx + 1) % validPlayers.length] as PlayerId;
         return nextPlayer;
     }
+
+    private throwErrorIfActionInvalid(action: GamePlayAction) {
+        const { piece, rotate, flip } = action;
+
+        const pieceData = applyPieceModifications(GamePiecesData[piece], rotate, flip);
+
+        this.validate_pieceDoesntOverlapExistingPiece(action, pieceData);
+        this.validate_pieceFitsOnBoard(action, pieceData);
+    }
+
+    private validate_pieceDoesntOverlapExistingPiece({ location }: GamePlayAction, pieceData: number[][]) {
+        var pieceY = pieceData.length;
+        var pieceX = pieceData[0].length;
+        for (var i = 0; i < pieceY; i++) {
+            for (var j = 0; j < pieceX; j++) {
+                if (pieceData[i][j] !== 0 && this.boardState[location.y + i][location.x + j] !== undefined) {
+                    throw new InvalidActionError("Invalid action: Piece cannot overlap another piece.");
+                }
+            }
+        }
+    }
+
+    private validate_pieceFitsOnBoard(action: GamePlayAction, pieceData: number[][]) {
+        var pieceY = pieceData.length;
+        var pieceX = pieceData[0].length;
+
+        if (GAMEBOARD_SIZE < action.location.y + pieceY ||
+            GAMEBOARD_SIZE < action.location.x + pieceX) {
+            throw new InvalidActionError("Invalid action: Piece must fully fit on game board.");
+        }
+    }
 }
 
 export default Game;
 
 function createInitialBoardState(): BoardState {
-    const rows = 20;
-    const columns = 20;
+    const rows = GAMEBOARD_SIZE;
+    const columns = GAMEBOARD_SIZE;
     const rowArray: PlayerId[][] = new Array(rows).fill([]);
     const result = rowArray.map(() => new Array(columns).fill(undefined));
     return result;

@@ -1,5 +1,7 @@
 class InvalidActionError extends Error {
-    message = "Invalid Action!";
+    constructor(public message: string) {
+        super();
+    }
 }
 
 export default InvalidActionError;

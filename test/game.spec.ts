@@ -69,14 +69,6 @@ describe("Game", () => {
             expect(game.getState().currentPlayer).toEqual(4);
         });
 
-        it("Two players can't play in the same spot", () => {
-            const game = new Game(0);
-            game.action(gameMove(1, 0, { x: 0, y: 0 }))
-            expectError(() => {
-                game.action(gameMove(2, 0, { x: 0, y: 0 }))
-            });
-        });
-
         it("A player's piece is removed from inventory after playing it", () => {
             const game = new Game(0);
             const pieceToPlay = 0;
@@ -86,6 +78,28 @@ describe("Game", () => {
             expect(state.players[0].playerPieces.find((piece: GamePiece) => piece.id == pieceToPlay)).toBeFalsy();
         });
     });
+
+    describe("Move validation logic", () => {
+        it("Two players can't play in the same spot", () => {
+            const game = new Game(0);
+            game.action(gameMove(1, 0, { x: 0, y: 0 }))
+            expectError(() => {
+                game.action(gameMove(2, 0, { x: 0, y: 0 }))
+            });
+        });
+
+        it("Piece cannot extend past the edges of the board", () => {
+            const game = new Game(0);
+
+            expectError(() => {
+                game.action(gameMove(1, 0, { x: 19, y: 0 }))
+            });
+
+            expectError(() => {
+                game.action(gameMove(1, 0, { x: 0, y: 19 }))
+            });
+        });
+    })
 
     it("Regression Test: Player 2 can move after making an invalid attempt", () => {
         const game = new Game(0);
