@@ -10,6 +10,8 @@ interface ActivePieceProps {
     flip: (piece: GamePiece) => any;
 }
 
+const DEBOUNCE_TIMEOUT_MS = 300;
+
 function ActivePieceContainer(props: ActivePieceProps) {
     if (props.piece) {
         return <ActivePiece {...props} />
@@ -41,9 +43,9 @@ function ActivePiece(props: ActivePieceProps) {
     const mouseWheelListener = (e: WheelEvent) => {
         e.preventDefault();
         if (e.deltaY < 0) {
-            props.rotate(windowListenerRef.current);
+            debounce(() => props.rotate(windowListenerRef.current));
         } else {
-            props.rotate(windowListenerRef.current, true);
+            debounce(() => props.rotate(windowListenerRef.current, true));
         }
     }
 
@@ -76,6 +78,16 @@ function ActivePiece(props: ActivePieceProps) {
             playerId={props.playerId}
         />
     </div>
+}
+
+let debounceIndicator = false;
+
+const debounce = (action: Function) => {
+    if (!debounceIndicator) {
+        debounceIndicator = true;
+        action();
+        setTimeout(() => debounceIndicator = false, DEBOUNCE_TIMEOUT_MS);
+    }
 }
 
 export default ActivePieceContainer;
