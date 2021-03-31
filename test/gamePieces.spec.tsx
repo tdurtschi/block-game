@@ -21,18 +21,21 @@ describe("Game Pieces", () => {
   it("Shows one piece for each input", () => {
     const gamePieces: GamePiece[] = [
       {
+        playerId: 1,
         id: 0,
         pieceData: GamePiecesData[0],
         rotate: 0,
         flip: false
       },
       {
+        playerId: 1,
         id: 1,
         pieceData: GamePiecesData[1],
         rotate: 0,
         flip: false
       },
       {
+        playerId: 1,
         id: 2,
         pieceData: GamePiecesData[2],
         rotate: 0,

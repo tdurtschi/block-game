@@ -1,13 +1,12 @@
 import React = require("react");
 import Action, { BoardLocation } from "../shared/types/Actions";
-import GameStatus from "../shared/types/GameStatus";
 import GameBoard from "./gameBoard";
 import GamePieces from "./gamePieces";
 import ActivePieceContainer from "./activePiece";
-import { applyPieceToBoard } from "../shared/pieceUtils";
 import GamePiece, { GamePiecesData } from "../shared/types/GamePiece";
 import * as pieceUtils from "../shared/pieceUtils"
 import GameState from "../shared/types/GameState";
+import StagedPiece from "../frontend/StagedPiece";
 
 interface GameContainerProps {
     gameState: GameState;
@@ -16,26 +15,24 @@ interface GameContainerProps {
 
 function GameContainer({ gameState, action }: GameContainerProps) {
     const [activePiece, setActivePiece] = React.useState<GamePiece>();
-    const [stagedPiece, setStagedPiece] = React.useState<GamePiece>();
-    const [boardTarget, setBoardTarget] = React.useState<BoardLocation>();
+    const [stagedPiece, setStagedPiece] = React.useState<StagedPiece>();
 
     const rotate = (piece: GamePiece, reverse: boolean = false) => {
         const result = {
-            id: piece?.id,
+            ...piece,
             pieceData: reverse
                 ? pieceUtils.rotateReverse(piece.pieceData)
                 : pieceUtils.rotate(piece.pieceData),
             rotate: reverse
                 ? (piece.rotate + 3) % 4
                 : (piece.rotate + 1) % 4,
-            flip: piece.flip
         } as GamePiece;
         setActivePiece(result);
     }
 
     const flip = (piece: GamePiece) => {
         const result = {
-            id: piece?.id,
+            ...piece,
             pieceData: pieceUtils.flip(piece.pieceData),
             rotate: piece.rotate > 0 ? 4 - piece.rotate : 0,
             flip: !piece.flip
@@ -51,19 +48,15 @@ function GameContainer({ gameState, action }: GameContainerProps) {
     const pickUpStagedPiece = (yCoord: number, xCoord: number) => {
         setActivePiece(stagedPiece);
         setStagedPiece(undefined);
-        setBoardTarget(undefined);
     }
 
     const stagePiece = (yCoord: number, xCoord: number) => {
         if (activePiece !== undefined) {
             const stagedPiece = {
-                pieceData: activePiece.pieceData,
-                id: activePiece.id,
-                rotate: activePiece.rotate,
-                flip: activePiece.flip
+                ...activePiece,
+                target: { x: xCoord, y: yCoord }
             };
 
-            setBoardTarget({ x: xCoord, y: yCoord });
             setStagedPiece(stagedPiece);
             setActivePiece(undefined);
         }
@@ -71,13 +64,13 @@ function GameContainer({ gameState, action }: GameContainerProps) {
 
     const handlePlayerPieceClick = (pieceId: number) => {
         setActivePiece({
+            playerId: gameState.currentPlayer,
             pieceData: GamePiecesData[pieceId],
             id: pieceId,
             rotate: 0 as 0 | 1 | 2 | 3,
             flip: false
         });
         setStagedPiece(undefined);
-        setBoardTarget(undefined);
     }
 
     const confirmMove = () => {
@@ -85,30 +78,21 @@ function GameContainer({ gameState, action }: GameContainerProps) {
             kind: "GamePlay",
             playerId: gameState.currentPlayer,
             piece: stagedPiece?.id ?? -1,
-            location: boardTarget ?? { x: -1, y: -1 },
+            location: stagedPiece?.target ?? { x: -1, y: -1 },
             rotate: stagedPiece?.rotate ?? 0,
             flip: stagedPiece?.flip ?? false
         });
-        setBoardTarget(undefined);
         setActivePiece(undefined);
     }
 
     return <>
         <div className={`left-pane ${activePiece !== undefined ? 'hide-cursor' : ''}`}>
-            {stagedPiece !== undefined && boardTarget ?
-                <GameBoard
-                    boardState={applyPieceToBoard(boardTarget, stagedPiece.pieceData, gameState.currentPlayer, gameState.boardState)}
-                    stagedPiece={stagedPiece}
-                    stagePiece={stagePiece}
-                    pickUpStagedPiece={pickUpStagedPiece}
-                />
-                : <GameBoard
-                    boardState={gameState.boardState}
-                    stagedPiece={stagedPiece}
-                    stagePiece={stagePiece}
-                    pickUpStagedPiece={pickUpStagedPiece}
-                />
-            }
+            <GameBoard
+                boardState={gameState.boardState}
+                stagedPiece={stagedPiece}
+                stagePiece={stagePiece}
+                pickUpStagedPiece={pickUpStagedPiece}
+            />
             <div className={"action-buttons-container"}>
                 <PassButton pass={pass} />
                 <ConfirmButton confirmMove={confirmMove} />
@@ -123,7 +107,6 @@ function GameContainer({ gameState, action }: GameContainerProps) {
         </div>
         <ActivePieceContainer
             piece={activePiece}
-            playerId={gameState.currentPlayer}
             rotate={rotate}
             flip={flip}
         />

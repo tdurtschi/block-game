@@ -1,5 +1,5 @@
 import React = require("react");
-import GamePiece, { GamePiecesData } from "../shared/types/GamePiece";
+import GamePiece from "../shared/types/GamePiece";
 import PlayerId from "../shared/types/PlayerId";
 import Piece from "./gamePiece";
 

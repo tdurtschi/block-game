@@ -28,6 +28,7 @@ class Player {
 
     private pieces = () =>
         new Array(NUM_PIECES).fill(0).map((_, idx) => ({
+            playerId: this.playerId,
             id: idx,
             pieceData: GamePiecesData[idx],
             rotate: 0 as 0 | 1 | 2 | 3,

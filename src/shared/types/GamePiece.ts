@@ -1,8 +1,11 @@
+import PlayerId from "./PlayerId";
+
 export default interface GamePiece {
     pieceData: number[][];
     id: number;
     rotate: 0 | 1 | 2 | 3;
-    flip: boolean
+    flip: boolean;
+    playerId: PlayerId;
 }
 
 export const GamePiecesData = [

@@ -1,13 +1,14 @@
 import React = require("react");
 import BoardState from "../shared/types/BoardState";
-import GamePiece from "../shared/types/GamePiece";
 import PlayerId from "../shared/types/PlayerId";
+import { applyPieceToBoard } from "../shared/pieceUtils";
+import StagedPiece from "../frontend/StagedPiece";
 
 interface GameBoardProps {
     boardState: Readonly<BoardState>;
     stagePiece: (yCoord: number, xCoord: number) => any;
     pickUpStagedPiece: (yCoord: number, xCoord: number) => any;
-    stagedPiece: GamePiece | undefined;
+    stagedPiece: StagedPiece | undefined;
 }
 
 function GameBoard({
@@ -24,6 +25,10 @@ function GameBoard({
         }
     }
 
+    const boardStateToRender = stagedPiece
+        ? applyPieceToBoard(stagedPiece.target, stagedPiece.pieceData, stagedPiece.playerId, boardState)
+        : boardState;
+
     return (<div className="game-board">
         <div className={"game-underlay"}>
             {
@@ -37,7 +42,7 @@ function GameBoard({
         </div>
         <div style={{ position: "relative" }} data-game-board>
             {
-                boardState.map((row, rowIdx) =>
+                boardStateToRender.map((row, rowIdx) =>
                     <BoardRow
                         row={row}
                         key={rowIdx}

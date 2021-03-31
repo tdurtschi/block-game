@@ -5,7 +5,6 @@ import Piece from "./gamePiece";
 
 interface ActivePieceProps {
     piece: GamePiece | undefined;
-    playerId: PlayerId;
     rotate: (piece: GamePiece, reverse?: boolean) => any;
     flip: (piece: GamePiece) => any;
 }
@@ -75,7 +74,7 @@ function ActivePiece(props: ActivePieceProps) {
         <Piece
             piece={props.piece!}
             onClick={() => { }}
-            playerId={props.playerId}
+            playerId={props.piece!.playerId}
         />
     </div>
 }
