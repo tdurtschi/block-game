@@ -1,13 +1,29 @@
 import React = require("react");
 import BoardState from "../shared/types/BoardState";
+import GamePiece from "../shared/types/GamePiece";
 import PlayerId from "../shared/types/PlayerId";
 
 interface GameBoardProps {
     boardState: Readonly<BoardState>;
-    onClick: (yCoord: number, xCoord: number) => any;
+    stagePiece: (yCoord: number, xCoord: number) => any;
+    pickUpStagedPiece: (yCoord: number, xCoord: number) => any;
+    stagedPiece: GamePiece | undefined;
 }
 
-function GameBoard({ boardState, onClick }: GameBoardProps) {
+function GameBoard({
+    boardState,
+    stagePiece,
+    pickUpStagedPiece,
+    stagedPiece
+}: GameBoardProps) {
+    const onClick = (yCoord: number, xCoord: number) => {
+        if (stagedPiece) {
+            pickUpStagedPiece(yCoord, xCoord);
+        } else {
+            stagePiece(yCoord, xCoord);
+        }
+    }
+
     return (<div className="game-board">
         <div className={"game-underlay"}>
             {
@@ -29,7 +45,6 @@ function GameBoard({ boardState, onClick }: GameBoardProps) {
                         onClick={onClick} />)
             }
         </div>
-
     </div >)
 }
 

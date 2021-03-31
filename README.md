@@ -1,4 +1,5 @@
 * Pick up staged piece from board & fix cursor to pointer on staged piece
+* Refactor - create StagedPiece type including target x,y coord.
 * Played piece must touch same player's piece diagonally at least once.
 * Played piece cannot touch same player's piece directly.
 * Message for invalid move - client validation
@@ -9,6 +10,5 @@
 * Full Game smoke test - happy path
 * CSS Fixes
 * Move server to backend with websockets.
-* Debounce mouse wheel for rotation
 * Page Object pattern for cypress
 * Error goes away after some action/timer

@@ -93,6 +93,21 @@ describe("Block Game", () => {
                     [1, 0],
                 ]);
             })
+
+            it("Can pick up a piece from the board to move it", () => {
+                cy.get("[data-game-piece]").eq(0).click();
+                cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='0']").click();
+                cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='0']").click();
+                cy.get("[data-game-board] [data-coord-x='18'][data-coord-y='16']").click();
+                cy.get("[data-confirm-action]").click();
+
+                verifyBoardArea(18, 16, [
+                    [1, 0],
+                    [1, 0],
+                    [1, 1],
+                    [0, 1],
+                ]);
+            })
         });
     });
 });

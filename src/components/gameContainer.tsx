@@ -15,8 +15,6 @@ interface GameContainerProps {
 }
 
 function GameContainer({ gameState, action }: GameContainerProps) {
-    const gameOver = gameState.status == GameStatus.OVER;
-
     const [activePiece, setActivePiece] = React.useState<GamePiece>();
     const [stagedPiece, setStagedPiece] = React.useState<GamePiece>();
     const [boardTarget, setBoardTarget] = React.useState<BoardLocation>();
@@ -50,8 +48,13 @@ function GameContainer({ gameState, action }: GameContainerProps) {
         setStagedPiece(undefined);
         setActivePiece(undefined);
     }
+    const pickUpStagedPiece = (yCoord: number, xCoord: number) => {
+        setActivePiece(stagedPiece);
+        setStagedPiece(undefined);
+        setBoardTarget(undefined);
+    }
 
-    const handleGameBoardClick = (yCoord: number, xCoord: number) => {
+    const stagePiece = (yCoord: number, xCoord: number) => {
         if (activePiece !== undefined) {
             const stagedPiece = {
                 pieceData: activePiece.pieceData,
@@ -95,11 +98,15 @@ function GameContainer({ gameState, action }: GameContainerProps) {
             {stagedPiece !== undefined && boardTarget ?
                 <GameBoard
                     boardState={applyPieceToBoard(boardTarget, stagedPiece.pieceData, gameState.currentPlayer, gameState.boardState)}
-                    onClick={handleGameBoardClick}
+                    stagedPiece={stagedPiece}
+                    stagePiece={stagePiece}
+                    pickUpStagedPiece={pickUpStagedPiece}
                 />
                 : <GameBoard
                     boardState={gameState.boardState}
-                    onClick={handleGameBoardClick}
+                    stagedPiece={stagedPiece}
+                    stagePiece={stagePiece}
+                    pickUpStagedPiece={pickUpStagedPiece}
                 />
             }
             <div className={"action-buttons-container"}>
