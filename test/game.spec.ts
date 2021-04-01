@@ -128,6 +128,46 @@ describe("Game", () => {
                 });
             })
         })
+
+        describe("Piece touches a previously played piece only diagonally", () => {
+            let game: Game;
+            beforeEach(() => {
+                game = new Game(0);
+                game.action({
+                    playerId: 1,
+                    kind: "Pass"
+                })
+                game.action({
+                    playerId: 2,
+                    kind: "Pass"
+                })
+                game.action({
+                    playerId: 3,
+                    kind: "Pass"
+                })
+            })
+
+            it("Happy path - piece played connecting diagonally", () => {
+                game.action(gameMove(4, 0, { x: 0, y: 0 }))
+                game.action(gameMove(4, 1, { x: 2, y: 0 }))
+            })
+
+            it("Throw error if play doesn't touch another piece", () => {
+                game.action(gameMove(4, 0, { x: 0, y: 0 }))
+
+                expectError(() => {
+                    game.action(gameMove(4, 1, { x: 3, y: 0 }))
+                });
+            })
+
+            it("Throw error if play touches another adjacently", () => {
+                game.action(gameMove(4, 0, { x: 0, y: 0 }))
+
+                expectError(() => {
+                    game.action(gameMove(4, 1, { x: 1, y: 0 }))
+                });
+            })
+        })
     })
 
     it("Regression Test: Player 2 can move after making an invalid attempt", () => {
