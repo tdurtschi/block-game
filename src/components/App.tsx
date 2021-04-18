@@ -4,6 +4,7 @@ import { IGameClient } from "../gameClient";
 import Action from "../shared/types/Actions";
 import GameState from "../shared/types/GameState";
 import GameStatus from "../shared/types/GameStatus";
+import PlayerState from "../shared/types/PlayerState";
 import GameContainer from "./gameContainer";
 
 export interface BlockGameProps {
@@ -34,7 +35,6 @@ function BlockGame({ gameClient }: BlockGameProps) {
         <>
             <header>
                 <h1>Block Game</h1>
-
             </header>
             <div
                 className={`game-container`}
@@ -46,8 +46,10 @@ function BlockGame({ gameClient }: BlockGameProps) {
                         action={submitAction}
                     />
                 }
-                {(gameState && gameState.status === GameStatus.OVER) && <div>
-                    <h2 data-game-over>Game Over!</h2>
+                {(gameState && gameState.status === GameStatus.OVER) && <div data-game-over>
+                    <h2>Game Over!</h2>
+                    {gameState.players.map((player, i) => <PlayerScore key={i} player={player} />)}
+                    <h2>{winnerMessage(gameState)}</h2>
                     <h2>Click here to start a new game:</h2>
                     <div style={{ width: "16px" }} />
                     <NewGameButton startGame={startGame} />
@@ -77,4 +79,24 @@ function NewGameButton({ startGame }: { startGame: () => void }) {
             New Game
         </button>
     </>;
+}
+
+function PlayerScore({ player }: { player: PlayerState }) {
+    return <div className={`player-${player.playerId}-score`}>
+        <h3>
+            Player {player.playerId}:&nbsp;
+            <span>{player.score}</span>
+        </h3>
+    </div>
+}
+
+function winnerMessage(gameState: GameState) {
+    const orderedPlayers = gameState.players
+        .map(player => ({ playerId: player.playerId, score: player.score }));
+    orderedPlayers.sort((a, b) => a.score > b.score ? -1 : a.score === b.score ? 0 : 1);
+    if (orderedPlayers[0].score === orderedPlayers[1].score) {
+        return "Tie game";
+    } else {
+        return `Player ${orderedPlayers[0].playerId} wins!`;
+    }
 }

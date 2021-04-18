@@ -37,6 +37,14 @@ describe("Block Game", () => {
                 cy.get("[data-game-over]");
             });
 
+            it('Shows each player\'s score', () => {
+                cy.get(".player-1-score").contains("0");
+                cy.get(".player-2-score").contains("0");
+                cy.get(".player-3-score").contains("0");
+                cy.get(".player-4-score").contains("0");
+                cy.get("[data-game-over]").contains("Tie game");
+            });
+
             it("Allows a player to start a new game", () => {
                 cy.get("[data-new-game]").click();
                 cy.contains("Player 1");

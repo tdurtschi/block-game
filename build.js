@@ -54,7 +54,6 @@ const config = {
 if (isWatch) {
     compileSass();
     initHotReload();
-
 } else {
     compileSass();
     require('esbuild').build(config);

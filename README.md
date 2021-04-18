@@ -1,11 +1,11 @@
+* Game ends if all non-passed players are out of pieces
+* Full Game smoke test - happy path
 * Player can cancel move after staging.
 * Player can cancel move by dropping back into inventory.
-* Calculate & Display score at end of game.
-* Full Game smoke test - happy path
 * Error goes away after some action/timer
 * Client side validation that piece fits on board - prevent exception
-* Game ends if all non-passed players are out of pieces
-** MVP! **
+* **MVP!**
+* Readme
 * CSS Fixes
 * Move server to backend with websockets.
 * Page Object pattern for cypress
