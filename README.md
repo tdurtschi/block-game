@@ -4,10 +4,12 @@
 * Player can cancel move by dropping back into inventory.
 * Error goes away after some action/timer
 * Client side validation that piece fits on board - prevent exception
+* In Game Instructions
 * **MVP!**
 * Readme
-* CSS Fixes
 * Move server to backend with websockets.
+* CSS Fixes
+* Ship-it script
 * Page Object pattern for cypress
 * Fix cursor to pointer on staged piece hover.
 * Message for invalid move - client validation

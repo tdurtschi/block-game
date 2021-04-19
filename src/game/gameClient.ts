@@ -1,6 +1,6 @@
-import GameServer from "./server";
-import Action from "./shared/types/Actions";
-import GameState from "./shared/types/GameState";
+import GameServer from "../server";
+import Action from "../shared/types/Actions";
+import GameState from "../shared/types/GameState";
 
 export interface IGameClient {
     newGame: () => any
