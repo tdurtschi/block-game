@@ -3,6 +3,7 @@ import Game from "../../src/server/Game";
 import GameStatus from "../../src/shared/types/GameStatus";
 import PlayerId from "../../src/shared/types/PlayerId";
 import GamePiece from "../../src/shared/types/GamePiece";
+import { fixture_playerUsesAllPiecesToEndGame } from "../testGameFixture";
 
 describe("Game", () => {
     it("Has 4 players", () => {
@@ -47,6 +48,14 @@ describe("Game", () => {
             game.action({
                 playerId: 4,
                 kind: "Pass"
+            })
+            expect(game.status).toBe(GameStatus.OVER);
+        });
+
+        it("Play ends when all players have passed or have no pieces left", () => {
+            const game = new Game(0);
+            fixture_playerUsesAllPiecesToEndGame.forEach(action => {
+                game.action(action);
             })
             expect(game.status).toBe(GameStatus.OVER);
         });

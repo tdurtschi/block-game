@@ -33,13 +33,13 @@ class Game {
         const action = payload;
         if (this.currentPlayer == payload.playerId) {
             if (action.kind == "Pass") {
-                this.getPlayer(action.playerId).pass();
-                if (this.allPlayersPassed()) {
-                    this.status = GameStatus.OVER;
-                }
+                this.passAction(action.playerId);
             } else if (action.kind == "GamePlay") {
                 this.throwErrorIfActionInvalid(action)
                 this.applyPieceToGameBoard(action)
+                if(this.getPlayer(action.playerId).isOutOfPieces()) {
+                    this.passAction(action.playerId);
+                }
             }
             this.currentPlayer = this.getPlayerForNextTurn();
         }
@@ -84,6 +84,13 @@ class Game {
         const playerIdx = validPlayers.findIndex(playerId => playerId === this.currentPlayer);
         const nextPlayer = validPlayers[(playerIdx + 1) % validPlayers.length] as PlayerId;
         return nextPlayer;
+    }
+
+    private passAction(playerId: PlayerId) {
+        this.getPlayer(playerId).pass();
+        if (this.allPlayersPassed()) {
+            this.status = GameStatus.OVER;
+        }
     }
 
     private throwErrorIfActionInvalid(action: GamePlayAction) {
@@ -249,3 +256,4 @@ function applyPieceModifications(pieceData: number[][], rotation: 0 | 1 | 2 | 3,
         return applyRotate(applyRotate(applyRotate(result)));
     }
 }
+

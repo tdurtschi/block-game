@@ -1,4 +1,3 @@
-* Game ends if all non-passed players are out of pieces
 * Full Game smoke test - happy path
 * Player can cancel move after staging.
 * Player can cancel move by dropping back into inventory.
@@ -7,6 +6,7 @@
 * In Game Instructions
 * **MVP!**
 * Readme
+* View gameboard end state after game over
 * Move server to backend with websockets.
 * CSS Fixes
 * Ship-it script

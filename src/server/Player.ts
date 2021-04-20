@@ -17,6 +17,10 @@ class Player {
     this.hasPassed = true;
   }
 
+  public isOutOfPieces() {
+    return this.playerPieces.length === 0;
+  }
+
   public getState(): PlayerState {
     return {
       playerId: this.playerId,
