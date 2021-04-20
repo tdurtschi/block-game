@@ -1,6 +1,5 @@
 import { useState } from "react";
 import React = require("react");
-import { fixture_playerUsesAllPiecesToEndGame, testGameFixture } from "../../test/testGameFixture";
 import { IGameClient } from "../game/gameClient";
 import Action from "../shared/types/Actions";
 import GameState from "../shared/types/GameState";
@@ -10,9 +9,10 @@ import GameContainer from "./gameContainer";
 
 export interface BlockGameProps {
     gameClient: IGameClient
+    errorDisplayTime?: number
 }
 
-function BlockGame({ gameClient }: BlockGameProps) {
+function BlockGame({ gameClient, errorDisplayTime }: BlockGameProps) {
     const [gameState, setGameState] = useState<GameState>();
     const [error, setError] = useState<string>();
 
@@ -61,7 +61,13 @@ function BlockGame({ gameClient }: BlockGameProps) {
                     <NewGameButton startGame={startGame} />
                 </>}
             </div>
-            {error && <div className={`error-message-container`}>Error: {error}</div>}
+            {<Error 
+                errorText={error ?? ""} 
+                errorDisplayTime={errorDisplayTime}
+                clearError={() => {
+                    setError(undefined);
+                }}
+            />}
         </>
     )
 };
@@ -100,4 +106,26 @@ function winnerMessage(gameState: GameState) {
     } else {
         return `Player ${orderedPlayers[0].playerId} wins!`;
     }
+}
+
+export interface ErrorState {
+    errorDisplayTime?: number;
+    errorText: string;
+    clearError: () => any;
+}
+
+function Error(errorState: ErrorState) {
+    const [displayError, setDisplayError] = useState<boolean>(false);
+
+    React.useEffect(() => {
+        setDisplayError(true);
+        setTimeout(() => {
+            setDisplayError(false); 
+            errorState.clearError()
+        }, errorState.errorDisplayTime || 6000);
+    }, [errorState.errorText]);
+
+    return displayError && errorState.errorText && (
+        <div className={`error-message-container`}>Error: { errorState.errorText }</div>
+    ) || <></>;
 }

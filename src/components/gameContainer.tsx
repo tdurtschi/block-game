@@ -74,7 +74,7 @@ function GameContainer({ gameState, action }: GameContainerProps) {
     }
 
     const confirmMove = () => {
-        action({
+        const actionResult = action({
             kind: "GamePlay",
             playerId: gameState.currentPlayer,
             piece: stagedPiece?.id ?? -1,
@@ -83,6 +83,7 @@ function GameContainer({ gameState, action }: GameContainerProps) {
             flip: stagedPiece?.flip ?? false
         });
         setActivePiece(undefined);
+        if(!actionResult.errorMessage) setStagedPiece(undefined);
     }
 
     const cancelMove = () => {
@@ -99,8 +100,8 @@ function GameContainer({ gameState, action }: GameContainerProps) {
             />
             <div className={"action-buttons-container"}>
                 {stagedPiece === undefined ? <PassButton pass={pass}/> : null}
-                {stagedPiece === undefined ? null : <ConfirmButton confirmMove={confirmMove} />}
                 {stagedPiece === undefined ? null : <CancelButton cancelMove={cancelMove}/>}
+                {stagedPiece === undefined ? null : <ConfirmButton confirmMove={confirmMove} />}
             </div>
         </div>
         <div className={`right-pane`}>

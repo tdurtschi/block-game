@@ -8,9 +8,11 @@ const container = document.createElement('div');
 container.className = "app-container";
 document.body.appendChild(container);
 
-const gameClient = new GameClient(new GameServer());
+const props = {
+  gameClient: new GameClient(new GameServer())
+}
 
 ReactDOM.render(
-  React.createElement(App, { gameClient }),
+  React.createElement(App, props),
   container
 );

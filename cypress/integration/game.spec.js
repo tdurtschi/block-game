@@ -52,12 +52,9 @@ describe("Block Game", () => {
         })
 
         describe("Passing", () => {
-            it("Clears a staged piece from the game board and the active piece", () => {
+            it("Clears the active piece", () => {
                 cy.get("[data-game-piece]").eq(0).click();
-                cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='0']").click();
                 cy.get("[data-player-pass-button]").click();
-                cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='0'].player-1-color").should("not.exist");
-                cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='0'].player-2-color").should("not.exist");
                 cy.get('[data-active-piece]').should("not.exist");
             });
         });
@@ -127,6 +124,27 @@ describe("Block Game", () => {
                     [1, 1],
                     [0, 1],
                 ]);
+            })
+
+            it("A staged piece persists when there's an error with the move", () => {
+                cy.get("[data-game-piece]").eq(0).click();
+                cy.get("[data-game-board] [data-coord-x='1'][data-coord-y='1']").click();
+                cy.get("[data-confirm-action]").click();
+
+                verifyBoardArea(1, 1, [
+                    [1, 0],
+                    [1, 0],
+                    [1, 1],
+                    [0, 1],
+                ]);
+            })
+
+            it("[Regression] The second player doesn't start their turn with the last player's staged piece", () => {
+                cy.get("[data-game-piece]").eq(0).click();
+                cy.get("[data-game-board] [data-coord-x='0'][data-coord-y='0']").click();
+                cy.get("[data-confirm-action]").click();
+
+                cy.get("[data-player-pass-button]");
             })
         });
     });

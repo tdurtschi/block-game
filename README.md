@@ -1,9 +1,8 @@
-* Player can cancel move after staging.
-* Player can cancel move by dropping back into inventory.
-* Error goes away after some action/timer
 * In Game Instructions
 * Client side validation that piece fits on board - prevent exception
 * **MVP!**
+* Player can cancel move by dropping back into inventory.
+* Confirm Pass
 * Build watch & Open cypress script 
 * Build, serve, & run cypress script
 * Readme
