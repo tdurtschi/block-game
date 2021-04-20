@@ -1,10 +1,11 @@
-* Full Game smoke test - happy path
 * Player can cancel move after staging.
 * Player can cancel move by dropping back into inventory.
 * Error goes away after some action/timer
-* Client side validation that piece fits on board - prevent exception
 * In Game Instructions
+* Client side validation that piece fits on board - prevent exception
 * **MVP!**
+* Build watch & Open cypress script 
+* Build, serve, & run cypress script
 * Readme
 * View gameboard end state after game over
 * Move server to backend with websockets.

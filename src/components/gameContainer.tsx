@@ -85,6 +85,10 @@ function GameContainer({ gameState, action }: GameContainerProps) {
         setActivePiece(undefined);
     }
 
+    const cancelMove = () => {
+        setStagedPiece(undefined);
+    }
+
     return <>
         <div className={`left-pane ${activePiece !== undefined ? 'hide-cursor' : ''}`}>
             <GameBoard
@@ -94,8 +98,9 @@ function GameContainer({ gameState, action }: GameContainerProps) {
                 pickUpStagedPiece={pickUpStagedPiece}
             />
             <div className={"action-buttons-container"}>
-                <PassButton pass={pass} />
-                <ConfirmButton confirmMove={confirmMove} />
+                {stagedPiece === undefined ? <PassButton pass={pass}/> : null}
+                {stagedPiece === undefined ? null : <ConfirmButton confirmMove={confirmMove} />}
+                {stagedPiece === undefined ? null : <CancelButton cancelMove={cancelMove}/>}
             </div>
         </div>
         <div className={`right-pane`}>
@@ -121,6 +126,16 @@ const PassButton = ({ pass }: { pass: () => void }) =>
     >
         Pass
     </button>
+
+const CancelButton = ({ cancelMove}: { cancelMove: () => void}) =>
+    <button
+        className="btn-secondary"
+        data-cancel-action
+        onClick={cancelMove}
+    >
+        Cancel Move
+    </button>
+
 
 const ConfirmButton = ({ confirmMove }: { confirmMove: () => void }) =>
     <button
