@@ -1,17 +1,26 @@
-* In Game Instructions
-* Client side validation that piece fits on board - prevent exception
-* **MVP!**
-* Player can cancel move by dropping back into inventory.
-* Confirm Pass
-* Build watch & Open cypress script 
-* Build, serve, & run cypress script
-* Readme
-* View gameboard end state after game over
-* Move server to backend with websockets.
-* CSS Fixes
-* Ship-it script
-* Page Object pattern for cypress
-* Fix cursor to pointer on staged piece hover.
-* Message for invalid move - client validation
-    * _Maybe this one makes sense to split up into multiple stories, i.e. different behavior to discourage different invalid moves? Maybe that's overkill_
-* Keep track of mouse offset from top left to avoid jitter when first moving picked up piece.
+# Block-Game
+
+This is a clone of a board game with a similar name.
+
+## Run Block-Game in Dev Mode
+
+_Prerequisites: NodeJS_
+
+Dev mode spins up the app and opens cypress in watch mode.
+```bash
+npm install
+npm run dev
+```
+
+To start the app in watch mode without cypress, use `npm run watch` instead of `npm run dev`.
+
+## Build
+
+```bash
+npm run build
+```
+
+Static site output will be in `dist/` directory.
+
+## Product Backlog
+[Link](./backlog.md)
