@@ -1,4 +1,5 @@
 @import "./colors.scss";
+@import "./constants.scss";
 
 .game-pieces {
     padding-right: 1rem;
@@ -34,8 +35,8 @@
 
         div {
             box-sizing: border-box;
-            width: 2rem;
-            height: 2rem;
+            width: $CELL_SIZE;
+            height: $CELL_SIZE;
         }
     }
 

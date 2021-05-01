@@ -12,7 +12,6 @@ interface GamePiecesProps {
 function GamePieces(props: GamePiecesProps) {
     return (
         <>
-            <h2>Player {props.playerId}'s Turn</h2>
             <div data-player-pieces
                 className={`game-pieces`}>
                 {

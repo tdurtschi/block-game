@@ -1,4 +1,5 @@
 @import "./colors.scss";
+@import "./constants.scss";
 
 .game-board {
     position: relative;
@@ -21,8 +22,8 @@
 
 .board-cell {
     box-sizing: border-box;
-    width: 2rem;
-    height: 2rem;
+    width: $CELL_SIZE;
+    height: $CELL_SIZE;
     border: 1px solid;
     border-color: $game-board-squares-color;
 }

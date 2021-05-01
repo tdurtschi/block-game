@@ -21,6 +21,16 @@ body {
 
 h1 {
     @include krona-one-font();
+    font-size: 1.5rem;
+}
+
+a {
+    @include exo-font();
+    color: $text-color;
+
+    &:visited {
+        color: $text-color;
+    }
 }
 
 @mixin button {
@@ -50,6 +60,18 @@ h1 {
     background-color: $btn-secondary-color;
 }
 
+.flex-row {
+    display: flex;
+}
+
+.space-between {
+    justify-content: space-between;
+}
+
+.align-center {
+    align-items:center;
+}
+
 .error-message-container {
     user-select: none;
     min-width: 900px;
@@ -59,4 +81,8 @@ h1 {
     font-size: 30px;
     margin-left:auto;
     margin-right:auto;
+}
+
+.help-button {
+    margin-left: 8px;
 }

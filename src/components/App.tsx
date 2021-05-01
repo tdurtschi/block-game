@@ -56,9 +56,19 @@ function BlockGame({ gameClient, errorDisplayTime }: BlockGameProps) {
                     <NewGameButton startGame={startGame} />
                 </div>}
                 {!gameState && <>
-                    <h2>Click here to start a new game:</h2>
-                    <div style={{ width: "16px" }} />
-                    <NewGameButton startGame={startGame} />
+                    <div>
+                    <div className="flex-row">
+                        <h2>Click here to start a new game:</h2>
+                        <div style={{ width: "16px" }} />
+                        <NewGameButton startGame={startGame} />
+                    </div>
+                    <div>
+                        <h2>Or<HelpButton onClick={() => {
+                            alert("Not Implemented! 🤷‍♂️")
+                        }}/>
+                        </h2>
+                    </div>
+                    </div>
                 </>}
             </div>
             {<Error 
@@ -129,3 +139,8 @@ function Error(errorState: ErrorState) {
         <div className={`error-message-container`}>Error: { errorState.errorText }</div>
     ) || <></>;
 }
+
+const HelpButton = ({onClick}: {onClick: () => any}) => 
+    <a href="" className="help-button" data-help-button onClick={onClick}>
+        Learn How To Play
+    </a>

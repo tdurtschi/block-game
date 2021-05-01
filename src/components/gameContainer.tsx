@@ -92,17 +92,20 @@ function GameContainer({ gameState, action }: GameContainerProps) {
 
     return <>
         <div className={`left-pane ${activePiece !== undefined ? 'hide-cursor' : ''}`}>
+            <div className={"flex-row space-between"}>
+                <h2>Player {gameState.currentPlayer}'s Turn</h2>
+                <div className={"action-buttons-container"}>
+                        {stagedPiece === undefined ? <PassButton pass={pass}/> : null}
+                        {stagedPiece === undefined ? null : <CancelButton cancelMove={cancelMove}/>}
+                        {stagedPiece === undefined ? null : <ConfirmButton confirmMove={confirmMove} />}
+                </div>
+            </div>
             <GameBoard
                 boardState={gameState.boardState}
                 stagedPiece={stagedPiece}
                 stagePiece={stagePiece}
                 pickUpStagedPiece={pickUpStagedPiece}
             />
-            <div className={"action-buttons-container"}>
-                {stagedPiece === undefined ? <PassButton pass={pass}/> : null}
-                {stagedPiece === undefined ? null : <CancelButton cancelMove={cancelMove}/>}
-                {stagedPiece === undefined ? null : <ConfirmButton confirmMove={confirmMove} />}
-            </div>
         </div>
         <div className={`right-pane`}>
             <GamePieces
