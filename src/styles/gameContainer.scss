@@ -39,12 +39,12 @@
     cursor: none;
 }
 
-.active-piece{
+.active-piece {
     pointer-events: none;
     z-index: 100;
 }
 
-.action-buttons-container{
+.action-buttons-container {
     padding: 1rem 0rem;
     display: flex;
     flex-direction: row;

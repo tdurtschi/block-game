@@ -1,4 +1,4 @@
-import '../src/index.tsx';
+import "../src/index.tsx";
 
 describe("Block Game", () => {
     const page: HTMLElement = document.body;

@@ -2,7 +2,7 @@ import { BoardLocation } from "../shared/types/Actions";
 import GamePiece from "../shared/types/GamePiece";
 
 interface IStagedPiece {
-    target: BoardLocation
+    target: BoardLocation;
 }
 
 type StagedPiece = GamePiece & IStagedPiece;

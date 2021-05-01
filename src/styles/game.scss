@@ -2,23 +2,26 @@
 
 $border-width: 3px;
 
-.player-1-color .filled, .player-1-color.filled {
+.player-1-color .filled,
+.player-1-color.filled {
     background-color: $p1-color;
     border: $border-width solid $p1-border-color;
 }
 
-.player-2-color .filled, .player-2-color.filled  {
-	background-color: $p2-color;
+.player-2-color .filled,
+.player-2-color.filled {
+    background-color: $p2-color;
     border: $border-width solid $p2-border-color;
 }
 
-.player-3-color .filled, .player-3-color.filled {
-	background-color: $p3-color;
+.player-3-color .filled,
+.player-3-color.filled {
+    background-color: $p3-color;
     border: $border-width solid $p3-border-color;
 }
 
-.player-4-color .filled, .player-4-color.filled {
-	background-color: $p4-color;
+.player-4-color .filled,
+.player-4-color.filled {
+    background-color: $p4-color;
     border: $border-width solid $p4-border-color;
 }
-

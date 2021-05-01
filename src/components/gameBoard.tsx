@@ -23,34 +23,41 @@ function GameBoard({
         } else {
             stagePiece(yCoord, xCoord);
         }
-    }
+    };
 
     const boardStateToRender = stagedPiece
-        ? applyPieceToBoard(stagedPiece.target, stagedPiece.pieceData, stagedPiece.playerId, boardState)
+        ? applyPieceToBoard(
+              stagedPiece.target,
+              stagedPiece.pieceData,
+              stagedPiece.playerId,
+              boardState
+          )
         : boardState;
 
-    return (<div className="game-board">
-        <div className={"game-underlay"}>
-            {
-                gameBoardUnderlayData.map((row, rowIdx) =>
+    return (
+        <div className="game-board">
+            <div className={"game-underlay"}>
+                {gameBoardUnderlayData.map((row, rowIdx) => (
                     <BoardRow
                         row={row}
                         key={rowIdx}
                         yCoord={rowIdx}
-                        onClick={onClick} />)
-            }
-        </div>
-        <div style={{ position: "relative" }} data-game-board>
-            {
-                boardStateToRender.map((row, rowIdx) =>
+                        onClick={onClick}
+                    />
+                ))}
+            </div>
+            <div style={{ position: "relative" }} data-game-board>
+                {boardStateToRender.map((row, rowIdx) => (
                     <BoardRow
                         row={row}
                         key={rowIdx}
                         yCoord={rowIdx}
-                        onClick={onClick} />)
-            }
+                        onClick={onClick}
+                    />
+                ))}
+            </div>
         </div>
-    </div >)
+    );
 }
 
 interface BoardRowProps {
@@ -60,16 +67,19 @@ interface BoardRowProps {
 }
 
 function BoardRow({ row, yCoord, onClick }: BoardRowProps) {
-    return <div
-        className={`board-row`}
-    >
-        {row.map((col, xCoord) => <BoardCell
-            playerId={col}
-            key={xCoord}
-            yCoord={yCoord}
-            xCoord={xCoord}
-            onClick={onClick} />)}
-    </div>
+    return (
+        <div className={`board-row`}>
+            {row.map((col, xCoord) => (
+                <BoardCell
+                    playerId={col}
+                    key={xCoord}
+                    yCoord={yCoord}
+                    xCoord={xCoord}
+                    onClick={onClick}
+                />
+            ))}
+        </div>
+    );
 }
 
 interface BoardCellProps {
@@ -80,12 +90,14 @@ interface BoardCellProps {
 }
 
 function BoardCell({ playerId, xCoord, yCoord, onClick }: BoardCellProps) {
-    return <div
-        className={`board-cell ${getCellColorClass(playerId)}`}
-        data-coord-y={yCoord}
-        data-coord-x={xCoord}
-        onClick={() => onClick(yCoord, xCoord)}
-    />
+    return (
+        <div
+            className={`board-cell ${getCellColorClass(playerId)}`}
+            data-coord-y={yCoord}
+            data-coord-x={xCoord}
+            onClick={() => onClick(yCoord, xCoord)}
+        />
+    );
 }
 
 function getCellColorClass(playerId: PlayerId | undefined) {
@@ -534,6 +546,6 @@ const gameBoardUnderlayData = [
         undefined,
         undefined
     ]
-]
+];
 
 export default GameBoard;

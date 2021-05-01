@@ -13,9 +13,9 @@ const DEBOUNCE_TIMEOUT_MS = 300;
 
 function ActivePieceContainer(props: ActivePieceProps) {
     if (props.piece) {
-        return <ActivePiece {...props} />
+        return <ActivePiece {...props} />;
     } else {
-        return <></>
+        return <></>;
     }
 }
 
@@ -26,18 +26,18 @@ function ActivePiece(props: ActivePieceProps) {
 
     React.useEffect(() => {
         windowListenerRef.current = props.piece!;
-    })
+    });
 
     const removeHooks = () => {
-        document.removeEventListener("mousemove", mouseMoveListener)
-        document.removeEventListener("wheel", mouseWheelListener)
-        document.removeEventListener("mousedown", mouseDownListener)
-    }
+        document.removeEventListener("mousemove", mouseMoveListener);
+        document.removeEventListener("wheel", mouseWheelListener);
+        document.removeEventListener("mousedown", mouseDownListener);
+    };
 
     const mouseMoveListener = (e: MouseEvent) => {
         setX(e.pageX);
         setY(e.pageY);
-    }
+    };
 
     const mouseWheelListener = (e: WheelEvent) => {
         e.preventDefault();
@@ -46,37 +46,42 @@ function ActivePiece(props: ActivePieceProps) {
         } else {
             debounce(() => props.rotate(windowListenerRef.current, true));
         }
-    }
+    };
 
     const mouseDownListener = (e: MouseEvent) => {
         if (e.button == 2) {
             e.preventDefault();
             props.flip(windowListenerRef.current);
         }
-    }
+    };
 
     React.useEffect(() => {
         document.addEventListener("mousemove", mouseMoveListener);
-        document.addEventListener("wheel", mouseWheelListener, { passive: false });
+        document.addEventListener("wheel", mouseWheelListener, {
+            passive: false
+        });
         document.addEventListener("mousedown", mouseDownListener);
 
         return removeHooks;
-    }, [])
+    }, []);
 
-    return <div
-        data-active-piece
-        className={"active-piece"}
-        style={{
-            position: "absolute",
-            top: `${y - 24}px`,
-            left: `${x - 24}px`,
-        }}>
-        <Piece
-            piece={props.piece!}
-            onClick={() => { }}
-            playerId={props.piece!.playerId}
-        />
-    </div>
+    return (
+        <div
+            data-active-piece
+            className={"active-piece"}
+            style={{
+                position: "absolute",
+                top: `${y - 24}px`,
+                left: `${x - 24}px`
+            }}
+        >
+            <Piece
+                piece={props.piece!}
+                onClick={() => {}}
+                playerId={props.piece!.playerId}
+            />
+        </div>
+    );
 }
 
 let debounceIndicator = false;
@@ -85,8 +90,8 @@ const debounce = (action: Function) => {
     if (!debounceIndicator) {
         debounceIndicator = true;
         action();
-        setTimeout(() => debounceIndicator = false, DEBOUNCE_TIMEOUT_MS);
+        setTimeout(() => (debounceIndicator = false), DEBOUNCE_TIMEOUT_MS);
     }
-}
+};
 
 export default ActivePieceContainer;

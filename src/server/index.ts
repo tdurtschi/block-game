@@ -3,11 +3,11 @@ import Game from "./Game";
 import GameState from "../shared/types/GameState";
 
 class GameServer {
-    private games: Map<number, Game> = new Map<number, Game>()
+    private games: Map<number, Game> = new Map<number, Game>();
     private onUpdate: (gameState: Readonly<GameState>) => any;
 
     constructor() {
-        this.onUpdate = () => { }
+        this.onUpdate = () => {};
     }
 
     newGame() {
@@ -30,12 +30,12 @@ class GameServer {
             } catch (error) {
                 return {
                     errorMessage: error.message ?? "Unknown Error Occured"
-                }
+                };
             }
         } else {
             return {
                 errorMessage: "Game Not Found!"
-            }
+            };
         }
     }
 }

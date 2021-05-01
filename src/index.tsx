@@ -4,15 +4,12 @@ import App from "./components/App";
 import GameClient from "./game/gameClient";
 import GameServer from "./server";
 
-const container = document.createElement('div');
+const container = document.createElement("div");
 container.className = "app-container";
 document.body.appendChild(container);
 
 const props = {
-  gameClient: new GameClient(new GameServer())
-}
+    gameClient: new GameClient(new GameServer())
+};
 
-ReactDOM.render(
-  React.createElement(App, props),
-  container
-);
+ReactDOM.render(React.createElement(App, props), container);

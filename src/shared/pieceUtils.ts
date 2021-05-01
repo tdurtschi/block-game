@@ -6,8 +6,9 @@ function applyPieceToBoard(
     { x, y }: BoardLocation,
     pieceData: number[][],
     playerId: PlayerId,
-    gameBoard: Readonly<BoardState>) {
-    const newBoard: BoardState = gameBoard.map(row => row.map(col => col));
+    gameBoard: Readonly<BoardState>
+) {
+    const newBoard: BoardState = gameBoard.map((row) => row.map((col) => col));
 
     for (var i = 0; i < pieceData.length; i++) {
         for (var j = 0; j < pieceData[i].length; j++) {
@@ -59,10 +60,4 @@ function clone(pieceData: number[][]): number[][] {
     return newPiece;
 }
 
-export {
-    applyPieceToBoard,
-    rotate,
-    rotateReverse,
-    flip,
-    clone
-};
+export { applyPieceToBoard, rotate, rotateReverse, flip, clone };

@@ -4,7 +4,7 @@ import GameBoard from "./gameBoard";
 import GamePieces from "./gamePieces";
 import ActivePieceContainer from "./activePiece";
 import GamePiece, { GamePiecesData } from "../shared/types/GamePiece";
-import * as pieceUtils from "../shared/pieceUtils"
+import * as pieceUtils from "../shared/pieceUtils";
 import GameState from "../shared/types/GameState";
 import StagedPiece from "../frontend/StagedPiece";
 
@@ -23,12 +23,10 @@ function GameContainer({ gameState, action }: GameContainerProps) {
             pieceData: reverse
                 ? pieceUtils.rotateReverse(piece.pieceData)
                 : pieceUtils.rotate(piece.pieceData),
-            rotate: reverse
-                ? (piece.rotate + 3) % 4
-                : (piece.rotate + 1) % 4,
+            rotate: reverse ? (piece.rotate + 3) % 4 : (piece.rotate + 1) % 4
         } as GamePiece;
         setActivePiece(result);
-    }
+    };
 
     const flip = (piece: GamePiece) => {
         const result = {
@@ -38,17 +36,17 @@ function GameContainer({ gameState, action }: GameContainerProps) {
             flip: !piece.flip
         } as GamePiece;
         setActivePiece(result);
-    }
+    };
 
     const pass = () => {
         action({ playerId: gameState.currentPlayer, kind: "Pass" });
         setStagedPiece(undefined);
         setActivePiece(undefined);
-    }
+    };
     const pickUpStagedPiece = (yCoord: number, xCoord: number) => {
         setActivePiece(stagedPiece);
         setStagedPiece(undefined);
-    }
+    };
 
     const stagePiece = (yCoord: number, xCoord: number) => {
         if (activePiece !== undefined) {
@@ -60,7 +58,7 @@ function GameContainer({ gameState, action }: GameContainerProps) {
             setStagedPiece(stagedPiece);
             setActivePiece(undefined);
         }
-    }
+    };
 
     const handlePlayerPieceClick = (pieceId: number) => {
         setActivePiece({
@@ -71,7 +69,7 @@ function GameContainer({ gameState, action }: GameContainerProps) {
             flip: false
         });
         setStagedPiece(undefined);
-    }
+    };
 
     const confirmMove = () => {
         const actionResult = action({
@@ -83,75 +81,80 @@ function GameContainer({ gameState, action }: GameContainerProps) {
             flip: stagedPiece?.flip ?? false
         });
         setActivePiece(undefined);
-        if(!actionResult.errorMessage) setStagedPiece(undefined);
-    }
+        if (!actionResult.errorMessage) setStagedPiece(undefined);
+    };
 
     const cancelMove = () => {
         setStagedPiece(undefined);
-    }
+    };
 
-    return <>
-        <div className={`left-pane ${activePiece !== undefined ? 'hide-cursor' : ''}`}>
-            <div className={"inner"}>
-                <div className={"flex-row space-between"}>
-                    <h2>Player {gameState.currentPlayer}'s Turn</h2>
-                    <div className={"action-buttons-container"}>
-                            {stagedPiece === undefined ? <PassButton pass={pass}/> : null}
-                            {stagedPiece === undefined ? null : <CancelButton cancelMove={cancelMove}/>}
-                            {stagedPiece === undefined ? null : <ConfirmButton confirmMove={confirmMove} />}
+    return (
+        <>
+            <div
+                className={`left-pane ${
+                    activePiece !== undefined ? "hide-cursor" : ""
+                }`}
+            >
+                <div className={"inner"}>
+                    <div className={"flex-row space-between"}>
+                        <h2>Player {gameState.currentPlayer}'s Turn</h2>
+                        <div className={"action-buttons-container"}>
+                            {stagedPiece === undefined ? (
+                                <PassButton pass={pass} />
+                            ) : null}
+                            {stagedPiece === undefined ? null : (
+                                <CancelButton cancelMove={cancelMove} />
+                            )}
+                            {stagedPiece === undefined ? null : (
+                                <ConfirmButton confirmMove={confirmMove} />
+                            )}
+                        </div>
                     </div>
+                    <GameBoard
+                        boardState={gameState.boardState}
+                        stagedPiece={stagedPiece}
+                        stagePiece={stagePiece}
+                        pickUpStagedPiece={pickUpStagedPiece}
+                    />
                 </div>
-                <GameBoard
-                    boardState={gameState.boardState}
-                    stagedPiece={stagedPiece}
-                    stagePiece={stagePiece}
-                    pickUpStagedPiece={pickUpStagedPiece}
-                />
             </div>
-        </div>
-        <div className={`right-pane`}>
-            <div className={"inner"}>
-                <GamePieces
-                    gamePieces={gameState.players[gameState.currentPlayer - 1].playerPieces}
-                    playerId={gameState.currentPlayer}
-                    onClickPiece={handlePlayerPieceClick}
-                />
+            <div className={`right-pane`}>
+                <div className={"inner"}>
+                    <GamePieces
+                        gamePieces={
+                            gameState.players[gameState.currentPlayer - 1]
+                                .playerPieces
+                        }
+                        playerId={gameState.currentPlayer}
+                        onClickPiece={handlePlayerPieceClick}
+                    />
+                </div>
             </div>
-        </div>
-        <ActivePieceContainer
-            piece={activePiece}
-            rotate={rotate}
-            flip={flip}
-        />
-    </>
+            <ActivePieceContainer
+                piece={activePiece}
+                rotate={rotate}
+                flip={flip}
+            />
+        </>
+    );
 }
 
-const PassButton = ({ pass }: { pass: () => void }) =>
-    <button
-        className="btn-secondary"
-        data-player-pass-button
-        onClick={pass}
-    >
+const PassButton = ({ pass }: { pass: () => void }) => (
+    <button className="btn-secondary" data-player-pass-button onClick={pass}>
         Pass
     </button>
+);
 
-const CancelButton = ({ cancelMove}: { cancelMove: () => void}) =>
-    <button
-        className="btn-secondary"
-        data-cancel-action
-        onClick={cancelMove}
-    >
+const CancelButton = ({ cancelMove }: { cancelMove: () => void }) => (
+    <button className="btn-secondary" data-cancel-action onClick={cancelMove}>
         Cancel Move
     </button>
+);
 
-
-const ConfirmButton = ({ confirmMove }: { confirmMove: () => void }) =>
-    <button
-        className="btn-primary"
-        data-confirm-action
-        onClick={confirmMove}
-    >
+const ConfirmButton = ({ confirmMove }: { confirmMove: () => void }) => (
+    <button className="btn-primary" data-confirm-action onClick={confirmMove}>
         Confirm Move
     </button>
+);
 
 export default GameContainer;

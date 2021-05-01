@@ -4,7 +4,12 @@ import InvalidActionError from "./errors/InvalidActionError";
 import Player from "./Player";
 import PlayerId from "../shared/types/PlayerId";
 import { GamePiecesData } from "../shared/types/GamePiece";
-import { applyPieceToBoard, clone, rotate as applyRotate, flip as applyFlip } from "../shared/pieceUtils";
+import {
+    applyPieceToBoard,
+    clone,
+    rotate as applyRotate,
+    flip as applyFlip
+} from "../shared/pieceUtils";
 import GameState from "../shared/types/GameState";
 import BoardState from "../shared/types/BoardState";
 
@@ -17,7 +22,7 @@ class Game {
     constructor(
         public id: number,
         public status: GameStatus = GameStatus.CREATED,
-        public players: Player[] = [],
+        public players: Player[] = []
     ) {
         this.players = [
             new Player(1),
@@ -35,16 +40,17 @@ class Game {
             if (action.kind == "Pass") {
                 this.passAction(action.playerId);
             } else if (action.kind == "GamePlay") {
-                this.throwErrorIfActionInvalid(action)
-                this.applyPieceToGameBoard(action)
-                if(this.getPlayer(action.playerId).isOutOfPieces()) {
+                this.throwErrorIfActionInvalid(action);
+                this.applyPieceToGameBoard(action);
+                if (this.getPlayer(action.playerId).isOutOfPieces()) {
                     this.passAction(action.playerId);
                 }
             }
             this.currentPlayer = this.getPlayerForNextTurn();
-        }
-        else {
-            throw new InvalidActionError(`It is player ${this.currentPlayer}'s turn.`);
+        } else {
+            throw new InvalidActionError(
+                `It is player ${this.currentPlayer}'s turn.`
+            );
         }
     }
 
@@ -53,36 +59,61 @@ class Game {
     }
 
     allPlayersPassed() {
-        return this.getPlayer(1).hasPassed &&
+        return (
+            this.getPlayer(1).hasPassed &&
             this.getPlayer(2).hasPassed &&
             this.getPlayer(3).hasPassed &&
             this.getPlayer(4).hasPassed
+        );
     }
 
     public getState(): Readonly<GameState> {
         return {
             id: this.id,
             currentPlayer: this.currentPlayer,
-            players: this.players.map(player => player.getState()),
+            players: this.players.map((player) => player.getState()),
             boardState: this.boardState,
             status: this.status
-        }
+        };
     }
 
-    applyPieceToGameBoard({ location, piece, playerId, rotate, flip }: GamePlayAction) {
-        const modifiedPiece = applyPieceModifications(GamePiecesData[piece], rotate, flip);
-        this.boardState = applyPieceToBoard(location, modifiedPiece, playerId, this.boardState);
+    applyPieceToGameBoard({
+        location,
+        piece,
+        playerId,
+        rotate,
+        flip
+    }: GamePlayAction) {
+        const modifiedPiece = applyPieceModifications(
+            GamePiecesData[piece],
+            rotate,
+            flip
+        );
+        this.boardState = applyPieceToBoard(
+            location,
+            modifiedPiece,
+            playerId,
+            this.boardState
+        );
 
         const player = this.getPlayer(playerId);
-        player.playerPieces = player.playerPieces.filter(playerPiece => playerPiece.id != piece);
+        player.playerPieces = player.playerPieces.filter(
+            (playerPiece) => playerPiece.id != piece
+        );
     }
 
     getPlayerForNextTurn(): PlayerId {
-        const validPlayers = [1, 2, 3, 4].filter(playerId =>
-            playerId === this.currentPlayer ||
-            !this.getPlayer(playerId as PlayerId).hasPassed);
-        const playerIdx = validPlayers.findIndex(playerId => playerId === this.currentPlayer);
-        const nextPlayer = validPlayers[(playerIdx + 1) % validPlayers.length] as PlayerId;
+        const validPlayers = [1, 2, 3, 4].filter(
+            (playerId) =>
+                playerId === this.currentPlayer ||
+                !this.getPlayer(playerId as PlayerId).hasPassed
+        );
+        const playerIdx = validPlayers.findIndex(
+            (playerId) => playerId === this.currentPlayer
+        );
+        const nextPlayer = validPlayers[
+            (playerIdx + 1) % validPlayers.length
+        ] as PlayerId;
         return nextPlayer;
     }
 
@@ -96,7 +127,11 @@ class Game {
     private throwErrorIfActionInvalid(action: GamePlayAction) {
         const { piece, rotate, flip } = action;
 
-        const pieceData = applyPieceModifications(GamePiecesData[piece], rotate, flip);
+        const pieceData = applyPieceModifications(
+            GamePiecesData[piece],
+            rotate,
+            flip
+        );
 
         this.validate_ifFirstMove_pieceIsInCorner(action, pieceData);
         this.validate_pieceDoesntOverlapExistingPiece(action, pieceData);
@@ -105,52 +140,80 @@ class Game {
         this.validate_pieceDoesntTouchAdjacently(action, pieceData);
     }
 
-    private validate_ifFirstMove_pieceIsInCorner({ location: { x, y }, playerId }: GamePlayAction, pieceData: number[][]) {
+    private validate_ifFirstMove_pieceIsInCorner(
+        { location: { x, y }, playerId }: GamePlayAction,
+        pieceData: number[][]
+    ) {
         if (!this.getPlayer(playerId).isFirstTurn()) {
-            return
+            return;
         }
 
         var pieceY = pieceData.length;
         var pieceX = pieceData[0].length;
-        if (!((pieceData[0][0] == 1 && x == 0 && y == 0) ||
-            (pieceData[pieceY - 1][pieceX - 1] == 1 &&
-                x + pieceX == GAMEBOARD_SIZE &&
-                y + pieceY == GAMEBOARD_SIZE) ||
-            (pieceData[0][pieceX - 1] == 1 &&
-                x + pieceX == GAMEBOARD_SIZE &&
-                y == 0) ||
-            (pieceData[pieceY - 1][0] == 1 &&
-                y + pieceY == GAMEBOARD_SIZE &&
-                x == 0))) {
-            throw new InvalidActionError("If it is your first turn, make sure your piece touches a corner.")
+        if (
+            !(
+                (pieceData[0][0] == 1 && x == 0 && y == 0) ||
+                (pieceData[pieceY - 1][pieceX - 1] == 1 &&
+                    x + pieceX == GAMEBOARD_SIZE &&
+                    y + pieceY == GAMEBOARD_SIZE) ||
+                (pieceData[0][pieceX - 1] == 1 &&
+                    x + pieceX == GAMEBOARD_SIZE &&
+                    y == 0) ||
+                (pieceData[pieceY - 1][0] == 1 &&
+                    y + pieceY == GAMEBOARD_SIZE &&
+                    x == 0)
+            )
+        ) {
+            throw new InvalidActionError(
+                "If it is your first turn, make sure your piece touches a corner."
+            );
         }
     }
 
-    private validate_pieceDoesntOverlapExistingPiece({ location }: GamePlayAction, pieceData: number[][]) {
+    private validate_pieceDoesntOverlapExistingPiece(
+        { location }: GamePlayAction,
+        pieceData: number[][]
+    ) {
         var pieceY = pieceData.length;
         var pieceX = pieceData[0].length;
         for (var i = 0; i < pieceY; i++) {
             for (var j = 0; j < pieceX; j++) {
-                if (pieceData[i][j] !== 0 && this.boardState[location.y + i][location.x + j] !== undefined) {
-                    throw new InvalidActionError("Invalid action: Piece cannot overlap another piece.");
+                if (
+                    pieceData[i][j] !== 0 &&
+                    this.boardState[location.y + i][location.x + j] !==
+                        undefined
+                ) {
+                    throw new InvalidActionError(
+                        "Invalid action: Piece cannot overlap another piece."
+                    );
                 }
             }
         }
     }
 
-    private validate_pieceFitsOnBoard({ location }: GamePlayAction, pieceData: number[][]) {
+    private validate_pieceFitsOnBoard(
+        { location }: GamePlayAction,
+        pieceData: number[][]
+    ) {
         var pieceY = pieceData.length;
         var pieceX = pieceData[0].length;
 
-        if (GAMEBOARD_SIZE < location.y + pieceY ||
-            GAMEBOARD_SIZE < location.x + pieceX) {
-            throw new InvalidActionError("Invalid action: Piece must fully fit on game board.");
+        if (
+            GAMEBOARD_SIZE < location.y + pieceY ||
+            GAMEBOARD_SIZE < location.x + pieceX
+        ) {
+            throw new InvalidActionError(
+                "Invalid action: Piece must fully fit on game board."
+            );
         }
     }
 
-    private validate_pieceTouchesDiagonally({ location: { x, y }, playerId }: GamePlayAction, pieceData: number[][]) {
+    private validate_pieceTouchesDiagonally(
+        { location: { x, y }, playerId }: GamePlayAction,
+        pieceData: number[][]
+    ) {
         if (this.getPlayer(playerId).isFirstTurn()) {
-            return
+            return;
         }
 
         var pieceY = pieceData.length;
@@ -159,19 +222,25 @@ class Game {
         for (var i = 0; i < pieceY; i++) {
             if (!foundMatch) {
                 for (var j = 0; j < pieceX; j++) {
-                    if (pieceData[i][j] == 1 &&
+                    if (
+                        pieceData[i][j] == 1 &&
                         ((y + i + 1 < this.boardState.length &&
                             x + j + 1 < this.boardState[0].length &&
-                            this.boardState[y + i + 1][x + j + 1] == playerId) ||
+                            this.boardState[y + i + 1][x + j + 1] ==
+                                playerId) ||
                             (y + i + 1 < this.boardState.length &&
                                 x + j > 0 &&
-                                this.boardState[y + i + 1][x + j - 1] == playerId) ||
+                                this.boardState[y + i + 1][x + j - 1] ==
+                                    playerId) ||
                             (y + i > 0 &&
                                 x + j + 1 < this.boardState[0].length &&
-                                this.boardState[y + i - 1][x + j + 1] == playerId) ||
+                                this.boardState[y + i - 1][x + j + 1] ==
+                                    playerId) ||
                             (y + i > 0 &&
                                 x + j > 0 &&
-                                this.boardState[y + i - 1][x + j - 1] == playerId))) {
+                                this.boardState[y + i - 1][x + j - 1] ==
+                                    playerId))
+                    ) {
                         foundMatch = true;
                         break;
                     }
@@ -180,11 +249,16 @@ class Game {
         }
 
         if (!foundMatch) {
-            throw new InvalidActionError("Invalid action: Piece must touch your own piece diagonally");
+            throw new InvalidActionError(
+                "Invalid action: Piece must touch your own piece diagonally"
+            );
         }
     }
 
-    private validate_pieceDoesntTouchAdjacently({ location: { x, y }, playerId }: GamePlayAction, pieceData: number[][]) {
+    private validate_pieceDoesntTouchAdjacently(
+        { location: { x, y }, playerId }: GamePlayAction,
+        pieceData: number[][]
+    ) {
         var pieceY = pieceData.length;
         var pieceX = pieceData[0].length;
         let isValid = true;
@@ -194,29 +268,37 @@ class Game {
                 for (var j = 0; j < pieceX; j++) {
                     if (pieceData[i][j] == 1) {
                         //check above
-                        if (y + i > 0 &&
-                            this.boardState[y + i - 1][x + j] == playerId) {
+                        if (
+                            y + i > 0 &&
+                            this.boardState[y + i - 1][x + j] == playerId
+                        ) {
                             isValid = false;
                             break;
                         }
 
                         //check right
-                        if (x + j + 1 < this.boardState[0].length &&
-                            this.boardState[y + i][x + j + 1] == playerId) {
+                        if (
+                            x + j + 1 < this.boardState[0].length &&
+                            this.boardState[y + i][x + j + 1] == playerId
+                        ) {
                             isValid = false;
                             break;
                         }
 
                         //check below
-                        if (y + i + 1 < this.boardState.length &&
-                            this.boardState[y + i + 1][x + j] == playerId) {
+                        if (
+                            y + i + 1 < this.boardState.length &&
+                            this.boardState[y + i + 1][x + j] == playerId
+                        ) {
                             isValid = false;
                             break;
                         }
 
                         //check left
-                        if (x + j > 0 &&
-                            this.boardState[y + i][x + j - 1] == playerId) {
+                        if (
+                            x + j > 0 &&
+                            this.boardState[y + i][x + j - 1] == playerId
+                        ) {
                             isValid = false;
                             break;
                         }
@@ -226,7 +308,9 @@ class Game {
         }
 
         if (!isValid) {
-            throw new InvalidActionError("Invalid action: Piece must not touch your own piece adjacently");
+            throw new InvalidActionError(
+                "Invalid action: Piece must not touch your own piece adjacently"
+            );
         }
     }
 }
@@ -241,7 +325,11 @@ function createInitialBoardState(): BoardState {
     return result;
 }
 
-function applyPieceModifications(pieceData: number[][], rotation: 0 | 1 | 2 | 3, flip: boolean = false) {
+function applyPieceModifications(
+    pieceData: number[][],
+    rotation: 0 | 1 | 2 | 3,
+    flip: boolean = false
+) {
     let result = clone(pieceData);
 
     if (flip) result = applyFlip(result);
@@ -256,4 +344,3 @@ function applyPieceModifications(pieceData: number[][], rotation: 0 | 1 | 2 | 3,
         return applyRotate(applyRotate(applyRotate(result)));
     }
 }
-

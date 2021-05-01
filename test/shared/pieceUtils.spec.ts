@@ -1,4 +1,4 @@
-import { flip, rotate, rotateReverse } from "../../src/shared/pieceUtils"
+import { flip, rotate, rotateReverse } from "../../src/shared/pieceUtils";
 
 const testPiece = [
     [1, 0],
