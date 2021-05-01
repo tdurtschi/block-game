@@ -2,6 +2,7 @@
 @import "./constants.scss";
 
 .game-pieces {
+    height: 100%;
     padding-right: 1rem;
     display: flex;
     flex-wrap: wrap;

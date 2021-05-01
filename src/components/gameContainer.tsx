@@ -92,27 +92,31 @@ function GameContainer({ gameState, action }: GameContainerProps) {
 
     return <>
         <div className={`left-pane ${activePiece !== undefined ? 'hide-cursor' : ''}`}>
-            <div className={"flex-row space-between"}>
-                <h2>Player {gameState.currentPlayer}'s Turn</h2>
-                <div className={"action-buttons-container"}>
-                        {stagedPiece === undefined ? <PassButton pass={pass}/> : null}
-                        {stagedPiece === undefined ? null : <CancelButton cancelMove={cancelMove}/>}
-                        {stagedPiece === undefined ? null : <ConfirmButton confirmMove={confirmMove} />}
+            <div className={"inner"}>
+                <div className={"flex-row space-between"}>
+                    <h2>Player {gameState.currentPlayer}'s Turn</h2>
+                    <div className={"action-buttons-container"}>
+                            {stagedPiece === undefined ? <PassButton pass={pass}/> : null}
+                            {stagedPiece === undefined ? null : <CancelButton cancelMove={cancelMove}/>}
+                            {stagedPiece === undefined ? null : <ConfirmButton confirmMove={confirmMove} />}
+                    </div>
                 </div>
+                <GameBoard
+                    boardState={gameState.boardState}
+                    stagedPiece={stagedPiece}
+                    stagePiece={stagePiece}
+                    pickUpStagedPiece={pickUpStagedPiece}
+                />
             </div>
-            <GameBoard
-                boardState={gameState.boardState}
-                stagedPiece={stagedPiece}
-                stagePiece={stagePiece}
-                pickUpStagedPiece={pickUpStagedPiece}
-            />
         </div>
         <div className={`right-pane`}>
-            <GamePieces
-                gamePieces={gameState.players[gameState.currentPlayer - 1].playerPieces}
-                playerId={gameState.currentPlayer}
-                onClickPiece={handlePlayerPieceClick}
-            />
+            <div className={"inner"}>
+                <GamePieces
+                    gamePieces={gameState.players[gameState.currentPlayer - 1].playerPieces}
+                    playerId={gameState.currentPlayer}
+                    onClickPiece={handlePlayerPieceClick}
+                />
+            </div>
         </div>
         <ActivePieceContainer
             piece={activePiece}

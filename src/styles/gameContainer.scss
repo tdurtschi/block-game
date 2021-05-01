@@ -10,22 +10,29 @@
     align-items: center;
     min-width: 900px;
     max-width: 1000px;
-    height: 750px;
+    height: 675px;
     background-color: $game-container-color;
 }
 
 .right-pane {
-    padding: 0 0rem 1rem 1rem;
     display: flex;
     flex-direction: column;
     height: 100%;
+
+    .inner {
+        padding: 1rem 0rem 1rem 1rem;
+        height: calc(100% - 2rem);
+    }
 }
 
 .left-pane {
-    padding: 2rem 1rem 1rem;
     display: flex;
     flex-direction: column;
     height: 100%;
+
+    .inner {
+        padding: 0 1rem 1rem;
+    }
 }
 
 .hide-cursor {
