@@ -34,8 +34,15 @@ function BlockGame({ gameClient, errorDisplayTime }: BlockGameProps) {
 
     return (
         <>
-            <header>
+            <header className="flex-row">
                 <h1>Block Game</h1>
+                <Error 
+                    errorText={error ?? ""} 
+                    errorDisplayTime={errorDisplayTime}
+                    clearError={() => {
+                        setError(undefined);
+                    }}
+                />
             </header>
             <div
                 className={`game-container`}
@@ -71,13 +78,6 @@ function BlockGame({ gameClient, errorDisplayTime }: BlockGameProps) {
                     </div>
                 </>}
             </div>
-            {<Error 
-                errorText={error ?? ""} 
-                errorDisplayTime={errorDisplayTime}
-                clearError={() => {
-                    setError(undefined);
-                }}
-            />}
         </>
     )
 };
