@@ -6,6 +6,7 @@ import GameState from "../shared/types/GameState";
 import GameStatus from "../shared/types/GameStatus";
 import PlayerState from "../shared/types/PlayerState";
 import GameContainer from "./gameContainer";
+import { HelpButton } from "./Help";
 
 export interface BlockGameProps {
     gameClient: IGameClient;
@@ -80,11 +81,7 @@ function BlockGame({ gameClient, errorDisplayTime }: BlockGameProps) {
                             <div>
                                 <h2>
                                     Or
-                                    <HelpButton
-                                        onClick={() => {
-                                            alert("Not Implemented! 🤷‍♂️");
-                                        }}
-                                    />
+                                    <HelpButton />
                                 </h2>
                             </div>
                         </div>
@@ -159,8 +156,3 @@ function Error(errorState: ErrorState) {
     );
 }
 
-const HelpButton = ({ onClick }: { onClick: () => any }) => (
-    <a href="" className="help-button" data-help-button onClick={onClick}>
-        Learn How To Play
-    </a>
-);
