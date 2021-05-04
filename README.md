@@ -6,9 +6,15 @@ This is a clone of a board game with a similar name.
 
 _Prerequisites: NodeJS_
 
-Dev mode spins up the app and opens cypress in watch mode.
+Before running the app, install dependencies:
+
 ```bash
 npm install
+```
+
+Dev mode spins up the app and opens cypress in watch mode.
+
+```bash
 npm run dev
 ```
 
@@ -23,4 +29,5 @@ npm run build
 Static site output will be in `dist/` directory.
 
 ## Product Backlog
+
 [Link](./backlog.md)

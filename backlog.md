@@ -9,9 +9,9 @@
 -   Player can cancel move by dropping back into inventory.
 -   Confirm Pass
 -   Build, serve, & run cypress script
--   Readme
 -   View gameboard end state after game over
--   Move server to backend with websockets.
+-   View all scores while game is in progress
+-   Move server to backend with websockets. (See below)
 -   CSS Fixes
 -   Ship-it script
 -   Page Object pattern for cypress
@@ -20,3 +20,17 @@
     -   _Maybe this one makes sense to split up into multiple stories, i.e. different behavior to discourage different invalid moves? Maybe that's overkill_
 -   Keep track of mouse offset from top left to avoid jitter when first moving picked up piece.
 -   Incorporate feedback mechanism
+-   AI player - naive
+-   View other players' pieces when it's not their turn
+
+## Server backlog (Draft)
+
+-   User can select "Local" game or "Online"
+-   Feature flag for "Online" mode
+-   If 4 players select "Online" mode, the game starts. No player access controls.
+-   Online players can't do actions on another player's turn.
+-   8 players can start 2 games.
+-   Remove feature flag
+-   ^^ **MVP!** ^^
+-   Player can create a nickname before playing online game.
+-   Private games
