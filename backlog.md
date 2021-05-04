@@ -2,9 +2,9 @@
 
 # Product Backlog
 
--   In Game Instructions
--   Client side validation that piece fits on board - prevent exception
+-   Deploy to PRODUCTION! 🚀 🐀
 -   ^^ **MVP!** ^^
+-   Fix big array in gameContainer.tsx
 -   QA pipeline / ship-it script
 -   Player can cancel move by dropping back into inventory.
 -   Confirm Pass

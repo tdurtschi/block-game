@@ -1,5 +1,5 @@
 import React = require("react");
-import Action, { BoardLocation } from "../shared/types/Actions";
+import Action from "../shared/types/Actions";
 import GameBoard from "./gameBoard";
 import GamePieces from "./gamePieces";
 import ActivePieceContainer from "./activePiece";
@@ -49,7 +49,15 @@ function GameContainer({ gameState, action }: GameContainerProps) {
     };
 
     const stagePiece = (yCoord: number, xCoord: number) => {
-        if (activePiece !== undefined) {
+        const pieceFitsOnBoard = (piece: GamePiece) => {
+            const pieceX = piece.pieceData[0].length;
+            const pieceY = piece.pieceData.length;
+
+            return xCoord + pieceX <= 20 &&
+                yCoord + pieceY <= 20;
+        }
+
+        if (activePiece && pieceFitsOnBoard(activePiece)) {
             const stagedPiece = {
                 ...activePiece,
                 target: { x: xCoord, y: yCoord }
@@ -91,9 +99,8 @@ function GameContainer({ gameState, action }: GameContainerProps) {
     return (
         <>
             <div
-                className={`left-pane ${
-                    activePiece !== undefined ? "hide-cursor" : ""
-                }`}
+                className={`left-pane ${activePiece !== undefined ? "hide-cursor" : ""
+                    }`}
             >
                 <div className={"inner"}>
                     <div className={"flex-row space-between"}>

@@ -155,6 +155,29 @@ describe("Block Game", () => {
                 ]);
             });
 
+            it("Prevents a piece from being placed so that it's off the edge of the board", () => {
+                cy.get("[data-game-piece]").eq(0).click();
+
+                // Try the right edge
+                cy.get(
+                    "[data-game-board] [data-coord-x='19'][data-coord-y='0']"
+                ).click();
+                // Try the bottom Edge
+                cy.get(
+                    "[data-game-board] [data-coord-x='0'][data-coord-y='19']"
+                ).click();
+
+                // Make sure the piece can be played (Clicks twice because of some
+                // strange Cypress issue where the click happens in the wrong spot here)
+                cy.get(
+                    "[data-game-board] [data-coord-x='0'][data-coord-y='0']"
+                ).click();
+                cy.get(
+                    "[data-game-board] [data-coord-x='0'][data-coord-y='0']"
+                ).click();
+                cy.get("[data-confirm-action]").click();
+            });
+
             it("[Regression] The second player doesn't start their turn with the last player's staged piece", () => {
                 cy.get("[data-game-piece]").eq(0).click();
                 cy.get(
