@@ -29,6 +29,7 @@
 -   Online players can't do actions on another player's turn.
 -   8 players can start 2 games.
 -   Remove feature flag
+-   Security (???)
 -   ^^ **MVP!** ^^
 -   Player can create a nickname before playing online game.
 -   Private games
@@ -43,5 +44,6 @@
 -   Online players can't do actions on another player's turn.
 -   8 players can start 2 games.
 -   Remove feature flag
+-   Security (???)
 -   ^^ **MVP!** ^^
 -   Private games

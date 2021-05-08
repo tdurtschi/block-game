@@ -12,18 +12,18 @@ On a player's turn, a player can either play a tile or pass. You can't play agai
 The rules for playing a tile are:
 
 * The first tile must touch one of the board's corners.
-* Two pieces can't overlap
-* Two of the player's pieces CANNOT touch each other ADJACENTLY. 
-* Two of the player's pieces MUST touch each other DIAGONALLY, at least once.
+* Two tiles can't overlap.
+* Two of the player's tiles CANNOT touch each other ADJACENTLY. 
+* Two of the player's tiles MUST touch each other DIAGONALLY, at least once.
 
-The game ends when all players have either passed or played all their tiles.
+The game ends when every player has either passed or played all their tiles.
 
 # Gameplay
 To play a tile, click on it to pick it up, and place it on the gameboard.
 
-**Rotate** your piece by using the scroll wheel while the piece is 'picked up'.
+**Rotate** a tile by using the scroll wheel while the piece is 'picked up'.
 
-**Flip** your piece by right clicking while the piece is 'picked up'.
+**Flip** a tile by right clicking while the piece is 'picked up'.
 `;
 
 export const HelpContent = ({ onHide }: { onHide: () => any }) => (
