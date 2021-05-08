@@ -53,9 +53,8 @@ function GameContainer({ gameState, action }: GameContainerProps) {
             const pieceX = piece.pieceData[0].length;
             const pieceY = piece.pieceData.length;
 
-            return xCoord + pieceX <= 20 &&
-                yCoord + pieceY <= 20;
-        }
+            return xCoord + pieceX <= 20 && yCoord + pieceY <= 20;
+        };
 
         if (activePiece && pieceFitsOnBoard(activePiece)) {
             const stagedPiece = {
@@ -99,8 +98,9 @@ function GameContainer({ gameState, action }: GameContainerProps) {
     return (
         <>
             <div
-                className={`left-pane ${activePiece !== undefined ? "hide-cursor" : ""
-                    }`}
+                className={`left-pane ${
+                    activePiece !== undefined ? "hide-cursor" : ""
+                }`}
             >
                 <div className={"inner"}>
                     <div className={"flex-row space-between"}>

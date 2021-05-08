@@ -30,11 +30,12 @@ export const HelpContent = ({ onHide }: { onHide: () => any }) => (
     <div className={"help-container"}>
         <div className={"help-content"}>
             <ReactMarkdown children={helpMarkdown} />
-            <button className="btn-primary" onClick={onHide}>Ok</button>
+            <button className="btn-primary" onClick={onHide}>
+                Ok
+            </button>
         </div>
     </div>
-)
-
+);
 
 export const HelpButton = () => {
     const [isShowingHelp, setIsShowingHelp] = useState<boolean>(false);
@@ -42,11 +43,19 @@ export const HelpButton = () => {
         setIsShowingHelp(true);
     };
 
-    return (<>
-        {isShowingHelp && <HelpContent onHide={() => setIsShowingHelp(false)} />}
-        <a href="#" className="help-button" data-help-button onClick={onClick}>
-            Learn How To Play
-    </a>
-    </>
-    )
+    return (
+        <>
+            {isShowingHelp && (
+                <HelpContent onHide={() => setIsShowingHelp(false)} />
+            )}
+            <a
+                href="#"
+                className="help-button"
+                data-help-button
+                onClick={onClick}
+            >
+                Learn How To Play
+            </a>
+        </>
+    );
 };

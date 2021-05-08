@@ -27,11 +27,11 @@ function GameBoard({
 
     const boardStateToRender = stagedPiece
         ? applyPieceToBoard(
-            stagedPiece.target,
-            stagedPiece.pieceData,
-            stagedPiece.playerId,
-            boardState
-        )
+              stagedPiece.target,
+              stagedPiece.pieceData,
+              stagedPiece.playerId,
+              boardState
+          )
         : boardState;
 
     return (
@@ -108,7 +108,7 @@ function getCellColorClass(playerId: PlayerId | undefined) {
 const createEmptyBoard = () => {
     const rows = new Array(20).fill(new Array(20).fill(undefined));
     return rows;
-}
+};
 
 const gameBoardUnderlayData = createEmptyBoard();
 
