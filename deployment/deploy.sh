@@ -1,9 +1,16 @@
 #! /bin/bash
-set -x -e
+set -e
 
 PROJECT_ROOT="$( cd "$(dirname "${BASH_SOURCE[0]}")" ; cd .. ; pwd -P )"
 
 export_variables_from_file() {
+    if [ ! -f $PROJECT_ROOT/deployment/deploy.env ]; then
+        echo "😭 ERROR!"
+        echo "🔴 File 'deploy.env' does not exist in directory $PROJECT_ROOT/deployment"
+        echo ""
+        exit 1
+    fi
+
     set -o allexport
     . $1
     set +o allexport
@@ -20,10 +27,10 @@ run_deploy_from_docker() {
 
 main() {
     cd $PROJECT_ROOT
+    export_variables_from_file ./deployment/deploy.env
     yarn build
     yarn test
     yarn e2e:ci
-    export_variables_from_file ./deployment/deploy.env
 
     run_deploy_from_docker
 }
