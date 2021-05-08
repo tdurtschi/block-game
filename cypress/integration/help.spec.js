@@ -1,6 +1,6 @@
 describe("In-Game Help", () => {
     beforeEach(() => {
-        cy.visit("http://localhost:3000/");
+        cy.visit("/");
         cy.contains("Block Game");
     });
 

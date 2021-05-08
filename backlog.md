@@ -2,8 +2,9 @@
 
 # Product Backlog
 
--   Deploy to PRODUCTION! 🚀 🐀
--   ^^ **MVP!** ^^
+-   Versioning
+-   ^^ **Next Release!** ^^
+-   Fix warnings during CI/CD/Testing
 -   Fix big array in gameContainer.tsx
 -   QA pipeline / ship-it script
 -   Player can cancel move by dropping back into inventory.
@@ -13,7 +14,6 @@
 -   View all scores while game is in progress
 -   Move server to backend with websockets. (See below)
 -   CSS Fixes
--   Ship-it script
 -   Page Object pattern for cypress
 -   Fix cursor to pointer on staged piece hover.
 -   Message for invalid move - client validation
@@ -33,4 +33,17 @@
 -   Remove feature flag
 -   ^^ **MVP!** ^^
 -   Player can create a nickname before playing online game.
+-   Private games
+
+## Server backlog (Draft 2)
+
+-   User can enter custom player names before starting local game
+-   User can select "Local" game or "Online"
+-   Feature flag for "Online" mode
+-   User can enter one player's info before starting online game
+-   Once 4 players enter player info and click start, game starts.
+-   Online players can't do actions on another player's turn.
+-   8 players can start 2 games.
+-   Remove feature flag
+-   ^^ **MVP!** ^^
 -   Private games

@@ -1,6 +1,6 @@
 describe("Block Game", () => {
     beforeEach(() => {
-        cy.visit("http://localhost:3000/");
+        cy.visit("/");
     });
 
     it("Displays the Header text and has a button to start the game.", () => {

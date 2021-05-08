@@ -7,11 +7,13 @@
     "license": "MIT",
     "scripts": {
         "build": "node build.js",
+        "deploy": "./deployment/deploy.sh",
         "dev": "nf start",
-        "start": "npm run build && serve dist/",
-        "e2e": "cypress open",
-        "e2e:ci": "cypress run",
+        "e2e": "CYPRESS_BASE_URL='http://localhost:3000' cypress open",
+        "e2e:run": "cypress run",
+        "e2e:ci": "CYPRESS_BASE_URL='http://localhost:5000' start-server-and-test start http://localhost:5000 e2e:run",
         "prettier": "prettier --write \"./**/*.(js|ts|tsx|scss)\"",
+        "start": "npm run build && serve dist/",
         "test": "DEBUG_PRINT_LIMIT=200 jest",
         "watch": "node build.js --watch"
     },
@@ -22,6 +24,7 @@
         "jest": "^26.6.3",
         "jest-nyancat-reporter": "^2.0.0",
         "prettier": "^2.2.1",
+        "start-server-and-test": "^1.12.1",
         "ts-jest": "^26.4.4",
         "webpack": "^5.10.0",
         "webpack-cli": "^4.2.0"
