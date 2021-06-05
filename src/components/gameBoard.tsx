@@ -6,9 +6,9 @@ import StagedPiece from "../frontend/StagedPiece";
 
 interface GameBoardProps {
     boardState: Readonly<BoardState>;
-    stagePiece: (yCoord: number, xCoord: number) => any;
-    pickUpStagedPiece: (yCoord: number, xCoord: number) => any;
-    stagedPiece: StagedPiece | undefined;
+    stagePiece?: (yCoord: number, xCoord: number) => any;
+    pickUpStagedPiece?: (yCoord: number, xCoord: number) => any;
+    stagedPiece?: StagedPiece;
 }
 
 function GameBoard({
@@ -18,9 +18,9 @@ function GameBoard({
     stagedPiece
 }: GameBoardProps) {
     const onClick = (yCoord: number, xCoord: number) => {
-        if (stagedPiece) {
+        if (stagedPiece && pickUpStagedPiece) {
             pickUpStagedPiece(yCoord, xCoord);
-        } else {
+        } else if(stagePiece) {
             stagePiece(yCoord, xCoord);
         }
     };

@@ -4,9 +4,10 @@ import { IGameClient } from "../frontend/gameClient";
 import Action from "../shared/types/Actions";
 import GameState from "../shared/types/GameState";
 import GameStatus from "../shared/types/GameStatus";
-import PlayerState from "../shared/types/PlayerState";
 import GameContainer from "./gameContainer";
+import { GameOver } from "./gameOver";
 import { HelpButton } from "./Help";
+import { NewGameButton } from "./newGameButton";
 
 export interface BlockGameProps {
     gameClient: IGameClient;
@@ -59,20 +60,11 @@ function BlockGame({ gameClient, errorDisplayTime }: BlockGameProps) {
                     />
                 )}
                 {gameState && gameState.status === GameStatus.OVER && (
-                    <div data-game-over>
-                        <h2>Game Over!</h2>
-                        {gameState.players.map((player, i) => (
-                            <PlayerScore key={i} player={player} />
-                        ))}
-                        <h2>{winnerMessage(gameState)}</h2>
-                        <h2>Click here to start a new game:</h2>
-                        <div style={{ width: "16px" }} />
-                        <NewGameButton startGame={startGame} />
-                    </div>
+                    <GameOver gameState={gameState} startGame={startGame}/>
                 )}
                 {!gameState && (
                     <>
-                        <div>
+                        <div className="new-game">
                             <div className="flex-row">
                                 <h2>Click here to start a new game:</h2>
                                 <div style={{ width: "16px" }} />
@@ -92,43 +84,12 @@ function BlockGame({ gameClient, errorDisplayTime }: BlockGameProps) {
     );
 }
 
+export interface GameOverProps {
+    gameState: GameState;
+    startGame: () => any;
+}
+
 export default BlockGame;
-
-function NewGameButton({ startGame }: { startGame: () => void }) {
-    return (
-        <>
-            <button className="btn-primary" data-new-game onClick={startGame}>
-                New Game
-            </button>
-        </>
-    );
-}
-
-function PlayerScore({ player }: { player: PlayerState }) {
-    return (
-        <div className={`player-${player.playerId}-score`}>
-            <h3>
-                Player {player.playerId}:&nbsp;
-                <span>{player.score}</span>
-            </h3>
-        </div>
-    );
-}
-
-function winnerMessage(gameState: GameState) {
-    const orderedPlayers = gameState.players.map((player) => ({
-        playerId: player.playerId,
-        score: player.score
-    }));
-    orderedPlayers.sort((a, b) =>
-        a.score > b.score ? -1 : a.score === b.score ? 0 : 1
-    );
-    if (orderedPlayers[0].score === orderedPlayers[1].score) {
-        return "Tie game";
-    } else {
-        return `Player ${orderedPlayers[0].playerId} wins!`;
-    }
-}
 
 export interface ErrorState {
     errorDisplayTime?: number;

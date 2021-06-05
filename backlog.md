@@ -4,7 +4,6 @@
 
 -   Keep track of mouse offset from top left to avoid jitter when first moving picked up piece.
 -   Confirm Pass
--   View gameboard end state after game over
 -   View all scores while game is in progress
 -   Versioning (show version/attribution on page somewhere?)
 -   Fix buggy error show/hide behavior
