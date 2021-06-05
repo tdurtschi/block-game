@@ -1,0 +1,1 @@
+./scripts/ship-it.sh
