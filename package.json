@@ -7,7 +7,7 @@
     "license": "MIT",
     "scripts": {
         "build": "node build.js",
-        "deploy": "./deployment/deploy.sh",
+        "deploy": "./scripts/deploy.sh",
         "dev": "nf start",
         "e2e": "CYPRESS_BASE_URL='http://localhost:3000' cypress open",
         "e2e:run": "cypress run",
