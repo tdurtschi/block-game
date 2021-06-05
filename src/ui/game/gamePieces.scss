@@ -1,5 +1,5 @@
-@import "./colors.scss";
-@import "./constants.scss";
+@import "../../styles/colors.scss";
+@import "../../styles/constants.scss";
 
 .game-pieces {
     height: 100%;
@@ -24,22 +24,3 @@
     border: 2px solid #555555;
 }
 
-.game-piece {
-    padding: 0.5rem;
-    cursor: pointer;
-
-    .row {
-        display: flex;
-
-        div {
-            box-sizing: border-box;
-            width: $CELL_SIZE;
-            height: $CELL_SIZE;
-        }
-    }
-
-    &:hover {
-        padding-top: 0.6rem;
-        padding-bottom: 0.4rem;
-    }
-}

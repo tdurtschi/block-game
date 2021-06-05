@@ -1,12 +1,12 @@
 import React = require("react");
-import Action from "../shared/types/Actions";
+import Action from "../../shared/types/Actions";
 import GameBoard from "./gameBoard";
 import GamePieces from "./gamePieces";
 import ActivePieceContainer from "./activePiece";
-import GamePiece, { GamePiecesData } from "../shared/types/GamePiece";
-import * as pieceUtils from "../shared/pieceUtils";
-import GameState from "../shared/types/GameState";
-import StagedPiece from "../frontend/StagedPiece";
+import GamePiece, { GamePiecesData } from "../../shared/types/GamePiece";
+import * as pieceUtils from "../../shared/pieceUtils";
+import GameState from "../../shared/types/GameState";
+import StagedPiece from "../../frontend/StagedPiece";
 
 interface GameContainerProps {
     gameState: GameState;

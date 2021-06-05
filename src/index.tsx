@@ -1,6 +1,6 @@
 import React = require("react");
 import ReactDOM = require("react-dom");
-import App from "./components/App";
+import App from "./ui/App";
 import GameClient from "./frontend/gameClient";
 import GameServer from "./server";
 

@@ -2,7 +2,7 @@ import React = require("react");
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import { IGameClient } from "../../src/frontend/gameClient";
 import GameStatus from "../../src/shared/types/GameStatus";
-import App from "../../src/components/App";
+import App from "../../src/ui/App";
 
 describe("Game Over", () => {
     it("Displays the winner", async () => {

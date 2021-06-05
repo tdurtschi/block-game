@@ -4,10 +4,9 @@ import { IGameClient } from "../frontend/gameClient";
 import Action from "../shared/types/Actions";
 import GameState from "../shared/types/GameState";
 import GameStatus from "../shared/types/GameStatus";
-import GameContainer from "./gameContainer";
+import GameContainer from "./game/gameContainer";
 import { GameOver } from "./gameOver";
-import { HelpButton } from "./Help";
-import { NewGameButton } from "./newGameButton";
+import { NewGame } from "./newGame/newGame";
 
 export interface BlockGameProps {
     gameClient: IGameClient;
@@ -63,26 +62,13 @@ function BlockGame({ gameClient, errorDisplayTime }: BlockGameProps) {
                     <GameOver gameState={gameState} startGame={startGame}/>
                 )}
                 {!gameState && (
-                    <>
-                        <div className="new-game">
-                            <div className="flex-row">
-                                <h2>Click here to start a new game:</h2>
-                                <div style={{ width: "16px" }} />
-                                <NewGameButton startGame={startGame} />
-                            </div>
-                            <div>
-                                <h2>
-                                    Or
-                                    <HelpButton />
-                                </h2>
-                            </div>
-                        </div>
-                    </>
+                    <NewGame startGame={startGame}/>
                 )}
             </div>
         </>
     );
 }
+
 
 export interface GameOverProps {
     gameState: GameState;

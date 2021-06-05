@@ -1,5 +1,5 @@
 import React = require("react");
-import App from "../../src/components/App";
+import App from "../../src/ui/App";
 import { IGameClient } from "../../src/frontend/gameClient";
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import GameStatus from "../../src/shared/types/GameStatus";

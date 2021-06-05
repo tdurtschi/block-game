@@ -1,8 +1,8 @@
 import React = require("react");
-import BoardState from "../shared/types/BoardState";
-import PlayerId from "../shared/types/PlayerId";
-import { applyPieceToBoard } from "../shared/pieceUtils";
-import StagedPiece from "../frontend/StagedPiece";
+import BoardState from "../../shared/types/BoardState";
+import PlayerId from "../../shared/types/PlayerId";
+import { applyPieceToBoard } from "../../shared/pieceUtils";
+import StagedPiece from "../../frontend/StagedPiece";
 
 interface GameBoardProps {
     boardState: Readonly<BoardState>;

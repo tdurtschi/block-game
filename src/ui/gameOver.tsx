@@ -1,8 +1,8 @@
 import React = require("react");
 import GameState from "../shared/types/GameState";
 import PlayerState from "../shared/types/PlayerState";
-import GameBoard from "./gameBoard";
-import { NewGameButton } from "./newGameButton";
+import GameBoard from "./game/gameBoard";
+import { NewGameButton } from "./newGame/newGameButton";
 
 export interface GameOverProps {
     gameState: GameState;

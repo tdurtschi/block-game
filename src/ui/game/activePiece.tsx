@@ -1,6 +1,6 @@
 import React = require("react");
-import PlayerId from "../shared/types/PlayerId";
-import GamePiece from "../shared/types/GamePiece";
+import PlayerId from "../../shared/types/PlayerId";
+import GamePiece from "../../shared/types/GamePiece";
 import Piece from "./gamePiece";
 
 interface ActivePieceProps {

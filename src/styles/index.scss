@@ -1,11 +1,12 @@
 @import "./colors.scss";
 
 @import "./game.scss";
-@import "./gamePieces.scss";
-@import "./gameContainer.scss";
-@import "./gameBoard.scss";
-@import "./newGame.scss";
-@import "./help.scss";
+@import "../ui/game/gamePieces.scss";
+@import "../ui/game/gamePiece.scss";
+@import "../ui/game/gameContainer.scss";
+@import "../ui/game/gameBoard.scss";
+@import "../ui/newGame/newGame.scss";
+@import "../ui/help/help.scss";
 
 @mixin krona-one-font {
     font-family: "Krona One", sans-serif;
