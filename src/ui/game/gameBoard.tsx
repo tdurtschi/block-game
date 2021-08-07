@@ -7,7 +7,7 @@ import StagedPiece from "../../frontend/StagedPiece";
 interface GameBoardProps {
     boardState: Readonly<BoardState>;
     stagePiece?: (yCoord: number, xCoord: number) => any;
-    pickUpStagedPiece?: (yCoord: number, xCoord: number) => any;
+    pickUpStagedPiece?: (mouseOffsetX?: number, mouseOffsetY?: number) => any;
     stagedPiece?: StagedPiece;
 }
 
@@ -19,19 +19,19 @@ function GameBoard({
 }: GameBoardProps) {
     const onClick = (yCoord: number, xCoord: number) => {
         if (stagedPiece && pickUpStagedPiece) {
-            pickUpStagedPiece(yCoord, xCoord);
-        } else if(stagePiece) {
+            pickUpStagedPiece();
+        } else if (stagePiece) {
             stagePiece(yCoord, xCoord);
         }
     };
 
     const boardStateToRender = stagedPiece
         ? applyPieceToBoard(
-              stagedPiece.target,
-              stagedPiece.pieceData,
-              stagedPiece.playerId,
-              boardState
-          )
+            stagedPiece.target,
+            stagedPiece.pieceData,
+            stagedPiece.playerId,
+            boardState
+        )
         : boardState;
 
     return (

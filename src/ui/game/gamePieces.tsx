@@ -6,7 +6,7 @@ import Piece from "./gamePiece";
 interface GamePiecesProps {
     gamePieces: GamePiece[];
     playerId: PlayerId;
-    onClickPiece: (pieceId: number) => any;
+    onClickPiece: (pieceId: number, mouseOffsetX: number, mouseOffsetY: number) => any;
 }
 
 function GamePieces(props: GamePiecesProps) {

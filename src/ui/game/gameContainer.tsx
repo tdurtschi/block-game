@@ -3,7 +3,7 @@ import Action from "../../shared/types/Actions";
 import GameBoard from "./gameBoard";
 import GamePieces from "./gamePieces";
 import ActivePieceContainer from "./activePiece";
-import GamePiece, { GamePiecesData } from "../../shared/types/GamePiece";
+import GamePiece, { ActiveGamePiece, GamePiecesData } from "../../shared/types/GamePiece";
 import * as pieceUtils from "../../shared/pieceUtils";
 import GameState from "../../shared/types/GameState";
 import StagedPiece from "../../frontend/StagedPiece";
@@ -14,27 +14,27 @@ interface GameContainerProps {
 }
 
 function GameContainer({ gameState, action }: GameContainerProps) {
-    const [activePiece, setActivePiece] = React.useState<GamePiece>();
+    const [activePiece, setActivePiece] = React.useState<ActiveGamePiece>();
     const [stagedPiece, setStagedPiece] = React.useState<StagedPiece>();
 
-    const rotate = (piece: GamePiece, reverse: boolean = false) => {
+    const rotate = (piece: ActiveGamePiece, reverse: boolean = false) => {
         const result = {
             ...piece,
             pieceData: reverse
                 ? pieceUtils.rotateReverse(piece.pieceData)
                 : pieceUtils.rotate(piece.pieceData),
             rotate: reverse ? (piece.rotate + 3) % 4 : (piece.rotate + 1) % 4
-        } as GamePiece;
+        } as ActiveGamePiece;
         setActivePiece(result);
     };
 
-    const flip = (piece: GamePiece) => {
+    const flip = (piece: ActiveGamePiece) => {
         const result = {
             ...piece,
             pieceData: pieceUtils.flip(piece.pieceData),
             rotate: piece.rotate > 0 ? 4 - piece.rotate : 0,
             flip: !piece.flip
-        } as GamePiece;
+        } as ActiveGamePiece;
         setActivePiece(result);
     };
 
@@ -43,23 +43,32 @@ function GameContainer({ gameState, action }: GameContainerProps) {
         setStagedPiece(undefined);
         setActivePiece(undefined);
     };
-    const pickUpStagedPiece = (yCoord: number, xCoord: number) => {
-        setActivePiece(stagedPiece);
+
+    const pickUpStagedPiece = (mouseOffsetX: number = 0, mouseOffsetY: number = 0) => {
+        setActivePiece(stagedPiece && { ...stagedPiece, mouseOffsetX, mouseOffsetY });
         setStagedPiece(undefined);
     };
 
     const stagePiece = (yCoord: number, xCoord: number) => {
+        if (!activePiece) return;
+
+        const xCoordWithOffset = xCoord - activePiece?.mouseOffsetX;
+        const yCoordWithOffset = yCoord - activePiece?.mouseOffsetY;
+
         const pieceFitsOnBoard = (piece: GamePiece) => {
             const pieceX = piece.pieceData[0].length;
             const pieceY = piece.pieceData.length;
 
-            return xCoord + pieceX <= 20 && yCoord + pieceY <= 20;
+            return xCoordWithOffset >= 0 &&
+                yCoordWithOffset >= 0 &&
+                xCoordWithOffset + pieceX <= 20 &&
+                yCoordWithOffset + pieceY <= 20;
         };
 
-        if (activePiece && pieceFitsOnBoard(activePiece)) {
+        if (pieceFitsOnBoard(activePiece)) {
             const stagedPiece = {
                 ...activePiece,
-                target: { x: xCoord, y: yCoord }
+                target: { x: xCoordWithOffset, y: yCoordWithOffset }
             };
 
             setStagedPiece(stagedPiece);
@@ -67,13 +76,15 @@ function GameContainer({ gameState, action }: GameContainerProps) {
         }
     };
 
-    const handlePlayerPieceClick = (pieceId: number) => {
+    const handlePlayerPieceClick = (pieceId: number, mouseOffsetX: number, mouseOffsetY: number) => {
         setActivePiece({
             playerId: gameState.currentPlayer,
             pieceData: GamePiecesData[pieceId],
             id: pieceId,
             rotate: 0 as 0 | 1 | 2 | 3,
-            flip: false
+            flip: false,
+            mouseOffsetX,
+            mouseOffsetY
         });
         setStagedPiece(undefined);
     };
@@ -98,9 +109,8 @@ function GameContainer({ gameState, action }: GameContainerProps) {
     return (
         <>
             <div
-                className={`left-pane ${
-                    activePiece !== undefined ? "hide-cursor" : ""
-                }`}
+                className={`left-pane ${activePiece !== undefined ? "hide-cursor" : ""
+                    }`}
             >
                 <div className={"inner"}>
                     <div className={"flex-row space-between"}>

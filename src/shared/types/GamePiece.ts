@@ -8,6 +8,11 @@ export default interface GamePiece {
     playerId: PlayerId;
 }
 
+export interface ActiveGamePiece extends GamePiece {
+    mouseOffsetX: number;
+    mouseOffsetY: number;
+}
+
 export const GamePiecesData = [
     [
         //0

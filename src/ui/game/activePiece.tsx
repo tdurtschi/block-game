@@ -1,12 +1,12 @@
 import React = require("react");
-import PlayerId from "../../shared/types/PlayerId";
-import GamePiece from "../../shared/types/GamePiece";
+import { ActiveGamePiece } from "../../shared/types/GamePiece";
+import { CELL_SIZE_PX } from "../constants";
 import Piece from "./gamePiece";
 
 interface ActivePieceProps {
-    piece: GamePiece | undefined;
-    rotate: (piece: GamePiece, reverse?: boolean) => any;
-    flip: (piece: GamePiece) => any;
+    piece: ActiveGamePiece | undefined;
+    rotate: (piece: ActiveGamePiece, reverse?: boolean) => any;
+    flip: (piece: ActiveGamePiece) => any;
 }
 
 const DEBOUNCE_TIMEOUT_MS = 300;
@@ -35,8 +35,10 @@ function ActivePiece(props: ActivePieceProps) {
     };
 
     const mouseMoveListener = (e: MouseEvent) => {
-        setX(e.pageX);
-        setY(e.pageY);
+        const newX = e.pageX - (props.piece!.mouseOffsetX * CELL_SIZE_PX);
+        const newY = e.pageY - (props.piece!.mouseOffsetY * CELL_SIZE_PX);
+        setX(newX);
+        setY(newY);
     };
 
     const mouseWheelListener = (e: WheelEvent) => {
@@ -77,7 +79,7 @@ function ActivePiece(props: ActivePieceProps) {
         >
             <Piece
                 piece={props.piece!}
-                onClick={() => {}}
+                onClick={() => { }}
                 playerId={props.piece!.playerId}
             />
         </div>

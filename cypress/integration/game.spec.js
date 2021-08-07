@@ -47,7 +47,7 @@ describe("Block Game", () => {
 
             it("Shows the final game board", () => {
                 cy.get("[data-game-board]");
-            })
+            });
 
             it("Allows a player to start a new game", () => {
                 cy.get("[data-new-game]").click();
@@ -57,7 +57,7 @@ describe("Block Game", () => {
 
         describe("Passing", () => {
             it("Clears the active piece", () => {
-                cy.get("[data-game-piece]").eq(0).click();
+                clickPlayersFirstPiece();
                 cy.get("[data-player-pass-button]").click();
                 cy.get("[data-active-piece]").should("not.exist");
             });
@@ -65,7 +65,7 @@ describe("Block Game", () => {
 
         describe("Playing Pieces", () => {
             it("Can play a piece by clicking it, clicking the game board, and confirming", () => {
-                cy.get("[data-game-piece]").eq(0).click();
+                clickPlayersFirstPiece();
                 cy.get(
                     "[data-game-board] [data-coord-x='0'][data-coord-y='0']"
                 ).click();
@@ -80,7 +80,7 @@ describe("Block Game", () => {
             });
 
             it("Can cancel a staged piece by clicking the cancel button", () => {
-                cy.get("[data-game-piece]").eq(0).click();
+                clickPlayersFirstPiece();
                 cy.get(
                     "[data-game-board] [data-coord-x='0'][data-coord-y='0']"
                 ).click();
@@ -94,7 +94,7 @@ describe("Block Game", () => {
             });
 
             it("Can rotate a piece with the mouse wheel", () => {
-                cy.get("[data-game-piece]").eq(0).click();
+                clickPlayersFirstPiece();
                 cy.get("[data-game-board]").trigger("wheel", { deltaY: -4 });
                 cy.get(
                     "[data-game-board] [data-coord-x='16'][data-coord-y='0']"
@@ -108,7 +108,7 @@ describe("Block Game", () => {
             });
 
             it("Can flip a piece with a right click", () => {
-                cy.get("[data-game-piece]").eq(0).click();
+                clickPlayersFirstPiece();
                 cy.get("[data-game-board]").trigger("mousedown", { button: 2 });
                 cy.get(
                     "[data-game-board] [data-coord-x='18'][data-coord-y='0']"
@@ -124,7 +124,7 @@ describe("Block Game", () => {
             });
 
             it("Can pick up a piece from the board to move it", () => {
-                cy.get("[data-game-piece]").eq(0).click();
+                clickPlayersFirstPiece();
                 cy.get(
                     "[data-game-board] [data-coord-x='0'][data-coord-y='0']"
                 ).click();
@@ -145,7 +145,7 @@ describe("Block Game", () => {
             });
 
             it("A staged piece persists when there's an error with the move", () => {
-                cy.get("[data-game-piece]").eq(0).click();
+                clickPlayersFirstPiece();
                 cy.get(
                     "[data-game-board] [data-coord-x='1'][data-coord-y='1']"
                 ).click();
@@ -160,7 +160,7 @@ describe("Block Game", () => {
             });
 
             it("Prevents a piece from being placed so that it's off the edge of the board", () => {
-                cy.get("[data-game-piece]").eq(0).click();
+                clickPlayersFirstPiece();
 
                 // Try the right edge
                 cy.get(
@@ -182,8 +182,28 @@ describe("Block Game", () => {
                 cy.get("[data-confirm-action]").click();
             });
 
+            it("A player can pick up a piece from any part of the piece and place it in the right position", () => {
+                cy.get("[data-game-piece]")
+                    .eq(0)
+                    .get(".row:nth-child(2) > div")
+                    .eq(1)
+                    .click();
+
+                cy.get(
+                    "[data-game-board] [data-coord-x='1'][data-coord-y='1']"
+                ).click();
+                cy.get("[data-confirm-action]").click();
+
+                verifyBoardArea(0, 0, [
+                    [1, 0],
+                    [1, 0],
+                    [1, 1],
+                    [0, 1]
+                ]);
+            });
+
             it("[Regression] The second player doesn't start their turn with the last player's staged piece", () => {
-                cy.get("[data-game-piece]").eq(0).click();
+                clickPlayersFirstPiece();
                 cy.get(
                     "[data-game-board] [data-coord-x='0'][data-coord-y='0']"
                 ).click();
@@ -195,8 +215,8 @@ describe("Block Game", () => {
     });
 });
 
-function verifyBoardArea(xCoord, yCoord, data) {
-    data.forEach((row, yIdx) => {
+function verifyBoardArea(xCoord, yCoord, expectedContents) {
+    expectedContents.forEach((row, yIdx) => {
         row.forEach((cell, xIdx) => {
             const playerId = cell;
             let selector =
@@ -215,4 +235,8 @@ function verifyBoardArea(xCoord, yCoord, data) {
             cy.get(selector);
         });
     });
+}
+
+function clickPlayersFirstPiece() {
+    cy.get("[data-game-piece]").eq(0).get(".row > div").eq(0).click();
 }
