@@ -36,7 +36,7 @@ function BlockGame({ gameClient, errorDisplayTime }: BlockGameProps) {
     return (
         <>
             <header className="flex-row">
-                <h1>Block Game</h1>
+                <h1>{`Block Game v${require("../../package.json").version}`}</h1>
                 <Error
                     errorText={error ?? ""}
                     errorDisplayTime={errorDisplayTime}
@@ -59,10 +59,10 @@ function BlockGame({ gameClient, errorDisplayTime }: BlockGameProps) {
                     />
                 )}
                 {gameState && gameState.status === GameStatus.OVER && (
-                    <GameOver gameState={gameState} startGame={startGame}/>
+                    <GameOver gameState={gameState} startGame={startGame} />
                 )}
                 {!gameState && (
-                    <NewGame startGame={startGame}/>
+                    <NewGame startGame={startGame} />
                 )}
             </div>
         </>

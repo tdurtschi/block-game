@@ -4,12 +4,13 @@
 
 -   Confirm Pass
 -   View all scores/pieces while game is in progress
--   Versioning (show version/attribution on page somewhere?)
+-   Helper text for flip/rotate while piece is active
 -   Fix buggy error show/hide behavior
 -   ^^ **Next Release!** ^^
 -   Move server to backend with websockets. (See below)
 -   Fix warnings during CI/CD/Testing
 -   Player can cancel move by dropping back into inventory.
+-   Active/Staged piece doesn't appear in player's inventory.
 -   CSS Fixes
 -   Page Object pattern for cypress
 -   Fix cursor to pointer on staged piece hover.
@@ -45,3 +46,13 @@
 -   Security (???)
 -   ^^ **MVP!** ^^
 -   Private games
+
+## Server backlog (Draft 3)
+
+-   User can enter custom player names before starting local game
+-   Tech chore: Register each player as 4 events to game. New Game status for registration state.
+-   AI that can complete a simple game by passing.
+    -   Subtasks: Before starting local game, select Human/AI for each player.
+    -   Notes: Is the AI just another client, managed by the UI?
+-   User can select Online or Local mode (Same behavior).
+-   4 Different browsers can connect to one Online game.
