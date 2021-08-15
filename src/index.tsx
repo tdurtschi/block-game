@@ -1,7 +1,7 @@
 import React = require("react");
 import ReactDOM = require("react-dom");
 import App from "./ui/App";
-import GameClient from "./frontend/gameClient";
+import GameClient from "./game-client";
 import GameServer from "./server";
 
 const container = document.createElement("div");

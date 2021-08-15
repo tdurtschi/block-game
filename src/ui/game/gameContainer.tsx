@@ -6,7 +6,8 @@ import ActivePieceContainer from "./activePiece";
 import GamePiece, { ActiveGamePiece, GamePiecesData } from "../../shared/types/GamePiece";
 import * as pieceUtils from "../../shared/pieceUtils";
 import GameState from "../../shared/types/GameState";
-import StagedPiece from "../../frontend/StagedPiece";
+import StagedPiece from "./StagedPiece";
+import { GameInfo } from "./gameInfo";
 
 interface GameContainerProps {
     gameState: GameState;
@@ -137,6 +138,7 @@ function GameContainer({ gameState, action }: GameContainerProps) {
             </div>
             <div className={`right-pane`}>
                 <div className={"inner"}>
+                    <GameInfo gameState={gameState} />
                     <GamePieces
                         gamePieces={
                             gameState.players[gameState.currentPlayer - 1]

@@ -3,9 +3,8 @@
 # Product Backlog
 
 -   Confirm Pass
--   View all scores/pieces while game is in progress
 -   Helper text for flip/rotate while piece is active
--   Fix buggy error show/hide behavior
+-   View all pieces while game is in progress
 -   ^^ **Next Release!** ^^
 -   Move server to backend with websockets. (See below)
 -   Fix warnings during CI/CD/Testing

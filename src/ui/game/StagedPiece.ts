@@ -1,5 +1,5 @@
-import { BoardLocation } from "../shared/types/Actions";
-import GamePiece from "../shared/types/GamePiece";
+import { BoardLocation } from "../../shared/types/Actions";
+import GamePiece from "../../shared/types/GamePiece";
 
 interface IStagedPiece {
     target: BoardLocation;

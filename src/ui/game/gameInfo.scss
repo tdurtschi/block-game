@@ -1,0 +1,13 @@
+.game-info {
+    padding-bottom: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+
+    >div:nth-child(1){
+        flex-basis: 100%;
+    }
+
+    .player-stat {
+        flex-basis: 50%;
+    }
+}

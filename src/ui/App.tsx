@@ -1,6 +1,6 @@
 import { useState } from "react";
 import React = require("react");
-import { IGameClient } from "../frontend/gameClient";
+import { IGameClient } from "../game-client";
 import Action from "../shared/types/Actions";
 import GameState from "../shared/types/GameState";
 import GameStatus from "../shared/types/GameStatus";
@@ -85,13 +85,15 @@ export interface ErrorState {
 
 function Error(errorState: ErrorState) {
     const [displayError, setDisplayError] = useState<boolean>(false);
+    const [errorDisplayTimeout, setErrorDisplayTimeout] = useState<NodeJS.Timeout | undefined>(undefined);
 
     React.useEffect(() => {
         setDisplayError(true);
-        setTimeout(() => {
+        errorDisplayTimeout && clearTimeout(errorDisplayTimeout);
+        setErrorDisplayTimeout(setTimeout(() => {
             setDisplayError(false);
             errorState.clearError();
-        }, errorState.errorDisplayTime || 6000);
+        }, errorState.errorDisplayTime || 6000));
     }, [errorState.errorText]);
 
     return (

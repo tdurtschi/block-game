@@ -3,7 +3,7 @@
 .game-container {
     display: flex;
     flex-direction: row;
-    margin: 1rem auto 0 auto;
+    margin: 0 auto 0 auto;
     border: 2px solid $game-border-color;
     border-radius: 3px;
     justify-content: flex-start;
@@ -20,8 +20,10 @@
     height: 100%;
 
     .inner {
-        padding: 1rem 0rem 1rem 1rem;
+        display: flex;
+        flex-direction: column;
         height: calc(100% - 2rem);
+        padding: 1rem 0rem 1rem 1rem;
     }
 }
 
