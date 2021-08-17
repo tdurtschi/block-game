@@ -2,6 +2,7 @@
 
 # Product Backlog
 
+-   Warning/Message on Mobile device
 -   Confirm Pass
 -   Helper text for flip/rotate while piece is active
 -   View all pieces while game is in progress

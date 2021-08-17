@@ -1,35 +1,41 @@
 const browserSync = require("browser-sync").create();
+const esbuild = require("esbuild");
 const fs = require("fs");
 const sass = require("sass");
-const isWatch =
+
+const IS_WATCH_MODE =
     process.argv.find((arg) => arg.includes("--watch")) !== undefined;
-const CSS_INPUT_PATH = "./src/styles";
-const CSS_OUTPUT_PATH = "./dist/styles.css";
+const PROJECT_ROOT = "./src";
+const CSS_INPUT_FILENAME = "./src/styles/index.scss";
+const CSS_OUTPUT_FILENAME = "./dist/styles.css";
 
 function compileSass() {
     var result = sass.renderSync({
-        file: `${CSS_INPUT_PATH}/index.scss`,
-        outFile: CSS_OUTPUT_PATH
+        file: CSS_INPUT_FILENAME,
+        outFile: CSS_OUTPUT_FILENAME
     });
 
-    fs.writeFile(CSS_OUTPUT_PATH, result.css, function (err) {
-        if (err) return console.log(err);
+    fs.writeFile(CSS_OUTPUT_FILENAME, result.css, function (err) {
+        if (err) return console.error(err);
     });
 }
 
 function initHotReload() {
     browserSync.init({ server: "./dist" });
 
-    fs.watch(CSS_INPUT_PATH, {}, () => {
-        try {
-            compileSass();
-            browserSync.reload("*.css");
-        } catch (error) {
-            browserSync.notify("Error compiling SCSS", 3000);
+    fs.watch(PROJECT_ROOT, {recursive: true}, (_, filename) => {
+        if(filename.indexOf(".scss") > 0){
+            try {
+                compileSass();
+                browserSync.reload("*.css");
+            } catch (error) {
+                console.error(error.message);
+                browserSync.notify("Error compiling SCSS", 3000);
+            }
         }
     });
 
-    require("esbuild").build({
+    esbuild.build({
         ...config,
         watch: {
             onRebuild(error, result) {
@@ -52,10 +58,10 @@ const config = {
     }
 };
 
-if (isWatch) {
+if (IS_WATCH_MODE) {
     compileSass();
     initHotReload();
 } else {
     compileSass();
-    require("esbuild").build(config);
+    esbuild.build(config);
 }
