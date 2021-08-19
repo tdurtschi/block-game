@@ -35,6 +35,7 @@ function BlockGame({ gameClient, errorDisplayTime }: BlockGameProps) {
 
     return (
         <>
+            <div className={"mobile-warning-banner"}>😭 Oh no, it looks like you're using a mobile device. Sorry, Block Game doesn't yet support mobile!</div>
             <header className="flex-row">
                 <h1>{`Block Game v${require("../../package.json").version}`}</h1>
                 <Error
