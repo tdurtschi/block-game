@@ -10,11 +10,11 @@
         "deploy": "./scripts/deploy.sh",
         "dev": "nf start",
         "e2e": "CYPRESS_BASE_URL='http://localhost:3000' cypress open",
-        "e2e:run": "cypress run",
-        "e2e:ci": "CYPRESS_BASE_URL='http://localhost:5000' start-server-and-test start http://localhost:5000 e2e:run",
+        "e2e:ci": "CYPRESS_BASE_URL='http://localhost:5000' start-server-and-test start http://localhost:5000 'cypress run'",
         "prettier": "prettier --write \"./**/*.(js|ts|tsx|scss)\"",
         "start": "npm run build && serve dist/",
-        "test": "DEBUG_PRINT_LIMIT=200 jest",
+        "test": "npm-run-all test-unit e2e:ci",
+        "test-unit": "DEBUG_PRINT_LIMIT=200 jest",
         "watch": "node build.js --watch"
     },
     "devDependencies": {
@@ -23,6 +23,7 @@
         "foreman": "^3.0.1",
         "jest": "^26.6.3",
         "jest-nyancat-reporter": "^2.0.0",
+        "npm-run-all": "^4.1.5",
         "prettier": "^2.2.1",
         "start-server-and-test": "^1.12.1",
         "ts-jest": "^26.4.4",
