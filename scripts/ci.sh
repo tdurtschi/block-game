@@ -7,7 +7,6 @@ main() {
     cd $PROJECT_ROOT
     yarn build
     yarn test
-    yarn e2e:ci
 }
 
 main
