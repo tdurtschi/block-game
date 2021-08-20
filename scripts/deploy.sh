@@ -28,6 +28,9 @@ run_deploy_from_docker() {
 main() {
     cd $PROJECT_ROOT
     
+    # Fails if docker daemon not running or currently starting up:
+    docker ps -q 
+    
     ./scripts/ci.sh
 
     export_variables_from_file ./scripts/deploy.env
