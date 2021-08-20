@@ -17,8 +17,8 @@ function BlockGame({ gameClient, errorDisplayTime }: BlockGameProps) {
     const [gameState, setGameState] = useState<GameState>();
     const [error, setError] = useState<string>();
 
-    const startGame = () => {
-        const initialGameState = gameClient.newGame();
+    const startGame = (players: { name: string }[]) => {
+        const initialGameState = gameClient.newGame(players);
         setGameState(initialGameState);
 
         gameClient.subscribe(setGameState);

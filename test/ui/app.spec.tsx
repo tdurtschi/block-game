@@ -29,7 +29,7 @@ describe("App", () => {
 
             render(<App gameClient={gameClient} />);
 
-            fireEvent.click(screen.getByText("New Game"));
+            startNewGame();
             pass();
 
             await waitFor(() => {
@@ -60,7 +60,7 @@ describe("App", () => {
 
             render(<App gameClient={gameClient} errorDisplayTime={5} />);
 
-            fireEvent.click(screen.getByText("New Game"));
+            startNewGame();
 
             pass();
             await waitFor(() => {
@@ -80,6 +80,11 @@ describe("App", () => {
         });
     });
 });
+
+function startNewGame() {
+    fireEvent.click(screen.getByText("New Game"));
+    fireEvent.click(screen.getByText("Start Game"));
+}
 
 function pass() {
     fireEvent.click(screen.getByText("Pass"));

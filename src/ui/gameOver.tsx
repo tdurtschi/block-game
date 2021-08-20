@@ -9,7 +9,7 @@ export interface GameOverProps {
     startGame: () => any;
 }
 
-export function GameOver({gameState, startGame}: GameOverProps) {
+export function GameOver({ gameState, startGame }: GameOverProps) {
     return <>
         <div data-game-over className={`left-pane game-over`}>
             <div className={"inner"}>
@@ -25,7 +25,7 @@ export function GameOver({gameState, startGame}: GameOverProps) {
                     <PlayerScore key={i} player={player} />
                 ))}
                 <h2>{winnerMessage(gameState)}</h2>
-                <h2>Click here to start a new game:</h2>
+                <h2>Click here to play again:</h2>
                 <div style={{ width: "16px" }} />
                 <NewGameButton startGame={startGame} />
             </div>
@@ -37,7 +37,7 @@ function PlayerScore({ player }: { player: PlayerState }) {
     return (
         <div className={`player-${player.playerId}-score`}>
             <h3>
-                Player {player.playerId}:&nbsp;
+                {player.name}:&nbsp;
                 <span>{player.score}</span>
             </h3>
         </div>

@@ -3,7 +3,7 @@ import Action from "../shared/types/Actions";
 import GameState from "../shared/types/GameState";
 
 export interface IGameClient {
-    newGame: () => any;
+    newGame: (players: {name: string}[]) => any;
     subscribe: (onUpdate: (gameState: Readonly<GameState>) => any) => any;
     action: (payload: Action) => any;
 }
@@ -13,8 +13,8 @@ class GameClient implements IGameClient {
 
     constructor(private server: GameServer) {}
 
-    newGame() {
-        const result = this.server.newGame();
+    newGame(players: {name: string}[]) {
+        const result = this.server.newGame(players);
         this.gameId = result.id;
         return result;
     }

@@ -2,7 +2,8 @@
 
 # Product Backlog
 
--   Players can have names
+-   Game is created in an unstarted state, with no players. Register players before beginning game.
+-   Players can enter custom names.
 -   AI player - naive
 -   ^^ **Next Release!** ^^
 -   Helper text for flip/rotate while piece is active

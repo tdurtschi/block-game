@@ -34,6 +34,7 @@ describe("Game Over", () => {
         render(<App gameClient={gameClient} />);
 
         fireEvent.click(screen.getByText("New Game"));
+        fireEvent.click(screen.getByText("Start Game"));
 
         await waitFor(() => {
             expect(screen.queryByText("Player 1 wins!")).not.toBeNull();

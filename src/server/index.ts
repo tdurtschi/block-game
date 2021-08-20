@@ -10,8 +10,8 @@ class GameServer {
         this.onUpdate = () => {};
     }
 
-    newGame() {
-        const game = new Game(0);
+    newGame(players: {name: string}[]) {
+        const game = new Game(0, players);
         this.games.set(game.id, game);
         return game.getState();
     }

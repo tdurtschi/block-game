@@ -11,6 +11,18 @@ describe("Game", () => {
         expect(game.players.length).toBe(4);
     });
 
+    it("Accepts custom player names", () => {
+        const game = new Game(0,
+            [{name: "POne"},
+            {name: "PTwo"},
+            {name: "PThree"},
+            {name: "PFour"}]);
+        expect(game.players[0].name).toBe("POne");
+        expect(game.players[1].name).toBe("PTwo");
+        expect(game.players[2].name).toBe("PThree");
+        expect(game.players[3].name).toBe("PFour");
+    })
+
     describe("Initial Gameplay", () => {
         it("Game isn't over", () => {
             const game = new Game(0);

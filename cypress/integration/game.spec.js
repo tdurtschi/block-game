@@ -8,9 +8,29 @@ describe("Block Game", () => {
         cy.get("[data-new-game]");
     });
 
+    describe("Registering Players", () => {
+        it("Gives players custom names", () => {
+            cy.get("[data-new-game]").click();
+            cy.get("[data-player-1-name]").clear().type("Shleemies");
+            cy.get("[data-player-2-name]").clear().type("Shoney's");
+            cy.get("[data-player-3-name]").clear().type("Shelley");
+            cy.get("[data-player-4-name]").clear().type("Schwifty");
+            cy.get("[data-confirm-action]").click();
+
+            cy.contains("Shleemies");
+            pass();
+            cy.contains("Shoney's");
+            pass();
+            cy.contains("Shelley");
+            pass();
+            cy.contains("Schwifty");
+            pass();
+        });
+    })
+
     describe("Gameplay", () => {
         beforeEach(() => {
-            cy.get("[data-new-game]").click();
+            startNewGame()
         });
 
         it("Shows a gameboard and all game pieces", () => {
@@ -250,6 +270,11 @@ function verifyBoardArea(xCoord, yCoord, expectedContents) {
 
 function clickPlayersFirstPiece() {
     cy.get("[data-game-piece]").eq(0).get(".row > div").eq(0).click();
+}
+
+function startNewGame() {
+    cy.get("[data-new-game]").click();
+    cy.get("[data-confirm-action]").click();
 }
 
 function pass() {

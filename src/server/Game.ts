@@ -18,17 +18,18 @@ const GAMEBOARD_SIZE = 20;
 class Game {
     public currentPlayer: PlayerId = 1;
     public boardState: (PlayerId | undefined)[][];
+    public status: GameStatus = GameStatus.CREATED;
+    public players: Player[];
 
     constructor(
         public id: number,
-        public status: GameStatus = GameStatus.CREATED,
-        public players: Player[] = []
+        public playerNames: {name: string}[] = []
     ) {
         this.players = [
-            new Player(1),
-            new Player(2),
-            new Player(3),
-            new Player(4)
+            new Player(1, playerNames[0]?.name ?? "Player 1"),
+            new Player(2, playerNames[1]?.name ?? "Player 2"),
+            new Player(3, playerNames[2]?.name ?? "Player 3"),
+            new Player(4, playerNames[3]?.name ?? "Player 4")
         ];
 
         this.boardState = createInitialBoardState();
