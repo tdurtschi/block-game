@@ -21,6 +21,9 @@ body {
     background-color: $background-color;
     color: $text-color;
     @include exo-font();
+    width: calc(100vw - 16px);
+    margin: 8px;
+    overflow-x: hidden;
 }
 
 h1 {

@@ -2,9 +2,11 @@
 
 # Product Backlog
 
+-   Players can have names
+-   AI player - naive
+-   ^^ **Next Release!** ^^
 -   Helper text for flip/rotate while piece is active
 -   View all pieces while game is in progress
--   ^^ **Next Release!** ^^
 -   Move server to backend with websockets. (See below)
 -   Fix warnings during CI/CD/Testing
 -   Player can cancel move by dropping back into inventory.
@@ -13,7 +15,6 @@
 -   Page Object pattern for cypress
 -   Fix cursor to pointer on staged piece hover.
 -   Incorporate feedback mechanism
--   AI player - naive
 -   View other players' pieces when it's not their turn
 -   Message for invalid move - client validation
     -   _Maybe this one makes sense to split up into multiple stories, i.e. different behavior to discourage different invalid moves? Maybe that's overkill_
