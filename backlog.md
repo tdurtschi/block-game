@@ -2,7 +2,7 @@
 
 # Product Backlog
 
--   Players can have names
+-   Players can have names (first, make a new game state 'unstarted', during which 4 players _must_ register. )
 -   AI player - naive
 -   ^^ **Next Release!** ^^
 -   Helper text for flip/rotate while piece is active

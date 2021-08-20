@@ -1,27 +1,27 @@
-import server from "../../src/server";
+import GameServer from "../../src/server";
 import { GamePlayAction } from "../../src/shared/types/Actions";
 import GameStatus from "../../src/shared/types/GameStatus";
 import PlayerId from "../../src/shared/types/PlayerId";
 
 describe("server", () => {
-    let subject: server;
+    let server: GameServer;
 
     beforeEach(() => {
-        subject = new server();
+        server = new GameServer();
     });
 
     it("Creates a game", () => {
-        const game = subject.newGame();
+        const game = server.newGame();
         expect(game.id).toBeDefined();
         expect(game.status).toBe(GameStatus.CREATED);
     });
 
     describe("Game Exceptions", () => {
         it("Converts a game exception into an error response", () => {
-            const game = subject.newGame();
+            const game = server.newGame();
 
             // Causes wrong player exception
-            const result = subject.action(
+            const result = server.action(
                 game.id,
                 gameMove(2, 0, { x: 0, y: 0 })
             );
@@ -32,11 +32,12 @@ describe("server", () => {
 
     describe("Subscribers", () => {
         it("A subscriber gets updated gameState after a successful action", () => {
-            const { id } = subject.newGame();
+            const { id } = server.newGame();
+            server.startGame();
             const subSpy = jasmine.createSpy("subscription");
 
-            subject.subscribe(subSpy);
-            subject.action(id, {
+            server.subscribe(subSpy);
+            server.action(id, {
                 kind: "Pass",
                 playerId: 1
             });

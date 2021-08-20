@@ -1,5 +1,6 @@
 enum GameStatus {
     CREATED,
+    STARTED,
     OVER
 }
 

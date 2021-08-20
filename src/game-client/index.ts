@@ -1,3 +1,4 @@
+import { times } from "cypress/types/lodash";
 import GameServer from "../server";
 import Action from "../shared/types/Actions";
 import GameState from "../shared/types/GameState";
@@ -15,6 +16,7 @@ class GameClient implements IGameClient {
 
     newGame() {
         const result = this.server.newGame();
+        this.server.startGame();
         this.gameId = result.id;
         return result;
     }

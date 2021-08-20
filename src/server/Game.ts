@@ -34,7 +34,9 @@ class Game {
         this.boardState = createInitialBoardState();
     }
 
-    public action(payload: Action) {
+    action(payload: Action) {
+        if(this.status !== GameStatus.STARTED) throw new Error("Cannot perform game action if game.status != STARTED");
+
         const action = payload;
         if (this.currentPlayer == payload.playerId) {
             if (action.kind == "Pass") {
@@ -54,7 +56,7 @@ class Game {
         }
     }
 
-    public getPlayer(playerId: PlayerId) {
+    getPlayer(playerId: PlayerId) {
         return this.players[playerId - 1];
     }
 
@@ -67,7 +69,7 @@ class Game {
         );
     }
 
-    public getState(): Readonly<GameState> {
+    getState(): Readonly<GameState> {
         return {
             id: this.id,
             currentPlayer: this.currentPlayer,
@@ -75,6 +77,10 @@ class Game {
             boardState: this.boardState,
             status: this.status
         };
+    }
+
+    start() {
+        this.status = GameStatus.STARTED;
     }
 
     applyPieceToGameBoard({

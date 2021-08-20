@@ -16,6 +16,13 @@ class GameServer {
         return game.getState();
     }
 
+    startGame() {
+        const game = this.games.get(0);
+        if(!game) throw new Error(`Couldn't find game with id: 0`);
+        
+        game.start();
+    }
+
     subscribe(onUpdate: (gameState: Readonly<GameState>) => any) {
         this.onUpdate = onUpdate;
     }
