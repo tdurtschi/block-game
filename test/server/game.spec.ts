@@ -6,7 +6,7 @@ import GamePiece from "../../src/shared/types/GamePiece";
 import { fixture_playerUsesAllPiecesToEndGame } from "../testGameFixture";
 
 describe("Game", () => {
-    it("Has 4 players", () => {
+    xit("Has 4 players", () => {
         const game = new Game(0);
         expect(game.players.length).toBe(4);
     });
@@ -27,8 +27,37 @@ describe("Game", () => {
             });
         });
 
+        describe("Registering Players", () => {
+            it("Can't start game without registering 4 players", () => {
+                expectError(() => {
+                    game.start();
+                });
+            });
+
+            it("Can't register more than 4 players", () => {
+                ["p1", "p2", "p3", "p4"].forEach(p => game.registerPlayer(p));
+
+                expectError(() => {
+                    game.registerPlayer("p5");
+                })
+            });
+
+            it("Keeps track of registered players", () => {
+                game.registerPlayer("Steve");
+                expect(game.getState().players[0].name).toEqual("Steve");
+            });
+
+            it("Can start game after registering 4 players", () => {
+                ["p1", "p2", "p3", "p4"].forEach(p => game.registerPlayer(p));
+                game.start();
+
+                expect(game.status).toBe(GameStatus.STARTED);
+            });
+        });
+
         describe("After starting the game", () => {
             beforeEach(() => {
+                ["p1", "p2", "p3", "p4"].forEach(p => game.registerPlayer(p));
                 game.start();
             });
 
@@ -52,6 +81,7 @@ describe("Game", () => {
         let game: Game;
         beforeEach(() => {
             game = new Game(0);
+            ["p1", "p2", "p3", "p4"].forEach(p => game.registerPlayer(p));
             game.start();
         })
 

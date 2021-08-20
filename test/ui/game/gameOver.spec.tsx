@@ -28,7 +28,9 @@ describe("Game Over", () => {
                 ],
                 boardState: [],
                 status: GameStatus.OVER
-            })
+            }),
+            registerPlayer: jest.fn(),
+            startGame: jest.fn()
         };
 
         render(<App gameClient={gameClient} />);

@@ -23,8 +23,10 @@ describe("App", () => {
                         }
                     ],
                     boardState: [],
-                    status: GameStatus.CREATED
-                })
+                    status: GameStatus.STARTED
+                }),
+                registerPlayer: jest.fn(),
+                startGame: jest.fn()
             };
 
             render(<App gameClient={gameClient} />);
@@ -54,8 +56,10 @@ describe("App", () => {
                         }
                     ],
                     boardState: [],
-                    status: GameStatus.CREATED
-                })
+                    status: GameStatus.STARTED
+                }),
+                registerPlayer: jest.fn(),
+                startGame: jest.fn()
             };
 
             render(<App gameClient={gameClient} errorDisplayTime={5} />);

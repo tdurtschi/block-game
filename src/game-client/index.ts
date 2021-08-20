@@ -1,12 +1,13 @@
-import { times } from "cypress/types/lodash";
 import GameServer from "../server";
 import Action from "../shared/types/Actions";
 import GameState from "../shared/types/GameState";
 
 export interface IGameClient {
+    action: (payload: Action) => any;
+    registerPlayer: (name: string) => any;
+    startGame: () => any;
     newGame: () => any;
     subscribe: (onUpdate: (gameState: Readonly<GameState>) => any) => any;
-    action: (payload: Action) => any;
 }
 
 class GameClient implements IGameClient {
@@ -16,9 +17,16 @@ class GameClient implements IGameClient {
 
     newGame() {
         const result = this.server.newGame();
-        this.server.startGame();
         this.gameId = result.id;
         return result;
+    }
+
+    registerPlayer(name: string) {
+        this.server.registerPlayer(name);
+    }
+
+    startGame() {
+        this.server.startGame();
     }
 
     subscribe(onUpdate: (gameState: Readonly<GameState>) => any) {

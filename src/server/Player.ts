@@ -9,7 +9,9 @@ class Player {
     public playerPieces: GamePiece[];
     public hasPassed: boolean = false;
 
-    constructor(public playerId: PlayerId) {
+    constructor(
+        public playerId: PlayerId, 
+        public name: string = "Unknown") {
         this.playerPieces = this.pieces();
     }
 
@@ -24,6 +26,7 @@ class Player {
     public getState(): PlayerState {
         return {
             playerId: this.playerId,
+            name: this.name,
             playerPieces: this.playerPieces,
             hasPassed: this.hasPassed,
             score: this.score()

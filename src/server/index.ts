@@ -16,9 +16,14 @@ class GameServer {
         return game.getState();
     }
 
+    registerPlayer(name: string) {
+        const game = this.getGame();
+        game.registerPlayer(name);
+        this.onUpdate(game.getState());
+    }
+
     startGame() {
-        const game = this.games.get(0);
-        if(!game) throw new Error(`Couldn't find game with id: 0`);
+        const game = this.getGame();
         
         game.start();
     }
@@ -44,6 +49,12 @@ class GameServer {
                 errorMessage: "Game Not Found!"
             };
         }
+    }
+
+    private getGame(): Game {
+        const game = this.games.get(0);
+        if(!game) throw new Error(`Couldn't find game with id: 0`);
+        return game;
     }
 }
 

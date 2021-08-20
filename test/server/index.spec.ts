@@ -20,7 +20,7 @@ describe("server", () => {
         it("Converts a game exception into an error response", () => {
             const game = server.newGame();
 
-            // Causes wrong player exception
+            // Causes game not started exception
             const result = server.action(
                 game.id,
                 gameMove(2, 0, { x: 0, y: 0 })
@@ -33,6 +33,7 @@ describe("server", () => {
     describe("Subscribers", () => {
         it("A subscriber gets updated gameState after a successful action", () => {
             const { id } = server.newGame();
+            ["p1", "p2", "p3", "p4"].forEach(p => server.registerPlayer(p));
             server.startGame();
             const subSpy = jasmine.createSpy("subscription");
 

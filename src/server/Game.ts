@@ -24,13 +24,6 @@ class Game {
         public status: GameStatus = GameStatus.CREATED,
         public players: Player[] = []
     ) {
-        this.players = [
-            new Player(1),
-            new Player(2),
-            new Player(3),
-            new Player(4)
-        ];
-
         this.boardState = createInitialBoardState();
     }
 
@@ -79,7 +72,16 @@ class Game {
         };
     }
 
+    registerPlayer(playerName: string) {
+        if(this.players.length >= 4) throw new Error("Tried to register too many players (4 maximum)!");
+        this.players.push(new Player((this.players.length + 1) as PlayerId, playerName));
+    }
+
     start() {
+        if(this.players.length !== 4){
+            throw new Error("Cannot start game before registering 4 players.");
+        }
+
         this.status = GameStatus.STARTED;
     }
 
@@ -108,7 +110,7 @@ class Game {
         );
     }
 
-    getPlayerForNextTurn(): PlayerId {
+    private getPlayerForNextTurn(): PlayerId {
         const validPlayers = [1, 2, 3, 4].filter(
             (playerId) =>
                 playerId === this.currentPlayer ||

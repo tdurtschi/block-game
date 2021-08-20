@@ -5,6 +5,7 @@
 -   Players can have names (first, make a new game state 'unstarted', during which 4 players _must_ register. )
 -   AI player - naive
 -   ^^ **Next Release!** ^^
+-   Improve logging/debug?
 -   Helper text for flip/rotate while piece is active
 -   View all pieces while game is in progress
 -   Move server to backend with websockets. (See below)

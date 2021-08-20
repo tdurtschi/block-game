@@ -20,8 +20,12 @@ function BlockGame({ gameClient, errorDisplayTime }: BlockGameProps) {
     const startGame = () => {
         const initialGameState = gameClient.newGame();
         setGameState(initialGameState);
-
         gameClient.subscribe(setGameState);
+        gameClient.registerPlayer("Player 1");
+        gameClient.registerPlayer("Player 2");
+        gameClient.registerPlayer("Player 3");
+        gameClient.registerPlayer("Player 4");
+        gameClient.startGame();
     };
 
     const submitAction = (action: Action) => {
