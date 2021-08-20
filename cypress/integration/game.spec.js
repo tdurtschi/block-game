@@ -24,13 +24,13 @@ describe("Block Game", () => {
         describe("End of the game", () => {
             beforeEach(() => {
                 cy.contains("Player 1");
-                cy.get("[data-player-pass-button]").click();
+                pass();
                 cy.contains("Player 2");
-                cy.get("[data-player-pass-button]").click();
+                pass();
                 cy.contains("Player 3");
-                cy.get("[data-player-pass-button]").click();
+                pass();
                 cy.contains("Player 4");
-                cy.get("[data-player-pass-button]").click();
+                pass();
             });
 
             it("If everyone passes, the game is over", () => {
@@ -58,9 +58,20 @@ describe("Block Game", () => {
         describe("Passing", () => {
             it("Clears the active piece", () => {
                 clickPlayersFirstPiece();
-                cy.get("[data-player-pass-button]").click();
+                pass();
                 cy.get("[data-active-piece]").should("not.exist");
             });
+
+            it("Can cancel passing and play a piece", () => {
+                cy.get("[data-player-pass-button]").click();
+                cy.get("[data-cancel-action]").click();
+
+                clickPlayersFirstPiece();
+                cy.get(
+                    "[data-game-board] [data-coord-x='0'][data-coord-y='0']"
+                ).click();
+                cy.get("[data-confirm-action]").click();
+            })
         });
 
         describe("Playing Pieces", () => {
@@ -239,4 +250,9 @@ function verifyBoardArea(xCoord, yCoord, expectedContents) {
 
 function clickPlayersFirstPiece() {
     cy.get("[data-game-piece]").eq(0).get(".row > div").eq(0).click();
+}
+
+function pass() {
+    cy.get("[data-player-pass-button]").click();
+    cy.get("[data-confirm-action]").click();
 }

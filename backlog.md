@@ -2,7 +2,6 @@
 
 # Product Backlog
 
--   Confirm Pass
 -   Helper text for flip/rotate while piece is active
 -   View all pieces while game is in progress
 -   ^^ **Next Release!** ^^

@@ -39,12 +39,6 @@ function GameContainer({ gameState, action }: GameContainerProps) {
         setActivePiece(result);
     };
 
-    const pass = () => {
-        action({ playerId: gameState.currentPlayer, kind: "Pass" });
-        setStagedPiece(undefined);
-        setActivePiece(undefined);
-    };
-
     const pickUpStagedPiece = (mouseOffsetX: number = 0, mouseOffsetY: number = 0) => {
         setActivePiece(stagedPiece && { ...stagedPiece, mouseOffsetX, mouseOffsetY });
         setStagedPiece(undefined);
@@ -90,42 +84,68 @@ function GameContainer({ gameState, action }: GameContainerProps) {
         setStagedPiece(undefined);
     };
 
-    const confirmMove = () => {
-        const actionResult = action({
-            kind: "GamePlay",
-            playerId: gameState.currentPlayer,
-            piece: stagedPiece?.id ?? -1,
-            location: stagedPiece?.target ?? { x: -1, y: -1 },
-            rotate: stagedPiece?.rotate ?? 0,
-            flip: stagedPiece?.flip ?? false
-        });
-        setActivePiece(undefined);
-        if (!actionResult.errorMessage) setStagedPiece(undefined);
-    };
+    const ActionButtons = ({ showMoveConfirmationPrompt }: { showMoveConfirmationPrompt: boolean }) => {
+        const [showPassConfirmationPrompt, setShowPassConfirmationPrompt] = React.useState<boolean>(false);
 
-    const cancelMove = () => {
-        setStagedPiece(undefined);
-    };
+        const cancelPass = () => {
+            setShowPassConfirmationPrompt(false);
+        };
+
+        const pass = () => {
+            setShowPassConfirmationPrompt(true);
+        };
+
+        const confirmPass = () => {
+            action({ playerId: gameState.currentPlayer, kind: "Pass" });
+            setStagedPiece(undefined);
+            setActivePiece(undefined);
+            setShowPassConfirmationPrompt(false);
+        }
+
+        const cancelMove = () => {
+            setStagedPiece(undefined);
+        };
+
+        const confirmMove = () => {
+            const actionResult = action({
+                kind: "GamePlay",
+                playerId: gameState.currentPlayer,
+                piece: stagedPiece?.id ?? -1,
+                location: stagedPiece?.target ?? { x: -1, y: -1 },
+                rotate: stagedPiece?.rotate ?? 0,
+                flip: stagedPiece?.flip ?? false
+            });
+            setActivePiece(undefined);
+            if (!actionResult.errorMessage) setStagedPiece(undefined);
+        };
+
+        if (showPassConfirmationPrompt) {
+            return (<>
+                <CancelButton action={cancelPass} />
+                <ConfirmButton label={"Confirm Pass"} action={confirmPass} />
+            </>)
+        } else if (showMoveConfirmationPrompt) {
+            return (<>
+                <CancelButton action={cancelMove} />
+                <ConfirmButton label={"Confirm Move"} action={confirmMove} />
+            </>);
+        } else {
+            return (<>
+                <PassButton pass={pass} />
+            </>);
+        }
+    }
 
     return (
         <>
             <div
-                className={`left-pane ${activePiece !== undefined ? "hide-cursor" : ""
-                    }`}
+                className={`left-pane ${activePiece !== undefined ? "hide-cursor" : ""}`}
             >
                 <div className={"inner"}>
                     <div className={"flex-row space-between"}>
                         <h2>Player {gameState.currentPlayer}'s Turn</h2>
                         <div className={"action-buttons-container"}>
-                            {stagedPiece === undefined ? (
-                                <PassButton pass={pass} />
-                            ) : null}
-                            {stagedPiece === undefined ? null : (
-                                <CancelButton cancelMove={cancelMove} />
-                            )}
-                            {stagedPiece === undefined ? null : (
-                                <ConfirmButton confirmMove={confirmMove} />
-                            )}
+                            <ActionButtons showMoveConfirmationPrompt={stagedPiece !== undefined} />
                         </div>
                     </div>
                     <GameBoard
@@ -164,15 +184,15 @@ const PassButton = ({ pass }: { pass: () => void }) => (
     </button>
 );
 
-const CancelButton = ({ cancelMove }: { cancelMove: () => void }) => (
-    <button className="btn-secondary" data-cancel-action onClick={cancelMove}>
-        Cancel Move
+const CancelButton = ({ action }: { action: () => void }) => (
+    <button className="btn-secondary" data-cancel-action onClick={action}>
+        Cancel
     </button>
 );
 
-const ConfirmButton = ({ confirmMove }: { confirmMove: () => void }) => (
-    <button className="btn-primary" data-confirm-action onClick={confirmMove}>
-        Confirm Move
+const ConfirmButton = ({ action, label }: { action: () => void, label?: string }) => (
+    <button className="btn-primary" data-confirm-action onClick={action}>
+        {label ? label : "Confirm"}
     </button>
 );
 

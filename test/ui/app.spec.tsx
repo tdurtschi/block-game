@@ -30,7 +30,7 @@ describe("App", () => {
             render(<App gameClient={gameClient} />);
 
             fireEvent.click(screen.getByText("New Game"));
-            fireEvent.click(screen.getByText("Pass"));
+            pass();
 
             await waitFor(() => {
                 expect(screen.queryByText("Error: Test Error")).not.toBeNull();
@@ -61,8 +61,8 @@ describe("App", () => {
             render(<App gameClient={gameClient} errorDisplayTime={5} />);
 
             fireEvent.click(screen.getByText("New Game"));
-            fireEvent.click(screen.getByText("Pass"));
 
+            pass();
             await waitFor(() => {
                 expect(screen.queryByText("Error: Test Error")).not.toBeNull();
             });
@@ -70,7 +70,7 @@ describe("App", () => {
                 expect(screen.queryByText("Error: Test Error")).toBeNull();
             });
 
-            fireEvent.click(screen.getByText("Pass"));
+            pass();
             await waitFor(() => {
                 expect(screen.queryByText("Error: Test Error")).not.toBeNull();
             });
@@ -80,3 +80,8 @@ describe("App", () => {
         });
     });
 });
+
+function pass() {
+    fireEvent.click(screen.getByText("Pass"));
+    fireEvent.click(screen.getByText("Confirm Pass"));
+}
