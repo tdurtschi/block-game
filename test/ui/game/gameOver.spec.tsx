@@ -17,12 +17,14 @@ describe("Game Over", () => {
                         playerPieces: [],
                         hasPassed: true,
                         playerId: 1,
+                        name: "Player 1",
                         score: 89
                     },
                     {
                         playerPieces: [[[1]]],
                         hasPassed: true,
                         playerId: 2,
+                        name: "Player 2",
                         score: 88
                     }
                 ],

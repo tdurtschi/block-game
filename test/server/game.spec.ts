@@ -126,7 +126,7 @@ describe("Game", () => {
                 kind: "Pass"
             });
             game.action(gameMove(4, 0, { x: 0, y: 0 }));
-            expect(game.getState().currentPlayer).toEqual(4);
+            expect(game.getState().currentPlayerId).toEqual(4);
         });
 
         it("A player's piece is removed from inventory after playing it", () => {

@@ -6,7 +6,7 @@ import PlayerState from "./PlayerState";
 type GameState = {
     id: number;
     boardState: Readonly<BoardState>;
-    currentPlayer: Readonly<PlayerId>;
+    currentPlayerId: Readonly<PlayerId>;
     players: Readonly<PlayerState[]>;
     status: GameStatus;
 };

@@ -44,7 +44,7 @@ describe("server", () => {
             });
 
             expect(subSpy).toHaveBeenCalled();
-            expect(subSpy.calls.first().args[0]["currentPlayer"]).toEqual(2);
+            expect(subSpy.calls.first().args[0]["currentPlayerId"]).toEqual(2);
         });
     });
 });

@@ -14,7 +14,7 @@ describe("App", () => {
                     .mockReturnValue({ errorMessage: "Test Error" }),
                 newGame: jest.fn().mockReturnValue({
                     id: 0,
-                    currentPlayer: 1,
+                    currentPlayerId: 1,
                     players: [
                         {
                             playerPieces: [],
@@ -47,12 +47,13 @@ describe("App", () => {
                     .mockReturnValue({ errorMessage: "Test Error" }),
                 newGame: jest.fn().mockReturnValue({
                     id: 0,
-                    currentPlayer: 1,
+                    currentPlayerId: 1,
                     players: [
                         {
                             playerPieces: [],
                             hasPassed: false,
-                            playerId: 1
+                            playerId: 1,
+                            name: "WHATEVER"
                         }
                     ],
                     boardState: [],

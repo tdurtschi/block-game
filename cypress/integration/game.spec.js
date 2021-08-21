@@ -23,13 +23,13 @@ describe("Block Game", () => {
 
         describe("End of the game", () => {
             beforeEach(() => {
-                cy.contains("Player 1");
+                cy.contains("Player 1's Turn");
                 pass();
-                cy.contains("Player 2");
+                cy.contains("Player 2's Turn");
                 pass();
-                cy.contains("Player 3");
+                cy.contains("Player 3's Turn");
                 pass();
-                cy.contains("Player 4");
+                cy.contains("Player 4's Turn");
                 pass();
             });
 

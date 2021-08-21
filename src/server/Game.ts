@@ -16,7 +16,7 @@ import BoardState from "../shared/types/BoardState";
 const GAMEBOARD_SIZE = 20;
 
 class Game {
-    public currentPlayer: PlayerId = 1;
+    public currentPlayerId: PlayerId = 1;
     public boardState: (PlayerId | undefined)[][];
 
     constructor(
@@ -31,7 +31,7 @@ class Game {
         if(this.status !== GameStatus.STARTED) throw new Error("Cannot perform game action if game.status != STARTED");
 
         const action = payload;
-        if (this.currentPlayer == payload.playerId) {
+        if (this.currentPlayerId == payload.playerId) {
             if (action.kind == "Pass") {
                 this.passAction(action.playerId);
             } else if (action.kind == "GamePlay") {
@@ -41,10 +41,10 @@ class Game {
                     this.passAction(action.playerId);
                 }
             }
-            this.currentPlayer = this.getPlayerForNextTurn();
+            this.currentPlayerId = this.getPlayerForNextTurn();
         } else {
             throw new InvalidActionError(
-                `It is player ${this.currentPlayer}'s turn.`
+                `It is player ${this.currentPlayerId}'s turn.`
             );
         }
     }
@@ -65,7 +65,7 @@ class Game {
     getState(): Readonly<GameState> {
         return {
             id: this.id,
-            currentPlayer: this.currentPlayer,
+            currentPlayerId: this.currentPlayerId,
             players: this.players.map((player) => player.getState()),
             boardState: this.boardState,
             status: this.status
@@ -113,11 +113,11 @@ class Game {
     private getPlayerForNextTurn(): PlayerId {
         const validPlayers = [1, 2, 3, 4].filter(
             (playerId) =>
-                playerId === this.currentPlayer ||
+                playerId === this.currentPlayerId ||
                 !this.getPlayer(playerId as PlayerId).hasPassed
         );
         const playerIdx = validPlayers.findIndex(
-            (playerId) => playerId === this.currentPlayer
+            (playerId) => playerId === this.currentPlayerId
         );
         const nextPlayer = validPlayers[
             (playerIdx + 1) % validPlayers.length

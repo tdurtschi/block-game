@@ -73,7 +73,7 @@ function GameContainer({ gameState, action }: GameContainerProps) {
 
     const handlePlayerPieceClick = (pieceId: number, mouseOffsetX: number, mouseOffsetY: number) => {
         setActivePiece({
-            playerId: gameState.currentPlayer,
+            playerId: gameState.currentPlayerId,
             pieceData: GamePiecesData[pieceId],
             id: pieceId,
             rotate: 0 as 0 | 1 | 2 | 3,
@@ -96,7 +96,7 @@ function GameContainer({ gameState, action }: GameContainerProps) {
         };
 
         const confirmPass = () => {
-            action({ playerId: gameState.currentPlayer, kind: "Pass" });
+            action({ playerId: gameState.currentPlayerId, kind: "Pass" });
             setStagedPiece(undefined);
             setActivePiece(undefined);
             setShowPassConfirmationPrompt(false);
@@ -109,7 +109,7 @@ function GameContainer({ gameState, action }: GameContainerProps) {
         const confirmMove = () => {
             const actionResult = action({
                 kind: "GamePlay",
-                playerId: gameState.currentPlayer,
+                playerId: gameState.currentPlayerId,
                 piece: stagedPiece?.id ?? -1,
                 location: stagedPiece?.target ?? { x: -1, y: -1 },
                 rotate: stagedPiece?.rotate ?? 0,
@@ -136,6 +136,12 @@ function GameContainer({ gameState, action }: GameContainerProps) {
         }
     }
 
+    function currentPlayersName() {
+        const player = gameState.players.find(p => p.playerId === gameState.currentPlayerId);
+        if (!player) throw new Error("Couldn't find player with id:" + gameState.currentPlayerId);
+        return player?.name;
+    }
+
     return (
         <>
             <div
@@ -143,7 +149,7 @@ function GameContainer({ gameState, action }: GameContainerProps) {
             >
                 <div className={"inner"}>
                     <div className={"flex-row space-between"}>
-                        <h2>Player {gameState.currentPlayer}'s Turn</h2>
+                        <h2>{currentPlayersName()}'s Turn</h2>
                         <div className={"action-buttons-container"}>
                             <ActionButtons showMoveConfirmationPrompt={stagedPiece !== undefined} />
                         </div>
@@ -161,10 +167,10 @@ function GameContainer({ gameState, action }: GameContainerProps) {
                     <GameInfo gameState={gameState} />
                     <GamePieces
                         gamePieces={
-                            gameState.players[gameState.currentPlayer - 1]
+                            gameState.players[gameState.currentPlayerId - 1]
                                 .playerPieces
                         }
-                        playerId={gameState.currentPlayer}
+                        playerId={gameState.currentPlayerId}
                         onClickPiece={handlePlayerPieceClick}
                     />
                 </div>

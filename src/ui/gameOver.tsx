@@ -9,7 +9,7 @@ export interface GameOverProps {
     startGame: () => any;
 }
 
-export function GameOver({gameState, startGame}: GameOverProps) {
+export function GameOver({ gameState, startGame }: GameOverProps) {
     return <>
         <div data-game-over className={`left-pane game-over`}>
             <div className={"inner"}>
@@ -37,7 +37,7 @@ function PlayerScore({ player }: { player: PlayerState }) {
     return (
         <div className={`player-${player.playerId}-score`}>
             <h3>
-                Player {player.playerId}:&nbsp;
+                {player.name}:&nbsp;
                 <span>{player.score}</span>
             </h3>
         </div>
@@ -46,7 +46,7 @@ function PlayerScore({ player }: { player: PlayerState }) {
 
 function winnerMessage(gameState: GameState) {
     const orderedPlayers = gameState.players.map((player) => ({
-        playerId: player.playerId,
+        name: player.name,
         score: player.score
     }));
     orderedPlayers.sort((a, b) =>
@@ -55,6 +55,6 @@ function winnerMessage(gameState: GameState) {
     if (orderedPlayers[0].score === orderedPlayers[1].score) {
         return "Tie game";
     } else {
-        return `Player ${orderedPlayers[0].playerId} wins!`;
+        return `${orderedPlayers[0].name} wins!`;
     }
 }
