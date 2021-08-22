@@ -16,6 +16,12 @@ describe("server", () => {
         expect(game.status).toBe(GameStatus.CREATED);
     });
 
+    it("Gives each game a unique ID", () => {
+        const game = server.newGame();
+        const game2 = server.newGame();
+        expect(game.id).not.toEqual(game2.id);
+    });
+
     describe("Game Exceptions", () => {
         it("Converts a game exception into an error response", () => {
             const game = server.newGame();
@@ -33,11 +39,11 @@ describe("server", () => {
     describe("Subscribers", () => {
         it("A subscriber gets updated gameState after a successful action", () => {
             const { id } = server.newGame();
-            ["p1", "p2", "p3", "p4"].forEach(p => server.registerPlayer(p));
-            server.startGame();
+            ["p1", "p2", "p3", "p4"].forEach(p => server.registerPlayer(id, p));
+            server.startGame(id);
             const subSpy = jasmine.createSpy("subscription");
 
-            server.subscribe(subSpy);
+            server.subscribe(id, subSpy);
             server.action(id, {
                 kind: "Pass",
                 playerId: 1
@@ -48,35 +54,48 @@ describe("server", () => {
         });
 
         it("A subscriber gets updated gameState after the game is started", () => {
-            server.newGame();
-            ["p1", "p2", "p3", "p4"].forEach(p => server.registerPlayer(p));
+            const { id } = server.newGame();
+            ["p1", "p2", "p3", "p4"].forEach(p => server.registerPlayer(id, p));
             const subSpy = jasmine.createSpy("subscription");
-            server.subscribe(subSpy);
+            server.subscribe(id, subSpy);
             
-            server.startGame();
+            server.startGame(id);
             
             expect(subSpy).toHaveBeenCalled();
             expect(subSpy.calls.first().args[0]["status"]).toEqual(GameStatus.STARTED);
         });
 
         it("Multiple subscribers can subscribe", () => {
-            server.newGame();
-            ["p1", "p2", "p3", "p4"].forEach(p => server.registerPlayer(p));
+            const { id } = server.newGame();
+            ["p1", "p2", "p3", "p4"].forEach(p => server.registerPlayer(id, p));
             const subSpy = jasmine.createSpy("subscription");
             const subSpy2 = jasmine.createSpy("subscription");
-            server.subscribe(subSpy);
-            server.subscribe(subSpy2);
+            server.subscribe(id, subSpy);
+            server.subscribe(id, subSpy2);
             
-            server.startGame();
+            server.startGame(id);
             expect(subSpy).toHaveBeenCalled();
             expect(subSpy2).toHaveBeenCalled();
+        });
+
+        it("Only notifies subscribers about the game they're subscribed to", () => {
+            const id1 = server.newGame().id;
+            const id2 = server.newGame().id;
+            const subSpy = jasmine.createSpy("subscription");
+            const subSpy2 = jasmine.createSpy("subscription");
+            server.subscribe(id1, subSpy);
+            server.subscribe(id2, subSpy2);
+            server.registerPlayer(id1, "Player 1");
+            
+            expect(subSpy).toHaveBeenCalled();
+            expect(subSpy2).not.toHaveBeenCalled();
         })
     });
 
     it("Returns the new player ID when registering a player", () => {
-        const game = server.newGame();
-        expect(server.registerPlayer("Player 1")).toEqual(1);
-        expect(server.registerPlayer("Another one")).toEqual(2);
+        const { id } = server.newGame();
+        expect(server.registerPlayer(id, "Player 1")).toEqual(1);
+        expect(server.registerPlayer(id, "Another one")).toEqual(2);
     })
 });
 

@@ -24,7 +24,9 @@ class GameClient implements IGameClient {
     }
 
     registerPlayer(player: PlayerConfig) {
-        const playerId = this.server.registerPlayer(player.name);
+        if(this.gameId === undefined) throw new Error("Tried to register player without gameId. 😭 This should never happen!");
+
+        const playerId = this.server.registerPlayer(this.gameId, player.name);
         
         if(player.isAI){
             new AIPlayer(this, playerId);
@@ -32,11 +34,14 @@ class GameClient implements IGameClient {
     }
 
     startGame() {
-        this.server.startGame();
+        if(this.gameId === undefined) throw new Error("Tried to start game without gameId. 😭 This should never happen!");
+
+        this.server.startGame(this.gameId);
     }
 
     subscribe(onUpdate: (gameState: Readonly<GameState>) => any) {
-        return this.server.subscribe(onUpdate);
+        if(this.gameId === undefined) throw new Error("Can't subscribe without creating a new game.");
+        return this.server.subscribe(this.gameId, onUpdate);
     }
 
     action(payload: Action) {
