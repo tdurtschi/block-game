@@ -26,6 +26,7 @@ class GameServer {
         const game = this.getGame();
         
         game.start();
+        this.onUpdate(game.getState());
     }
 
     subscribe(onUpdate: (gameState: Readonly<GameState>) => any) {

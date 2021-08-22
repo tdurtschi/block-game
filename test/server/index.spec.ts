@@ -46,6 +46,18 @@ describe("server", () => {
             expect(subSpy).toHaveBeenCalled();
             expect(subSpy.calls.first().args[0]["currentPlayerId"]).toEqual(2);
         });
+
+        it("A subscriber gets updated gameState after the game is started", () => {
+            server.newGame();
+            ["p1", "p2", "p3", "p4"].forEach(p => server.registerPlayer(p));
+            const subSpy = jasmine.createSpy("subscription");
+            server.subscribe(subSpy);
+            
+            server.startGame();
+            
+            expect(subSpy).toHaveBeenCalled();
+            expect(subSpy.calls.first().args[0]["status"]).toEqual(GameStatus.STARTED);
+        });
     });
 });
 

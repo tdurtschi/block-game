@@ -7,6 +7,7 @@ import GameStatus from "../shared/types/GameStatus";
 import GameContainer from "./game/gameContainer";
 import { GameOver } from "./gameOver";
 import { NewGame } from "./newGame/newGame";
+import { RegisterPlayers } from "./newGame/registerPlayers";
 
 export interface BlockGameProps {
     gameClient: IGameClient;
@@ -17,16 +18,19 @@ function BlockGame({ gameClient, errorDisplayTime }: BlockGameProps) {
     const [gameState, setGameState] = useState<GameState>();
     const [error, setError] = useState<string>();
 
-    const startGame = () => {
+    const createNewGame = () => {
         const initialGameState = gameClient.newGame();
         setGameState(initialGameState);
         gameClient.subscribe(setGameState);
-        gameClient.registerPlayer("Player 1");
-        gameClient.registerPlayer("Player 2");
-        gameClient.registerPlayer("Player 3");
-        gameClient.registerPlayer("Player 4");
-        gameClient.startGame();
     };
+
+    const onPlayersRegistered = (playerNames: { name: string }[]) => {
+        gameClient.registerPlayer(playerNames[0].name);
+        gameClient.registerPlayer(playerNames[1].name);
+        gameClient.registerPlayer(playerNames[2].name);
+        gameClient.registerPlayer(playerNames[3].name);
+        gameClient.startGame();
+    }
 
     const submitAction = (action: Action) => {
         const result = gameClient.action(action);
@@ -57,17 +61,20 @@ function BlockGame({ gameClient, errorDisplayTime }: BlockGameProps) {
                     return false;
                 }}
             >
-                {gameState && gameState.status !== GameStatus.OVER && (
+                {gameState && gameState.status === GameStatus.STARTED && (
                     <GameContainer
                         gameState={gameState}
                         action={submitAction}
                     />
                 )}
+                {gameState && gameState.status === GameStatus.CREATED && (
+                    <RegisterPlayers onPlayersRegistered={onPlayersRegistered} />
+                )}
                 {gameState && gameState.status === GameStatus.OVER && (
-                    <GameOver gameState={gameState} startGame={startGame} />
+                    <GameOver gameState={gameState} startGame={createNewGame} />
                 )}
                 {!gameState && (
-                    <NewGame startGame={startGame} />
+                    <NewGame startGame={createNewGame} />
                 )}
             </div>
         </>

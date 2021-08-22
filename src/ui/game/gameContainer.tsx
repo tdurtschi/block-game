@@ -8,6 +8,7 @@ import * as pieceUtils from "../../shared/pieceUtils";
 import GameState from "../../shared/types/GameState";
 import StagedPiece from "./StagedPiece";
 import { GameInfo } from "./gameInfo";
+import { ConfirmButton } from "../confirmButton";
 
 interface GameContainerProps {
     gameState: GameState;
@@ -193,12 +194,6 @@ const PassButton = ({ pass }: { pass: () => void }) => (
 const CancelButton = ({ action }: { action: () => void }) => (
     <button className="btn-secondary" data-cancel-action onClick={action}>
         Cancel
-    </button>
-);
-
-const ConfirmButton = ({ action, label }: { action: () => void, label?: string }) => (
-    <button className="btn-primary" data-confirm-action onClick={action}>
-        {label ? label : "Confirm"}
     </button>
 );
 

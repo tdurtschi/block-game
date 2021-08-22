@@ -8,9 +8,29 @@ describe("Block Game", () => {
         cy.get("[data-new-game]");
     });
 
+    describe("Registering Players", () => {
+        it("Gives players custom names", () => {
+            cy.get("[data-new-game]").click();
+            cy.get("[data-player-1-name]").clear().type("Shleemies");
+            cy.get("[data-player-2-name]").clear().type("Shoney's");
+            cy.get("[data-player-3-name]").clear().type("Shelley");
+            cy.get("[data-player-4-name]").clear().type("Schwifty");
+            cy.get("[data-confirm-action]").click();
+
+            cy.contains("Shleemies's Turn");
+            pass();
+            cy.contains("Shoney's's Turn");
+            pass();
+            cy.contains("Shelley's Turn");
+            pass();
+            cy.contains("Schwifty's Turn");
+            pass();
+        });
+    })
+
     describe("Gameplay", () => {
         beforeEach(() => {
-            cy.get("[data-new-game]").click();
+            startNewGame();
         });
 
         it("Shows a gameboard and all game pieces", () => {
@@ -254,5 +274,10 @@ function clickPlayersFirstPiece() {
 
 function pass() {
     cy.get("[data-player-pass-button]").click();
+    cy.get("[data-confirm-action]").click();
+}
+
+function startNewGame() {
+    cy.get("[data-new-game]").click();
     cy.get("[data-confirm-action]").click();
 }
