@@ -10,38 +10,45 @@ export const RegisterPlayers = ({ onPlayersRegistered }: { onPlayersRegistered: 
     ])
 
     return <>
-        <div className="new-game">
+        <div className="register-players">
+            <h2>Player Info:</h2>
             <div>
-                <div>
-                    Player 1:
+                <div className="player-info">
+                    <h3>Player 1:</h3>
+                    <label>Name:</label>
                     <input data-player-1-name type="text" value={players[0].name} onChange={(event) => {
                         players[0].name = event.target.value;
                         setPlayers([...players]);
                     }} />
                 </div>
-                <div>
-                    Player 2:
+                <div className="player-info">
+                    <h3>Player 2:</h3>
+                    <label>Name:</label>
                     <input data-player-2-name type="text" value={players[1].name} onChange={(event) => {
                         players[1].name = event.target.value;
                         setPlayers([...players]);
                     }} />
                 </div>
-                <div>
-                    Player 3:
+                <div className="player-info">
+                    <h3>Player 3:</h3>
+                    <label>Name:</label>
                     <input data-player-3-name type="text" value={players[2].name} onChange={(event) => {
                         players[2].name = event.target.value;
                         setPlayers([...players]);
                     }} />
                 </div>
-                <div>
-                    Player 4:
+                <div className="player-info">
+                    <h3>Player 4:</h3>
+                    <label>Name:</label>
                     <input data-player-4-name type="text" value={players[3].name} onChange={(event) => {
                         players[3].name = event.target.value;
                         setPlayers([...players]);
                     }} />
                 </div>
             </div>
-            <ConfirmButton label={"Start Game"} action={() => onPlayersRegistered(players)} />
+            <div className={"action-buttons"}>
+                <ConfirmButton label={"Start Game"} action={() => onPlayersRegistered(players)} />
+            </div>
         </div>
     </>
 }
