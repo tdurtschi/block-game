@@ -2,12 +2,14 @@ import Action from "../shared/types/Actions";
 import Game from "./Game";
 import GameState from "../shared/types/GameState";
 
+type UpdateCallback = (gameState: Readonly<GameState>) => any;
+
 class GameServer {
     private games: Map<number, Game> = new Map<number, Game>();
-    private onUpdate: (gameState: Readonly<GameState>) => any;
+    private subscribers: UpdateCallback[]; 
 
     constructor() {
-        this.onUpdate = () => {};
+        this.subscribers = []
     }
 
     newGame() {
@@ -18,19 +20,20 @@ class GameServer {
 
     registerPlayer(name: string) {
         const game = this.getGame();
-        game.registerPlayer(name);
-        this.onUpdate(game.getState());
+        const playerId = game.registerPlayer(name);
+        this.sendUpdate(game.getState());
+        return playerId;
     }
 
     startGame() {
         const game = this.getGame();
         
         game.start();
-        this.onUpdate(game.getState());
+        this.sendUpdate(game.getState());
     }
 
     subscribe(onUpdate: (gameState: Readonly<GameState>) => any) {
-        this.onUpdate = onUpdate;
+        this.subscribers.push(onUpdate);
     }
 
     action(gameId: number, payload: Action) {
@@ -38,7 +41,7 @@ class GameServer {
         if (game) {
             try {
                 game.action(payload);
-                this.onUpdate(game.getState());
+                this.sendUpdate(game.getState());
                 return {};
             } catch (error) {
                 return {
@@ -56,6 +59,10 @@ class GameServer {
         const game = this.games.get(0);
         if(!game) throw new Error(`Couldn't find game with id: 0`);
         return game;
+    }
+
+    private sendUpdate(gameState: GameState) {
+        this.subscribers.forEach(callback => callback(gameState));
     }
 }
 

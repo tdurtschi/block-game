@@ -74,7 +74,9 @@ class Game {
 
     registerPlayer(playerName: string) {
         if(this.players.length >= 4) throw new Error("Tried to register too many players (4 maximum)!");
-        this.players.push(new Player((this.players.length + 1) as PlayerId, playerName));
+        const newPlayerId = (this.players.length + 1) as PlayerId;
+        this.players.push(new Player(newPlayerId, playerName));
+        return newPlayerId;
     }
 
     start() {

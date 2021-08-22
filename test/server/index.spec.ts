@@ -58,7 +58,26 @@ describe("server", () => {
             expect(subSpy).toHaveBeenCalled();
             expect(subSpy.calls.first().args[0]["status"]).toEqual(GameStatus.STARTED);
         });
+
+        it("Multiple subscribers can subscribe", () => {
+            server.newGame();
+            ["p1", "p2", "p3", "p4"].forEach(p => server.registerPlayer(p));
+            const subSpy = jasmine.createSpy("subscription");
+            const subSpy2 = jasmine.createSpy("subscription");
+            server.subscribe(subSpy);
+            server.subscribe(subSpy2);
+            
+            server.startGame();
+            expect(subSpy).toHaveBeenCalled();
+            expect(subSpy2).toHaveBeenCalled();
+        })
     });
+
+    it("Returns the new player ID when registering a player", () => {
+        const game = server.newGame();
+        expect(server.registerPlayer("Player 1")).toEqual(1);
+        expect(server.registerPlayer("Another one")).toEqual(2);
+    })
 });
 
 function gameMove(

@@ -244,6 +244,23 @@ describe("Block Game", () => {
             });
         });
     });
+
+    describe("AI Players", () => {
+        it("a Player plays automatically when AI Player is selected", () => {
+            cy.get("[data-new-game]").click();
+            cy.get("[data-player-2-ai]").check();
+            cy.get("[data-player-3-ai]").check();
+            cy.get("[data-player-4-ai]").check();
+            cy.get("[data-confirm-action]").click();
+
+            cy.contains("Player 1's Turn");
+            pass();
+
+            // If P1 passes and the other 3 players are automatic, 
+            // the rest of the game will play out:
+            cy.get("[data-game-over]");
+        })
+    })
 });
 
 function verifyBoardArea(xCoord, yCoord, expectedContents) {

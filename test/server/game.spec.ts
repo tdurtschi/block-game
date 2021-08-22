@@ -47,6 +47,10 @@ describe("Game", () => {
                 expect(game.getState().players[0].name).toEqual("Steve");
             });
 
+            it("Returns the registered player's ID", () => {
+                expect(game.registerPlayer("Steve")).toEqual(1);
+            })
+
             it("Can start game after registering 4 players", () => {
                 ["p1", "p2", "p3", "p4"].forEach(p => game.registerPlayer(p));
                 game.start();

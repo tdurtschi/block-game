@@ -2,8 +2,7 @@
 
 # Product Backlog
 
--   Players can have names (first, make a new game state 'unstarted', during which 4 players _must_ register. )
--   AI player - naive
+-   No Duplicate Names
 -   Show if player has passed near score
 -   ^^ **Next Release!** ^^
 -   Figure out why contributions dont show up

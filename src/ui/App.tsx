@@ -1,6 +1,7 @@
 import { useState } from "react";
 import React = require("react");
 import { IGameClient } from "../game-client";
+import { PlayerConfig } from "../game-client/playerConfig";
 import Action from "../shared/types/Actions";
 import GameState from "../shared/types/GameState";
 import GameStatus from "../shared/types/GameStatus";
@@ -24,11 +25,11 @@ function BlockGame({ gameClient, errorDisplayTime }: BlockGameProps) {
         gameClient.subscribe(setGameState);
     };
 
-    const onPlayersRegistered = (playerNames: { name: string }[]) => {
-        gameClient.registerPlayer(playerNames[0].name);
-        gameClient.registerPlayer(playerNames[1].name);
-        gameClient.registerPlayer(playerNames[2].name);
-        gameClient.registerPlayer(playerNames[3].name);
+    const onPlayersRegistered = (playerConfig: PlayerConfig[]) => {
+        gameClient.registerPlayer(playerConfig[0]);
+        gameClient.registerPlayer(playerConfig[1]);
+        gameClient.registerPlayer(playerConfig[2]);
+        gameClient.registerPlayer(playerConfig[3]);
         gameClient.startGame();
     }
 
