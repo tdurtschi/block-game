@@ -22,19 +22,35 @@ run_deploy_from_docker() {
         -w=$PROJECT_TARGET_DIR \
         --env-file=$PROJECT_ROOT/scripts/deploy.env \
         frolvlad/alpine-bash \
-        /bin/bash $PROJECT_TARGET_DIR/scripts/docker/deploy-docker.sh
+        /bin/bash $PROJECT_TARGET_DIR/scripts/docker/do-static-upload.sh
+}
+
+docker_running_guard() {
+    # Fails if docker daemon not running or currently starting up:
+    docker ps -q 
+}
+
+publish_docker_image() {
+    echo ""
+    echo "🔧 Building docker image..."
+    docker build -f scripts/docker/Dockerfile -t tdurtschi/block-game-client .
+    
+    # Example to run this container: 
+    # docker run -p 80:80 -it --rm tdurtschi/block-game-client
+    echo ""
+    echo "🚀 Pushing image tdurtschi/block-game-client:latest..."
+    docker push tdurtschi/block-game-client:latest
 }
 
 main() {
     cd $PROJECT_ROOT
-    
-    # Fails if docker daemon not running or currently starting up:
-    docker ps -q 
-    
+    docker_running_guard
+
     ./scripts/ci.sh
 
     export_variables_from_file ./scripts/deploy.env
     run_deploy_from_docker
+    publish_docker_image
 }
 
 main

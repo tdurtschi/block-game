@@ -2,6 +2,7 @@
 
 # Product Backlog
 
+-   rename subscriber to listener
 -   Checkmark -> Radio button for AI / human players
 -   Show if player has passed near score
 -   ^^ **Next Release!** ^^
