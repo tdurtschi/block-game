@@ -22,7 +22,7 @@ function BlockGame({ gameClient, errorDisplayTime }: BlockGameProps) {
     const createNewGame = () => {
         const initialGameState = gameClient.newGame();
         setGameState(initialGameState);
-        gameClient.subscribe((gameState) => { console.log(gameState); setGameState(gameState) });
+        gameClient.subscribe((gameState) => setGameState(gameState));
     };
 
     const onPlayersRegistered = (playerConfig: PlayerConfig[]) => {

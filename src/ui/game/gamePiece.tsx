@@ -41,7 +41,6 @@ function PieceRow({ row, rowIndex, onClickPieceRow }: PieceRowProps) {
                     className={`${col === 1 ? "filled" : ""}`}
                     key={idx2}
                     onClick={(e) => {
-                        console.log(e);
                         onClickPieceRow(idx2, rowIndex)
                     }}
                 ></div>

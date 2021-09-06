@@ -27,7 +27,7 @@ describe("AI Player", () => {
     });
 
     describe("First turn", () => {
-        it.only("Plays the first piece in an available corner", (done) => {
+        it("Plays the first piece in an available corner", (done) => {
             const client = new GameClient(new GameServer());
             client.newGame();
             client.registerPlayer({ name: "p1", isAI: true });
@@ -37,7 +37,6 @@ describe("AI Player", () => {
 
             let isFirstTurn = true;
             client.subscribe((gameState) => {
-                console.log("Got new game state!");
                 if (
                     isFirstTurn &&
                     gameState.status == GameStatus.STARTED &&
@@ -48,7 +47,6 @@ describe("AI Player", () => {
                 }
 
                 if (!isFirstTurn && gameState.currentPlayerId === 1) {
-                    console.log(gameState.boardState);
                     expect(gameState.boardState[0][0]).not.toBeUndefined();
                     expect(
                         gameState.boardState[gameState.boardState.length - 1][0]

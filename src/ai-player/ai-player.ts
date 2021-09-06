@@ -66,7 +66,6 @@ export class AIPlayer {
             }
         }
 
-        console.log("Found valid spaces: ", validOpenSpaces);
         return validOpenSpaces;
     }
 
@@ -110,7 +109,6 @@ export class AIPlayer {
             const pieceId = Math.floor(Math.random()*(playerPieces.length-1));
             piece = playerPieces[pieceId];
         } while(!(condition(piece)));
-        console.log(this.playerId, "chose piece", piece.pieceData);
 
         return piece;
     }
