@@ -3,6 +3,7 @@
 # Product Backlog
 
 -   AI Plays a non-trivial game
+-   Client validation: shouldn't be able to register player before creating new game.
 -   Checkmark -> Radio button for AI / human players
 -   Show if player has passed near score
 -   ^^ **Next Release!** ^^

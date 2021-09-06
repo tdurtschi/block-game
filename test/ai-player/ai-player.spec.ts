@@ -1,17 +1,19 @@
 import { AIPlayer } from "../../src/ai-player/ai-player";
+import GameClient from "../../src/game-client";
+import GameServer from "../../src/server";
 import Game from "../../src/server/Game";
 import GameState from "../../src/shared/types/GameState";
 import GameStatus from "../../src/shared/types/GameStatus";
 
 interface FakeClient {
-    action: jasmine.Spy,
-    registerPlayer: jasmine.Spy,
-    startGame: jasmine.Spy,
-    newGame: jasmine.Spy,
-    subscribe: jasmine.Spy
-};
+    action: jasmine.Spy;
+    registerPlayer: jasmine.Spy;
+    startGame: jasmine.Spy;
+    newGame: jasmine.Spy;
+    subscribe: jasmine.Spy;
+}
 
-describe('AI Player', () => {
+describe("AI Player", () => {
     let fakeClient: FakeClient;
 
     beforeEach(() => {
@@ -22,22 +24,52 @@ describe('AI Player', () => {
             newGame: jasmine.createSpy(),
             subscribe: jasmine.createSpy()
         };
-    })
+    });
 
-    describe('First turn', () => {
-        it("Plays the first piece in an available corner", () => {
-            new AIPlayer(fakeClient, 1);
-            triggerUpdate(fakeClient, getGameStateFirstTurn());
+    describe("First turn", () => {
+        it.only("Plays the first piece in an available corner", (done) => {
+            const client = new GameClient(new GameServer());
+            client.newGame();
+            client.registerPlayer({ name: "p1", isAI: true });
+            client.registerPlayer({ name: "p2", isAI: true });
+            client.registerPlayer({ name: "p3", isAI: true });
+            client.registerPlayer({ name: "p4", isAI: true });
 
-            expect(fakeClient.action).toHaveBeenCalled();
-            const actionTaken = fakeClient.action.calls.first().args[0];
+            let isFirstTurn = true;
+            client.subscribe((gameState) => {
+                console.log("Got new game state!");
+                if (
+                    isFirstTurn &&
+                    gameState.status == GameStatus.STARTED &&
+                    gameState.currentPlayerId === 1
+                ) {
+                    isFirstTurn = false;
+                    return;
+                }
 
-            expect(actionTaken.kind).toEqual("GamePlay");
-            expect(actionTaken.playerId).toEqual(1);
-            expect(actionTaken.location).toEqual({x: 0, y: 0});
+                if (!isFirstTurn && gameState.currentPlayerId === 1) {
+                    console.log(gameState.boardState);
+                    expect(gameState.boardState[0][0]).not.toBeUndefined();
+                    expect(
+                        gameState.boardState[gameState.boardState.length - 1][0]
+                    ).not.toBeUndefined();
+                    expect(
+                        gameState.boardState[0][
+                            gameState.boardState[0].length - 1
+                        ]
+                    ).not.toBeUndefined();
+                    expect(
+                        gameState.boardState[gameState.boardState.length - 1][
+                            gameState.boardState[0].length - 1
+                        ]
+                    ).not.toBeUndefined();
 
-            // todo fix this test make it better
-        })
+                    done();
+                }
+            });
+
+            client.startGame();
+        });
     });
 
     it("Takes an action when it receives an update with a started game and the player ID matches", () => {

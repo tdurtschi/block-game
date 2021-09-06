@@ -1,4 +1,5 @@
 import { IGameClient } from "../game-client";
+import { BoardLocation } from "../shared/types/Actions";
 import GamePiece, { GamePiecesData } from "../shared/types/GamePiece";
 import GameState from "../shared/types/GameState";
 import GameStatus from "../shared/types/GameStatus";
@@ -29,10 +30,44 @@ export class AIPlayer {
             return;
         }
 
+        const validOpenSpaces = this.getValidOpenSpaces(gameState.boardState);
+
         this.gameClient.action({
             kind: "Pass",
             playerId: this.playerId
         });
+    }
+
+    private getValidOpenSpaces(boardState: readonly (PlayerId | undefined)[][]) {
+        const validOpenSpaces = [];
+        const isSpaceOpen = (location: BoardLocation) => boardState[location.y][location.x] === undefined;
+        const isSpaceValid = (location: BoardLocation) => {
+            if(location.x > 0 && boardState[location.y][location.x-1] === this.playerId){
+                return false;
+            }
+            if(location.y > 0 && boardState[location.y-1][location.x] === this.playerId){
+                return false;
+            }
+            if(location.x < (boardState[0].length - 1) && boardState[location.y][location.x+1] === this.playerId){
+                return false;
+            }
+            if(location.y < (boardState.length - 1) && boardState[location.y+1][location.x] === this.playerId){
+                return false;
+            }
+
+            return this.cellTouchesPlayedPieceDiagonally(boardState, location);
+        }
+
+        for(let y = 0; y < boardState.length; y++) {
+            for(let x = 0; x <  boardState[y].length; x++) {
+                if(isSpaceOpen({x, y}) && isSpaceValid({x, y})){
+                    validOpenSpaces.push({x, y});
+                }
+            }
+        }
+
+        console.log("Found valid spaces: ", validOpenSpaces);
+        return validOpenSpaces;
     }
 
     private isFirstTurn(gameState: GameState) {
@@ -78,6 +113,26 @@ export class AIPlayer {
         console.log(this.playerId, "chose piece", piece.pieceData);
 
         return piece;
+    }
+
+    private cellTouchesPlayedPieceDiagonally(boardState: readonly (PlayerId | undefined)[][], location: BoardLocation) {
+        return (
+            location.y + 1 < boardState.length &&
+            location.x + 1 < boardState[0].length &&
+            boardState[location.y + 1][location.x + 1] ==
+                this.playerId) ||
+            (location.y + 1 < boardState.length &&
+                location.x > 0 &&
+                boardState[location.y + 1][location.x - 1] ==
+                    this.playerId) ||
+            (location.y > 0 &&
+                location.x + 1 < boardState[0].length &&
+                boardState[location.y - 1][location.x + 1] ==
+                    this.playerId) ||
+            (location.y > 0 &&
+                location.x > 0 &&
+                boardState[location.y - 1][location.x - 1] ==
+                    this.playerId);
     }
 }
 

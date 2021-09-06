@@ -7,7 +7,10 @@ type UpdateCallback = (gameState: Readonly<GameState>) => any;
 
 class GameServer {
     private games: Map<number, Game> = new Map<number, Game>();
-    private subscribers: Map<number, UpdateCallback[]> = new Map<number, UpdateCallback[]>(); 
+    private subscribers: Map<number, UpdateCallback[]> = new Map<
+        number,
+        UpdateCallback[]
+    >();
 
     newGame() {
         const game = new Game(generateId());
@@ -24,14 +27,17 @@ class GameServer {
 
     startGame(gameId: number) {
         const game = this.getGame(gameId);
-        
+
         game.start();
         this.sendUpdate(game.getState());
     }
 
-    subscribe(gameId: number, onUpdate: (gameState: Readonly<GameState>) => any) {
+    subscribe(
+        gameId: number,
+        onUpdate: (gameState: Readonly<GameState>) => any
+    ) {
         const gameSubscribers = this.subscribers.get(gameId);
-        if(gameSubscribers === undefined) {
+        if (gameSubscribers === undefined) {
             this.subscribers.set(gameId, [onUpdate]);
         } else {
             gameSubscribers.push(onUpdate);
@@ -61,14 +67,16 @@ class GameServer {
 
     private getGame(gameId: number): Game {
         const game = this.games.get(gameId);
-        if(!game) throw new Error(`Couldn't find game with id: ${gameId}`);
+        if (!game) throw new Error(`Couldn't find game with id: ${gameId}`);
         return game;
     }
 
     private sendUpdate(gameState: GameState) {
         const gameSubscribers = this.subscribers.get(gameState.id);
         if (gameSubscribers !== undefined) {
-            gameSubscribers.forEach(callback => callback(gameState));
+            gameSubscribers.forEach((callback) =>
+                setTimeout(() => callback(gameState), 0)
+            );
         }
     }
 }

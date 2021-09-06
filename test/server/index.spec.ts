@@ -37,9 +37,11 @@ describe("server", () => {
     });
 
     describe("Subscribers", () => {
-        it("A subscriber gets updated gameState after a successful action", () => {
+        it("A subscriber gets updated gameState after a successful action", async () => {
             const { id } = server.newGame();
-            ["p1", "p2", "p3", "p4"].forEach(p => server.registerPlayer(id, p));
+            ["p1", "p2", "p3", "p4"].forEach((p) =>
+                server.registerPlayer(id, p)
+            );
             server.startGame(id);
             const subSpy = jasmine.createSpy("subscription");
 
@@ -49,36 +51,46 @@ describe("server", () => {
                 playerId: 1
             });
 
+            await flushAsync();
             expect(subSpy).toHaveBeenCalled();
             expect(subSpy.calls.first().args[0]["currentPlayerId"]).toEqual(2);
         });
 
-        it("A subscriber gets updated gameState after the game is started", () => {
+        it("A subscriber gets updated gameState after the game is started", async () => {
             const { id } = server.newGame();
-            ["p1", "p2", "p3", "p4"].forEach(p => server.registerPlayer(id, p));
+            ["p1", "p2", "p3", "p4"].forEach((p) =>
+                server.registerPlayer(id, p)
+            );
             const subSpy = jasmine.createSpy("subscription");
             server.subscribe(id, subSpy);
-            
+
             server.startGame(id);
-            
+
+            await flushAsync();
             expect(subSpy).toHaveBeenCalled();
-            expect(subSpy.calls.first().args[0]["status"]).toEqual(GameStatus.STARTED);
+            expect(subSpy.calls.first().args[0]["status"]).toEqual(
+                GameStatus.STARTED
+            );
         });
 
-        it("Multiple subscribers can subscribe", () => {
+        it("Multiple subscribers can subscribe", async () => {
             const { id } = server.newGame();
-            ["p1", "p2", "p3", "p4"].forEach(p => server.registerPlayer(id, p));
+            ["p1", "p2", "p3", "p4"].forEach((p) =>
+                server.registerPlayer(id, p)
+            );
             const subSpy = jasmine.createSpy("subscription");
             const subSpy2 = jasmine.createSpy("subscription");
             server.subscribe(id, subSpy);
             server.subscribe(id, subSpy2);
-            
+
             server.startGame(id);
+
+            await flushAsync();
             expect(subSpy).toHaveBeenCalled();
             expect(subSpy2).toHaveBeenCalled();
         });
 
-        it("Only notifies subscribers about the game they're subscribed to", () => {
+        it("Only notifies subscribers about the game they're subscribed to", async () => {
             const id1 = server.newGame().id;
             const id2 = server.newGame().id;
             const subSpy = jasmine.createSpy("subscription");
@@ -86,17 +98,18 @@ describe("server", () => {
             server.subscribe(id1, subSpy);
             server.subscribe(id2, subSpy2);
             server.registerPlayer(id1, "Player 1");
-            
+
+            await flushAsync();
             expect(subSpy).toHaveBeenCalled();
             expect(subSpy2).not.toHaveBeenCalled();
-        })
+        });
     });
 
     it("Returns the new player ID when registering a player", () => {
         const { id } = server.newGame();
         expect(server.registerPlayer(id, "Player 1")).toEqual(1);
         expect(server.registerPlayer(id, "Another one")).toEqual(2);
-    })
+    });
 });
 
 function gameMove(
@@ -114,3 +127,9 @@ function gameMove(
         flip: false
     };
 }
+
+const flushAsync = async () => {
+    return new Promise((resolve) => {
+        setTimeout(resolve, 0);
+    });
+};
