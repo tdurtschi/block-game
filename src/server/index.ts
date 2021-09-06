@@ -46,6 +46,8 @@ class GameServer {
                 this.sendUpdate(game.getState());
                 return {};
             } catch (error) {
+                console.error(error);
+                console.log(payload);
                 return {
                     errorMessage: error.message ?? "Unknown Error Occured"
                 };

@@ -2,7 +2,7 @@
 
 # Product Backlog
 
--   rename subscriber to listener
+-   AI Plays a non-trivial game
 -   Checkmark -> Radio button for AI / human players
 -   Show if player has passed near score
 -   ^^ **Next Release!** ^^
