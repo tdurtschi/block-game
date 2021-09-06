@@ -2,16 +2,14 @@ import GamePiece, { GamePiecesData } from "../shared/types/GamePiece";
 import PlayerId from "../shared/types/PlayerId";
 import PlayerState from "../shared/types/PlayerState";
 
-const NUM_PIECES = 21;
+const NUM_PIECES = GamePiecesData.length;
 const TOTAL_TILES = 89;
 
 class Player {
     public playerPieces: GamePiece[];
     public hasPassed: boolean = false;
 
-    constructor(
-        public playerId: PlayerId, 
-        public name: string = "Unknown") {
+    constructor(public playerId: PlayerId, public name: string = "Unknown") {
         this.playerPieces = this.pieces();
     }
 

@@ -60,4 +60,26 @@ function clone(pieceData: number[][]): number[][] {
     return newPiece;
 }
 
-export { applyPieceToBoard, rotate, rotateReverse, flip, clone };
+const applyFlip = flip;
+const applyRotate = rotate;
+function applyPieceModifications(
+    pieceData: number[][],
+    rotation: 0 | 1 | 2 | 3,
+    flip: boolean = false
+) {
+    let result = clone(pieceData);
+
+    if (flip) result = applyFlip(result);
+
+    if (rotation == 0) {
+        return result;
+    } else if (rotation == 1) {
+        return applyRotate(result);
+    } else if (rotation == 2) {
+        return applyRotate(applyRotate(result));
+    } else {
+        return applyRotate(applyRotate(applyRotate(result)));
+    }
+}
+
+export { applyPieceToBoard, rotate, rotateReverse, flip, clone, applyPieceModifications };
