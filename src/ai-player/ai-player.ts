@@ -1,6 +1,8 @@
 import { IGameClient } from "../game-client";
 import { MoveValidations } from "../shared/moveValidations";
+import { applyPieceModifications } from "../shared/pieceUtils";
 import { BoardLocation, GamePlayAction } from "../shared/types/Actions";
+import BoardState from "../shared/types/BoardState";
 import GamePiece from "../shared/types/GamePiece";
 import GameState from "../shared/types/GameState";
 import GameStatus from "../shared/types/GameStatus";
@@ -38,7 +40,7 @@ export class AIPlayer {
             for (let i = 0; i < validOpenCells.length; i++) {
                 try {
                     const cell = validOpenCells[i];
-                    const action = this.getValidMoveAtCell(gameState, cell);
+                    const action = this.getValidActionOrError(gameState, cell);
                     this.gameClient.action(action);
                 } catch (error) {
                     // Silently continue without finding valid move.
@@ -52,7 +54,7 @@ export class AIPlayer {
         }
     }
 
-    getValidMoveAtCell(
+    getValidActionOrError(
         gameState: GameState,
         cell: BoardLocation
     ): GamePlayAction {
@@ -62,22 +64,57 @@ export class AIPlayer {
 
         for (let i = 0; i < shuffledPieces.length; i++) {
             const piece = shuffledPieces[i];
-            const locationsToTry = shuffle(
-                generateLocationsToTry(piece.pieceData, cell)
+
+            const validLocationToPlay = this.getValidLocationToPlay(
+                piece,
+                cell,
+                gameState.boardState
             );
-            const validLocationToPlay = locationsToTry.find((location) => {
+
+            if (validLocationToPlay) {
+                return {
+                    kind: "GamePlay",
+                    playerId: this.playerId,
+                    piece: piece.id,
+                    location: validLocationToPlay.location,
+                    rotate: validLocationToPlay.rotate,
+                    flip: validLocationToPlay.flip
+                };
+            }
+        }
+
+        throw new Error("Unable to find valid move");
+    }
+
+    getValidLocationToPlay(
+        piece: any,
+        cell: BoardLocation,
+        boardState: Readonly<BoardState>
+    ) {
+        const permutationsToTry = generatePermutations(piece.pieceData, cell);
+
+        const validPermutation = permutationsToTry.find(
+            ({
+                location,
+                rotate,
+                flip
+            }: {
+                location: BoardLocation;
+                rotate: 0 | 1 | 2 | 3;
+                flip: boolean;
+            }) => {
                 const action: GamePlayAction = {
                     kind: "GamePlay",
                     playerId: this.playerId,
                     piece: piece.id,
                     location,
-                    rotate: 0 as 0, // 😭 Sad TS Compiler
-                    flip: false
+                    rotate,
+                    flip
                 };
 
                 try {
                     MoveValidations.validateGamePlayAction(
-                        gameState.boardState,
+                        boardState,
                         action,
                         false
                     );
@@ -85,21 +122,12 @@ export class AIPlayer {
                 } catch (error) {
                     return false;
                 }
-            });
-
-            if (validLocationToPlay) {
-                return {
-                    kind: "GamePlay",
-                    playerId: this.playerId,
-                    piece: piece.id,
-                    location: validLocationToPlay,
-                    rotate: 0 as 0, // 😭 Sad TS Compiler
-                    flip: false
-                };
             }
-        }
+        );
 
-        throw new Error("Unable to find valid move");
+        if (validPermutation) {
+            return validPermutation;
+        }
     }
 
     private getValidOpenCells(boardState: readonly (PlayerId | undefined)[][]) {
@@ -228,9 +256,34 @@ function shuffle(array: any[]) {
     return array;
 }
 
-function generateLocationsToTry(pieceData: number[][], cell: BoardLocation) {
-    const xCoordsToTry = pieceData[0].map((_, index) => cell.x - index);
-    const yCoordsToTry = pieceData.map((_, index) => cell.y - index);
+function generatePermutations(pieceData: number[][], cell: BoardLocation) {
+    const rotations: (0 | 1 | 2 | 3)[] = [0, 1, 2, 3];
+    const flipsAndRotations = rotations.flatMap((rotate) => [
+        { rotate, flip: true },
+        { rotate, flip: false }
+    ]);
+    const allPermutations = flipsAndRotations.flatMap(({ flip, rotate }) => {
+        const transformedPiece = applyPieceModifications(
+            pieceData,
+            rotate,
+            flip
+        );
 
-    return xCoordsToTry.flatMap((x) => yCoordsToTry.map((y) => ({ x, y })));
+        const xCoordsToTry = transformedPiece[0].map(
+            (_, index) => cell.x - index
+        );
+        const yCoordsToTry = transformedPiece.map((_, index) => cell.y - index);
+
+        const locations = xCoordsToTry.flatMap((x) =>
+            yCoordsToTry.map((y) => ({ x, y }))
+        );
+
+        return locations.map((location) => ({
+            rotate,
+            flip,
+            location
+        }));
+    });
+
+    return shuffle(allPermutations);
 }
