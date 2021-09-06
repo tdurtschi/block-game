@@ -56,14 +56,21 @@ export class AIPlayer {
         gameState: GameState,
         cell: BoardLocation
     ): GamePlayAction {
-        const piece = this.getRandomPieceWithCondition(
-            this.getPlayerPieces(gameState, this.playerId),
-            (piece) => {
+        const shuffledPieces = shuffle(
+            this.getPlayerPieces(gameState, this.playerId)
+        );
+
+        for (let i = 0; i < shuffledPieces.length; i++) {
+            const piece = shuffledPieces[i];
+            const locationsToTry = shuffle(
+                generateLocationsToTry(piece.pieceData, cell)
+            );
+            const validLocationToPlay = locationsToTry.find((location) => {
                 const action: GamePlayAction = {
                     kind: "GamePlay",
                     playerId: this.playerId,
                     piece: piece.id,
-                    location: cell,
+                    location,
                     rotate: 0 as 0, // 😭 Sad TS Compiler
                     flip: false
                 };
@@ -78,17 +85,21 @@ export class AIPlayer {
                 } catch (error) {
                     return false;
                 }
-            }
-        );
+            });
 
-        return {
-            kind: "GamePlay",
-            playerId: this.playerId,
-            piece: piece.id,
-            location: cell,
-            rotate: 0 as 0, // 😭 Sad TS Compiler
-            flip: false
-        };
+            if (validLocationToPlay) {
+                return {
+                    kind: "GamePlay",
+                    playerId: this.playerId,
+                    piece: piece.id,
+                    location: validLocationToPlay,
+                    rotate: 0 as 0, // 😭 Sad TS Compiler
+                    flip: false
+                };
+            }
+        }
+
+        throw new Error("Unable to find valid move");
     }
 
     private getValidOpenCells(boardState: readonly (PlayerId | undefined)[][]) {
@@ -120,7 +131,7 @@ export class AIPlayer {
             }
         }
 
-        return validOpenCells;
+        return shuffle(validOpenCells);
     }
 
     private isFirstTurn(gameState: GameState, playerId: PlayerId) {
@@ -137,14 +148,14 @@ export class AIPlayer {
             const piece = this.getRandomPieceWithCondition(
                 playerPieces,
                 (piece) => piece.pieceData[0][0] !== 0
-            );
+            )!;
             return { pieceId: piece.id, location: { x: 0, y: 0 }, rotate: 0 };
         } else if (boardState[0][boardState[0].length - 1] === undefined) {
             const piece = this.getRandomPieceWithCondition(
                 playerPieces,
                 (piece) =>
                     piece.pieceData[0][piece.pieceData[0].length - 1] !== 0
-            );
+            )!;
             const xLocation = boardState[0].length - piece.pieceData[0].length;
 
             return {
@@ -156,7 +167,7 @@ export class AIPlayer {
             const piece = this.getRandomPieceWithCondition(
                 playerPieces,
                 (piece) => piece.pieceData[piece.pieceData.length - 1][0] !== 0
-            );
+            )!;
             const yLocation = boardState.length - piece.pieceData.length;
 
             return {
@@ -171,7 +182,7 @@ export class AIPlayer {
                     piece.pieceData[piece.pieceData.length - 1][
                         piece.pieceData[0].length - 1
                     ] !== 0
-            );
+            )!;
             const xLocation = boardState[0].length - piece.pieceData[0].length;
             const yLocation = boardState.length - piece.pieceData.length;
 
@@ -186,17 +197,9 @@ export class AIPlayer {
     private getRandomPieceWithCondition(
         playerPieces: GamePiece[],
         condition: (piece: GamePiece) => boolean
-    ) {
-        let piece: GamePiece;
-        let attempts = 0;
-        do {
-            const pieceId = Math.floor(
-                Math.random() * (playerPieces.length - 1)
-            );
-            piece = playerPieces[pieceId];
-            attempts++;
-        } while (!condition(piece) && attempts < 1000);
-
+    ): GamePiece | undefined {
+        const shuffledPieces = shuffle(playerPieces);
+        let piece = shuffledPieces.find((piece) => condition(piece));
         return piece;
     }
 
@@ -204,4 +207,30 @@ export class AIPlayer {
         return gameState.players.find((player) => player.playerId === playerId)
             ?.playerPieces!;
     }
+}
+
+function shuffle(array: any[]) {
+    var m = array.length,
+        t,
+        i;
+
+    // While there remain elements to shuffle…
+    while (m) {
+        // Pick a remaining element…
+        i = Math.floor(Math.random() * m--);
+
+        // And swap it with the current element.
+        t = array[m];
+        array[m] = array[i];
+        array[i] = t;
+    }
+
+    return array;
+}
+
+function generateLocationsToTry(pieceData: number[][], cell: BoardLocation) {
+    const xCoordsToTry = pieceData[0].map((_, index) => cell.x - index);
+    const yCoordsToTry = pieceData.map((_, index) => cell.y - index);
+
+    return xCoordsToTry.flatMap((x) => yCoordsToTry.map((y) => ({ x, y })));
 }
