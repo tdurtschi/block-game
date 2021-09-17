@@ -93,36 +93,8 @@ export class AIPlayer {
     ) {
         const permutationsToTry = generatePermutations(piece.pieceData, cell);
 
-        const validPermutation = permutationsToTry.find(
-            ({
-                location,
-                rotate,
-                flip
-            }: {
-                location: BoardLocation;
-                rotate: 0 | 1 | 2 | 3;
-                flip: boolean;
-            }) => {
-                const action: GamePlayAction = {
-                    kind: "GamePlay",
-                    playerId: this.playerId,
-                    piece: piece.id,
-                    location,
-                    rotate,
-                    flip
-                };
-
-                try {
-                    MoveValidations.validateGamePlayAction(
-                        boardState,
-                        action,
-                        false
-                    );
-                    return true;
-                } catch (error) {
-                    return false;
-                }
-            }
+        const validPermutation = permutationsToTry.find((move: Move) =>
+            this.isValidMove(move, piece.id, boardState)
         );
 
         if (validPermutation) {
@@ -166,6 +138,28 @@ export class AIPlayer {
         const playerPieces = this.getPlayerPieces(gameState, playerId);
 
         return MoveValidations.isFirstTurn(playerPieces);
+    }
+
+    private isValidMove(
+        move: Move,
+        pieceId: number,
+        boardState: Readonly<BoardState>
+    ) {
+        const action: GamePlayAction = {
+            kind: "GamePlay",
+            playerId: this.playerId,
+            piece: pieceId,
+            location: move.location,
+            rotate: move.rotate,
+            flip: move.flip
+        };
+
+        try {
+            MoveValidations.validateGamePlayAction(boardState, action, false);
+            return true;
+        } catch (error) {
+            return false;
+        }
     }
 
     private getFirstMove(gameState: GameState) {
@@ -286,4 +280,10 @@ function generatePermutations(pieceData: number[][], cell: BoardLocation) {
     });
 
     return shuffle(allPermutations);
+}
+
+interface Move {
+    rotate: 0 | 1 | 2 | 3;
+    flip: boolean;
+    location: BoardLocation;
 }
