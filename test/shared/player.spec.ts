@@ -1,4 +1,4 @@
-import Player from "../../src/server/Player";
+import Player from "../../src/shared/Player";
 import PlayerId from "../../src/shared/types/PlayerId";
 
 describe("Player", () => {

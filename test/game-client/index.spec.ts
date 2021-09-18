@@ -1,5 +1,5 @@
 import GameClient from "../../src/game-client";
-import GameServer from "../../src/server";
+import GameServer from "../../src/server-local";
 
 describe('Game Client', () => {
     it("Subscribes an AI to game for an AI Player", () => {

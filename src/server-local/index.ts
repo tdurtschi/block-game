@@ -1,5 +1,5 @@
 import Action from "../shared/types/Actions";
-import Game from "./Game";
+import Game from "../shared/Game";
 import GameState from "../shared/types/GameState";
 import { generateId } from "./idGenerator";
 

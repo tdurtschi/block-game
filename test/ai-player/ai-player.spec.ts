@@ -1,7 +1,7 @@
 import { AIPlayer } from "../../src/ai-player/ai-player";
 import GameClient from "../../src/game-client";
-import GameServer from "../../src/server";
-import Game from "../../src/server/Game";
+import GameServer from "../../src/server-local";
+import Game from "../../src/shared/Game";
 import GameState from "../../src/shared/types/GameState";
 import GameStatus from "../../src/shared/types/GameStatus";
 

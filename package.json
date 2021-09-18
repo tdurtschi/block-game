@@ -12,6 +12,7 @@
         "e2e": "CYPRESS_BASE_URL='http://localhost:3000' cypress open",
         "e2e:ci": "CYPRESS_BASE_URL='http://localhost:5000' start-server-and-test start http://localhost:5000 'cypress run'",
         "prettier": "prettier --write \"./**/*.(js|ts|tsx|scss)\"",
+        "dev-server": "ts-node src/server-remote/index.ts",
         "start": "npm run build && serve dist/",
         "test": "npm-run-all build test-unit e2e:ci",
         "test-unit": "DEBUG_PRINT_LIMIT=200 jest",
@@ -33,6 +34,8 @@
     "dependencies": {
         "@types/react": "^17.0.0",
         "@types/react-dom": "^17.0.0",
+        "@types/sockjs": "^0.3.33",
+        "@types/sockjs-client": "^1.5.1",
         "browser-sync": "^2.26.14",
         "cypress": "^6.2.1",
         "esbuild": "^0.8.46",
@@ -41,7 +44,10 @@
         "react-markdown": "^6.0.1",
         "sass": "^1.32.7",
         "serve": "^11.3.2",
+        "sockjs": "^0.3.21",
+        "sockjs-client": "^1.5.2",
         "ts-loader": "^8.0.11",
+        "ts-node": "^10.2.1",
         "typescript": "^4.1.2"
     },
     "prettier": {

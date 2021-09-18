@@ -1,5 +1,5 @@
 import { GamePlayAction } from "../../src/shared/types/Actions";
-import Game from "../../src/server/Game";
+import Game from "../../src/shared/Game";
 import GameStatus from "../../src/shared/types/GameStatus";
 import PlayerId from "../../src/shared/types/PlayerId";
 import GamePiece from "../../src/shared/types/GamePiece";

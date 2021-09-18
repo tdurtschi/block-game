@@ -1,17 +1,17 @@
-import Action, { GamePlayAction } from "../shared/types/Actions";
-import GameStatus from "../shared/types/GameStatus";
-import InvalidActionError from "./errors/InvalidActionError";
+import Action, { GamePlayAction } from "./types/Actions";
+import GameStatus from "./types/GameStatus";
+import InvalidActionError from "../server-local/errors/InvalidActionError";
 import Player from "./Player";
-import PlayerId from "../shared/types/PlayerId";
-import { GamePiecesData } from "../shared/types/GamePiece";
+import PlayerId from "./types/PlayerId";
+import { GamePiecesData } from "./types/GamePiece";
 import {
     applyPieceToBoard,
     applyPieceModifications
-} from "../shared/pieceUtils";
-import GameState from "../shared/types/GameState";
-import BoardState from "../shared/types/BoardState";
-import { MoveValidations } from "../shared/moveValidations";
-import { GAMEBOARD_SIZE } from "../shared/constants";
+} from "./pieceUtils";
+import GameState from "./types/GameState";
+import BoardState from "./types/BoardState";
+import { MoveValidations } from "./moveValidations";
+import { GAMEBOARD_SIZE } from "./constants";
 
 class Game {
     public currentPlayerId: PlayerId = 1;

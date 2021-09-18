@@ -2,7 +2,7 @@ import React = require("react");
 import ReactDOM = require("react-dom");
 import App from "./ui/App";
 import GameClient from "./game-client";
-import GameServer from "./server";
+import GameServer from "./server-local";
 
 const container = document.createElement("div");
 container.className = "app-container";

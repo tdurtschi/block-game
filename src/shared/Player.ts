@@ -1,6 +1,6 @@
-import GamePiece, { GamePiecesData } from "../shared/types/GamePiece";
-import PlayerId from "../shared/types/PlayerId";
-import PlayerState from "../shared/types/PlayerState";
+import GamePiece, { GamePiecesData } from "./types/GamePiece";
+import PlayerId from "./types/PlayerId";
+import PlayerState from "./types/PlayerState";
 
 const NUM_PIECES = GamePiecesData.length;
 const TOTAL_TILES = 89;

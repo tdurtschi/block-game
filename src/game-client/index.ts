@@ -1,5 +1,5 @@
 import { AIPlayer } from "../ai-player/ai-player";
-import GameServer from "../server";
+import GameServer from "../server-local";
 import Action from "../shared/types/Actions";
 import GameState from "../shared/types/GameState";
 import { PlayerConfig } from "./playerConfig";

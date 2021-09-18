@@ -1,4 +1,4 @@
-import GameServer from "../../src/server";
+import GameServer from "../../src/server-local";
 import { GamePlayAction } from "../../src/shared/types/Actions";
 import GameStatus from "../../src/shared/types/GameStatus";
 import PlayerId from "../../src/shared/types/PlayerId";
