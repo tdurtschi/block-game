@@ -1,7 +1,7 @@
 import Action from "../shared/types/Actions";
 import Game from "../shared/Game";
 import GameState from "../shared/types/GameState";
-import { generateId } from "./idGenerator";
+import { generateId } from "../shared/idGenerator";
 
 type UpdateCallback = (gameState: Readonly<GameState>) => any;
 
