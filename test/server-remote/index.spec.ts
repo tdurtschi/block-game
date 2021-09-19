@@ -8,7 +8,7 @@ describe("Remote Server", () => {
     describe("A SockJS client", () => {
         let server: ChildProcess;
         beforeAll(async () => {
-            server = await setupServer(PORT);
+            server = await setupServer(9999);
         });
 
         afterAll(async (done) => {
@@ -17,84 +17,40 @@ describe("Remote Server", () => {
             server.on("exit", done);
         });
 
-        it("Successfully connects to server", (done) => {
-            var isSuccess: boolean = false;
-            var sock = new SockJS(`http://localhost:${PORT}/games`);
-            sock.onopen = function () {
-                sock.close();
-                isSuccess = true;
-                done();
-            };
-
-            sock.onerror = function () {
-                sock.close();
-                !isSuccess && fail("Couldn't connect to server");
-                done();
-            };
-
-            sock.onclose = function () {
-                sock.close();
-                !isSuccess && fail("Couldn't connect to server");
-                done();
-            };
+        it("Successfully connects to server", async () => {
+            const client = new TestClient("games");
+            await client.connected();
         });
 
-        it("Can retrieve a list of games", (done) => {
-            var sock = new SockJS(`http://localhost:${PORT}/games`);
-            sock.onopen = function () {};
+        it("Can retrieve a list of games", async () => {
+            const client = new TestClient("games");
 
-            sock.onmessage = function (ev: MessageEvent) {
-                const result = JSON.parse(ev.data);
-                expect(result.length).toBeDefined();
-
-                sock.close();
-                done();
-            };
+            const message: any = await client.getNextMessage();
+            expect(message.length).toBeDefined();
         });
 
-        it("Can create a new game", (done) => {
-            var sock = new SockJS(`http://localhost:${PORT}/games`);
-            let isFirstMessage = true;
-            sock.onopen = function () {
-                sock.send("NEW_GAME");
-            };
+        it("Can create a new game", async () => {
+            const client = new TestClient("games");
 
-            sock.onmessage = function (ev: MessageEvent) {
-                const result = JSON.parse(ev.data);
-                if (!isFirstMessage) {
-                    expect(result.length).toEqual(1);
-                    expect(result[0].id).toBeDefined();
-
-                    sock.close();
-                    done();
-                }
-                isFirstMessage = false;
-            };
+            await client.getNextMessage();
+            client.send("NEW_GAME");
+            const message: any = await client.getNextMessage();
+            expect(message.length).toEqual(1);
+            expect(message[0].id).toBeDefined();
         });
 
-        it("Can subscribe to a created new game", (done) => {
-            var gamesSock = new SockJS(`http://localhost:${PORT}/games`);
+        it("Can subscribe to a created new game", async () => {
+            const gamesClient = new TestClient("games");
+            const message: any = await gamesClient.getNextMessage();
+            const gameIdToJoin = message[0].id;
 
-            gamesSock.onmessage = function (ev: MessageEvent) {
-                const result = JSON.parse(ev.data);
-                const gameIdToJoin = result[0].id;
+            const gameClient = new TestClient("game");
+            await gameClient.connected();
+            gameClient.send({ kind: "SUBSCRIBE", id: gameIdToJoin });
 
-                var gameSock = new SockJS(`http://localhost:${PORT}/game`);
-                gameSock.onopen = function () {
-                    gameSock.send(
-                        JSON.stringify({ kind: "SUBSCRIBE", id: gameIdToJoin })
-                    );
-                };
-
-                gameSock.onmessage = function (ev: MessageEvent) {
-                    const message = JSON.parse(ev.data);
-                    expect(message.id).toEqual(gameIdToJoin);
-                    expect(message.status).toEqual(GameStatus.CREATED);
-
-                    gamesSock.close();
-                    done();
-                };
-            };
+            const result: any = await gameClient.getNextMessage();
+            expect(result.id).toEqual(gameIdToJoin);
+            expect(result.status).toEqual(GameStatus.CREATED);
         });
     });
 });
@@ -122,3 +78,40 @@ const setupServer = (port: number): Promise<ChildProcess> => {
         });
     });
 };
+
+class TestClient {
+    public sock: WebSocket;
+    public messageQueue: string[] = [];
+    constructor(prefix: string) {
+        this.sock = new SockJS(`http://localhost:${PORT}/${prefix}`);
+        this.sock.onmessage = this.onmessage;
+    }
+
+    connected() {
+        return new Promise((resolve) => {
+            this.sock.onopen = resolve;
+        });
+    }
+
+    send(data: string | object) {
+        this.sock.send(JSON.stringify(data));
+    }
+
+    getNextMessage() {
+        if (this.messageQueue.length > 0) {
+            return new Promise((resolve) => resolve(this.messageQueue.shift()));
+        } else {
+            return new Promise((resolve) => {
+                this.sock.onmessage = (ev) => {
+                    resolve(JSON.parse(ev.data));
+
+                    this.sock.onmessage = this.onmessage;
+                };
+            });
+        }
+    }
+
+    private onmessage = (ev: MessageEvent) => {
+        this.messageQueue.push(ev.data);
+    };
+}

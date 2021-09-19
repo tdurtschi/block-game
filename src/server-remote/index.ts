@@ -7,35 +7,40 @@ class SockJSGameServer {
     private games: Map<number, Game> = new Map<number, Game>();
 
     listen(port: number) {
+        const server = http.createServer();
+
         const games = sockjs.createServer({ prefix: "/games" });
-        games.on("connection", (conn) => {
-            conn.write(JSON.stringify(this.getGames()));
-            conn.on("data", (message: string) => {
-                this.newGame();
-                const response = JSON.stringify(this.getGames());
-                conn.write(response);
-            });
-            conn.on("close", function () {});
-        });
+        games.on("connection", this.handleNewGamesSubscriber.bind(this));
+        games.installHandlers(server);
 
         const game = sockjs.createServer({ prefix: "/game" });
-        game.on("connection", (conn) => {
-            conn.on("data", (data: string) => {
-                const message = JSON.parse(data);
-                if (this.games.has(message.id)) {
-                    conn.write(
-                        JSON.stringify(this.games.get(message.id)?.getState())
-                    );
-                }
-            });
-            conn.on("close", function () {});
-        });
-
-        const server = http.createServer();
-        games.installHandlers(server);
+        game.on("connection", this.handleNewGameSubscriber.bind(this));
         game.installHandlers(server);
+
         log(`Server listening on port ${port}...`);
         server.listen(port);
+    }
+
+    handleNewGamesSubscriber(conn: sockjs.Connection) {
+        conn.write(JSON.stringify(this.getGames()));
+        conn.on("data", (message: string) => {
+            this.newGame();
+            const response = JSON.stringify(this.getGames());
+            conn.write(response);
+        });
+        conn.on("close", function () {});
+    }
+
+    handleNewGameSubscriber(conn: sockjs.Connection) {
+        conn.on("data", (data: string) => {
+            const message = JSON.parse(data);
+            if (this.games.has(message.id)) {
+                conn.write(
+                    JSON.stringify(this.games.get(message.id)?.getState())
+                );
+            }
+        });
+        conn.on("close", function () {});
     }
 
     newGame() {

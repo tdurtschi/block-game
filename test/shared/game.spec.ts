@@ -6,11 +6,6 @@ import GamePiece from "../../src/shared/types/GamePiece";
 import { fixture_playerUsesAllPiecesToEndGame } from "../testGameFixture";
 
 describe("Game", () => {
-    xit("Has 4 players", () => {
-        const game = new Game(0);
-        expect(game.players.length).toBe(4);
-    });
-
     describe("Initial Gameplay", () => {
         let game: Game;
         beforeEach(() => {
@@ -35,11 +30,11 @@ describe("Game", () => {
             });
 
             it("Can't register more than 4 players", () => {
-                ["p1", "p2", "p3", "p4"].forEach(p => game.registerPlayer(p));
+                ["p1", "p2", "p3", "p4"].forEach((p) => game.registerPlayer(p));
 
                 expectError(() => {
                     game.registerPlayer("p5");
-                })
+                });
             });
 
             it("Keeps track of registered players", () => {
@@ -49,10 +44,10 @@ describe("Game", () => {
 
             it("Returns the registered player's ID", () => {
                 expect(game.registerPlayer("Steve")).toEqual(1);
-            })
+            });
 
             it("Can start game after registering 4 players", () => {
-                ["p1", "p2", "p3", "p4"].forEach(p => game.registerPlayer(p));
+                ["p1", "p2", "p3", "p4"].forEach((p) => game.registerPlayer(p));
                 game.start();
 
                 expect(game.status).toBe(GameStatus.STARTED);
@@ -61,33 +56,33 @@ describe("Game", () => {
 
         describe("After starting the game", () => {
             beforeEach(() => {
-                ["p1", "p2", "p3", "p4"].forEach(p => game.registerPlayer(p));
+                ["p1", "p2", "p3", "p4"].forEach((p) => game.registerPlayer(p));
                 game.start();
             });
 
             it("Game is started", () => {
                 expect(game.status).toBe(GameStatus.STARTED);
-            })
+            });
 
             it("Player 1 can make a move", () => {
                 game.action(gameMove(1, 0, { x: 0, y: 0 }));
             });
-    
+
             it("Player 2 cannot move", () => {
                 expectError(() => {
                     game.action(gameMove(2, 0, { x: 0, y: 0 }));
                 });
             });
-        })
+        });
     });
 
     describe("Gameplay", () => {
         let game: Game;
         beforeEach(() => {
             game = new Game(0);
-            ["p1", "p2", "p3", "p4"].forEach(p => game.registerPlayer(p));
+            ["p1", "p2", "p3", "p4"].forEach((p) => game.registerPlayer(p));
             game.start();
-        })
+        });
 
         it("Play ends when all players have passed", () => {
             game.action({
@@ -144,7 +139,6 @@ describe("Game", () => {
                 )
             ).toBeFalsy();
         });
-
 
         describe("Move validation logic", () => {
             it("Two players can't play in the same spot", () => {
@@ -227,7 +221,7 @@ describe("Game", () => {
                 });
             });
         });
-        
+
         it("Regression Test: Player 2 can move after making an invalid attempt", () => {
             game.action(gameMove(1, 0, { x: 0, y: 0 }));
 
