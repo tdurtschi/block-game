@@ -34,10 +34,22 @@ class SockJSGameServer {
     handleNewGameSubscriber(conn: sockjs.Connection) {
         conn.on("data", (data: string) => {
             const message = JSON.parse(data);
-            if (this.games.has(message.id)) {
+            console.log("got message", message);
+            // Client Registers to a game
+            if (message.kind === "SUBSCRIBE") {
                 conn.write(
                     JSON.stringify(this.games.get(message.id)?.getState())
                 );
+            }
+
+            // Client Registers a player
+            else if (message.kind === "REGISTER") {
+                console.log("registering", message.id);
+                const game = this.games.get(message.id);
+                if (game) {
+                    game.registerPlayer(message.playerName);
+                    conn.write(JSON.stringify(game.getState()));
+                }
             }
         });
         conn.on("close", function () {});
