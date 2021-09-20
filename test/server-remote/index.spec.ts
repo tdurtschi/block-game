@@ -19,7 +19,6 @@ describe("SockJS Server", () => {
 
         server.on("exit", done);
     });
-
     describe("Viewing and creating games", () => {
         it("Successfully connects to server", async () => {
             const client = new TestClient("games");
@@ -127,8 +126,10 @@ describe("SockJS Server", () => {
         it("Sends game list updates to multiple clients", async () => {
             const gamesClient1 = new TestClient("games");
             const gamesClient2 = new TestClient("games");
-            await gamesClient1.connected();
-            await gamesClient2.connected();
+            await Promise.all([
+                gamesClient1.connected(),
+                gamesClient2.connected()
+            ]);
 
             gamesClient1.send("NEW_GAME");
             await gamesClient2.getNextMessage();
@@ -144,8 +145,10 @@ describe("SockJS Server", () => {
 
             const gameClient1 = new TestClient("game");
             const gameClient2 = new TestClient("game");
-            await gameClient1.connected();
-            await gameClient2.connected();
+            await Promise.all([
+                gameClient1.connected(),
+                gameClient2.connected()
+            ]);
 
             gameClient1.send({ kind: "SUBSCRIBE", id: gameId });
             await gameClient1.getNextMessage();
