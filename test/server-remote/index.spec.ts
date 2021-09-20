@@ -4,6 +4,7 @@ import GameStatus from "../../src/shared/types/GameStatus";
 import Action, { GamePlayAction } from "../../src/shared/types/Actions";
 import PlayerState from "../../src/shared/types/PlayerState";
 import GameState from "../../src/shared/types/GameState";
+import { GameMessage } from "../../src/server-remote/game-message";
 
 const PORT = 9999;
 
@@ -121,27 +122,46 @@ describe("SockJS Server", () => {
             expect(result.currentPlayerId).toEqual(2);
         });
     });
-});
 
-type GameMessage =
-    | {
-          kind: "SUBSCRIBE";
-          id: number;
-      }
-    | {
-          kind: "REGISTER";
-          id: number;
-          playerName: string;
-      }
-    | {
-          kind: "START";
-          id: number;
-      }
-    | {
-          kind: "ACTION";
-          id: number;
-          action: Action;
-      };
+    describe("Multiple clients", () => {
+        it("Sends game list updates to multiple clients", async () => {
+            const gamesClient1 = new TestClient("games");
+            const gamesClient2 = new TestClient("games");
+            await gamesClient1.connected();
+            await gamesClient2.connected();
+
+            gamesClient1.send("NEW_GAME");
+            await gamesClient2.getNextMessage();
+        });
+
+        it("Sends game updates to multiple clients", async () => {
+            const client = new TestClient("games");
+
+            await client.getNextMessage();
+            client.send("NEW_GAME");
+            const message = await client.getNextMessage();
+            const gameId = message[message.length - 1].id;
+
+            const gameClient1 = new TestClient("game");
+            const gameClient2 = new TestClient("game");
+            await gameClient1.connected();
+            await gameClient2.connected();
+
+            gameClient1.send({ kind: "SUBSCRIBE", id: gameId });
+            await gameClient1.getNextMessage();
+            gameClient2.send({ kind: "SUBSCRIBE", id: gameId });
+            await gameClient2.getNextMessage();
+
+            gameClient1.send({
+                kind: "REGISTER",
+                id: gameId,
+                playerName: "Jill Biden"
+            });
+
+            await gameClient2.getNextMessage();
+        });
+    });
+});
 
 const setupServer = (port: number): Promise<ChildProcess> => {
     const env = {
@@ -200,6 +220,6 @@ class TestClient<TMessageType = any> {
     }
 
     private onmessage = (ev: MessageEvent) => {
-        this.messageQueue.push(ev.data);
+        this.messageQueue.push(JSON.parse(ev.data));
     };
 }

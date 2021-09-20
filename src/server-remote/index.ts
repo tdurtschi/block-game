@@ -4,7 +4,9 @@ import Game from "../shared/Game";
 import { generateId } from "../shared/idGenerator";
 
 class SockJSGameServer {
-    private games: Map<number, Game> = new Map<number, Game>();
+    private games: Map<number, Game> = new Map();
+    private gameSubscribers: Map<number, sockjs.Connection[]> = new Map();
+    private gameListSubscribers: sockjs.Connection[] = [];
 
     listen(port: number) {
         const server = http.createServer();
@@ -22,11 +24,12 @@ class SockJSGameServer {
     }
 
     handleNewGamesSubscriber(conn: sockjs.Connection) {
+        this.gameListSubscribers.push(conn);
         conn.write(JSON.stringify(this.getGames()));
         conn.on("data", (message: string) => {
             this.newGame();
             const response = JSON.stringify(this.getGames());
-            conn.write(response);
+            this.gameListSubscribers.forEach((conn) => conn.write(response));
         });
         conn.on("close", function () {});
     }
@@ -34,39 +37,25 @@ class SockJSGameServer {
     handleNewGameSubscriber(conn: sockjs.Connection) {
         conn.on("data", (data: string) => {
             const message = JSON.parse(data);
-            console.log("got message", message);
-            // Client Registers to a game
-            if (message.kind === "SUBSCRIBE") {
-                conn.write(
-                    JSON.stringify(this.games.get(message.id)?.getState())
-                );
-            }
+            console.log("Got message: ", message);
 
-            // Client Registers a player
-            else if (message.kind === "REGISTER") {
-                const game = this.games.get(message.id);
-                if (game) {
+            const game = this.games.get(message.id);
+            if (game) {
+                if (message.kind === "SUBSCRIBE") {
+                    const subscribers = this.gameSubscribers.get(message.id)!;
+                    subscribers.push(conn);
+                } else if (message.kind === "REGISTER") {
                     game.registerPlayer(message.playerName);
-                    conn.write(JSON.stringify(game.getState()));
-                }
-            }
-
-            // Client Registers a player
-            else if (message.kind === "START") {
-                const game = this.games.get(message.id);
-                if (game) {
+                } else if (message.kind === "START") {
                     game.start();
-                    conn.write(JSON.stringify(game.getState()));
-                }
-            }
-
-            // Client does a move
-            else if (message.kind === "ACTION") {
-                const game = this.games.get(message.id);
-                if (game) {
+                } else if (message.kind === "ACTION") {
                     game.action(message.action);
-                    conn.write(JSON.stringify(game.getState()));
                 }
+
+                const subscribers = this.gameSubscribers.get(message.id)!;
+                subscribers.forEach((conn) =>
+                    conn.write(JSON.stringify(game.getState()))
+                );
             }
         });
         conn.on("close", function () {});
@@ -75,6 +64,7 @@ class SockJSGameServer {
     newGame() {
         const game = new Game(generateId());
         this.games.set(game.id, game);
+        this.gameSubscribers.set(game.id, []);
         return game.getState();
     }
 
