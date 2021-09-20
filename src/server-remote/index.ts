@@ -44,10 +44,27 @@ class SockJSGameServer {
 
             // Client Registers a player
             else if (message.kind === "REGISTER") {
-                console.log("registering", message.id);
                 const game = this.games.get(message.id);
                 if (game) {
                     game.registerPlayer(message.playerName);
+                    conn.write(JSON.stringify(game.getState()));
+                }
+            }
+
+            // Client Registers a player
+            else if (message.kind === "START") {
+                const game = this.games.get(message.id);
+                if (game) {
+                    game.start();
+                    conn.write(JSON.stringify(game.getState()));
+                }
+            }
+
+            // Client does a move
+            else if (message.kind === "ACTION") {
+                const game = this.games.get(message.id);
+                if (game) {
+                    game.action(message.action);
                     conn.write(JSON.stringify(game.getState()));
                 }
             }

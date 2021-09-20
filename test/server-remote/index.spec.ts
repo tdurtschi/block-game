@@ -1,24 +1,25 @@
 import * as SockJS from "sockjs-client";
 import { fork, ChildProcess } from "child_process";
 import GameStatus from "../../src/shared/types/GameStatus";
-import { GamePlayAction } from "../../src/shared/types/Actions";
+import Action, { GamePlayAction } from "../../src/shared/types/Actions";
 import PlayerState from "../../src/shared/types/PlayerState";
+import GameState from "../../src/shared/types/GameState";
 
 const PORT = 9999;
 
-describe("Remote Server", () => {
-    describe("A SockJS client", () => {
-        let server: ChildProcess;
-        beforeAll(async () => {
-            server = await setupServer(9999);
-        });
+describe("SockJS Server", () => {
+    let server: ChildProcess;
+    beforeAll(async () => {
+        server = await setupServer(9999);
+    });
 
-        afterAll(async (done) => {
-            server.kill();
+    afterAll(async (done) => {
+        server.kill();
 
-            server.on("exit", done);
-        });
+        server.on("exit", done);
+    });
 
+    describe("Viewing and creating games", () => {
         it("Successfully connects to server", async () => {
             const client = new TestClient("games");
             await client.connected();
@@ -40,39 +41,37 @@ describe("Remote Server", () => {
             expect(message.length).toEqual(1);
             expect(message[0].id).toBeDefined();
         });
+    });
 
-        it("Can subscribe to a created new game", async () => {
+    describe("Setting up and playing a single game", () => {
+        let gameClient: TestClient<GameMessage>;
+        let gameId: number;
+        beforeAll(async () => {
             const gamesClient = new TestClient("games");
             const message = await gamesClient.getNextMessage();
-            const gameIdToJoin = message[0].id;
+            gameId = message[0].id;
 
-            const gameClient = new TestClient<GameMessage>("game");
+            gameClient = new TestClient("game");
             await gameClient.connected();
-            gameClient.send({ kind: "SUBSCRIBE", id: gameIdToJoin });
+        });
+
+        it("Can subscribe to a created game", async () => {
+            gameClient.send({ kind: "SUBSCRIBE", id: gameId });
 
             const result = await gameClient.getNextMessage();
-            expect(result.id).toEqual(gameIdToJoin);
+
+            expect(result.id).toEqual(gameId);
             expect(result.status).toEqual(GameStatus.CREATED);
         });
 
         it("Can register a player to a game", async () => {
-            const gamesClient = new TestClient("games");
-            const message = await gamesClient.getNextMessage();
-            const gameIdToJoin = message[0].id;
-
-            const gameClient = new TestClient<GameMessage>("game");
-            await gameClient.connected();
-            gameClient.send({ kind: "SUBSCRIBE", id: gameIdToJoin });
-
-            await gameClient.getNextMessage();
             gameClient.send({
                 kind: "REGISTER",
-                id: gameIdToJoin,
+                id: gameId,
                 playerName: "Joe Biden"
             });
 
             const result = await gameClient.getNextMessage();
-            console.log(result.players);
             expect(
                 result.players.find(
                     (player: PlayerState) => player.name === "Joe Biden"
@@ -80,17 +79,46 @@ describe("Remote Server", () => {
             ).toBeDefined();
         });
 
+        it("Can start a game with 4 players", async () => {
+            gameClient.send({
+                kind: "REGISTER",
+                id: gameId,
+                playerName: "Jill Biden"
+            });
+            await gameClient.getNextMessage();
+            gameClient.send({
+                kind: "REGISTER",
+                id: gameId,
+                playerName: "Bo Biden"
+            });
+            await gameClient.getNextMessage();
+            gameClient.send({
+                kind: "REGISTER",
+                id: gameId,
+                playerName: "Mo Biden"
+            });
+            await gameClient.getNextMessage();
+            gameClient.send({
+                kind: "START",
+                id: gameId
+            });
+
+            const result: GameState = await gameClient.getNextMessage();
+            expect(result.status).toEqual(GameStatus.STARTED);
+        });
+
         it("Can send a gameplay action to a game and get the resulting state", async () => {
-            // const gamesClient = new TestClient("games");
-            // const message = await gamesClient.getNextMessage();
-            // const gameIdToJoin = message[0].id;
-            // const gameClient = new TestClient("game");
-            // await gameClient.connected();
-            // gameClient.send({ kind: "SUBSCRIBE", id: gameIdToJoin });
-            // await gameClient.getNextMessage();
-            // gameClient.send({ kind: "ACTION", action: {
-            //     kind: "GamePlay",
-            // }})
+            gameClient.send({
+                kind: "ACTION",
+                id: gameId,
+                action: {
+                    kind: "Pass",
+                    playerId: 1
+                }
+            });
+
+            const result: GameState = await gameClient.getNextMessage();
+            expect(result.currentPlayerId).toEqual(2);
         });
     });
 });
@@ -106,8 +134,13 @@ type GameMessage =
           playerName: string;
       }
     | {
+          kind: "START";
+          id: number;
+      }
+    | {
           kind: "ACTION";
-          action: GamePlayAction;
+          id: number;
+          action: Action;
       };
 
 const setupServer = (port: number): Promise<ChildProcess> => {
