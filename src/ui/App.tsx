@@ -19,7 +19,7 @@ function BlockGame({ gameClient, errorDisplayTime }: BlockGameProps) {
     const [gameState, setGameState] = useState<GameState>();
     const [error, setError] = useState<string>();
 
-    const createNewGame = () => {
+    const createNewLocalGame = () => {
         const initialGameState = gameClient.newGame();
         setGameState(initialGameState);
         gameClient.subscribe((gameState) => setGameState(gameState));
@@ -72,10 +72,10 @@ function BlockGame({ gameClient, errorDisplayTime }: BlockGameProps) {
                     <RegisterPlayers onPlayersRegistered={onPlayersRegistered} />
                 )}
                 {gameState && gameState.status === GameStatus.OVER && (
-                    <GameOver gameState={gameState} startGame={createNewGame} />
+                    <GameOver gameState={gameState} startGame={createNewLocalGame} />
                 )}
                 {!gameState && (
-                    <NewGame startGame={createNewGame} />
+                    <NewGame startLocalGame={createNewLocalGame} />
                 )}
             </div>
         </>

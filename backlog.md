@@ -2,7 +2,6 @@
 
 # Product Backlog
 
--   AI Plays a non-trivial game
 -   Client validation: shouldn't be able to register player before creating new game.
 -   Checkmark -> Radio button for AI / human players
 -   Show if player has passed near score
@@ -52,10 +51,5 @@
 
 ## Server backlog (Draft 3)
 
--   User can enter custom player names before starting local game
--   Tech chore: Register each player as 4 events to game. New Game status for registration state.
--   AI that can complete a simple game by passing.
-    -   Subtasks: Before starting local game, select Human/AI for each player.
-    -   Notes: Is the AI just another client, managed by the UI?
 -   User can select Online or Local mode (Same behavior).
 -   4 Different browsers can connect to one Online game.
