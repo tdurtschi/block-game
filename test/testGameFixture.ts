@@ -44,7 +44,7 @@ export const testGameFixture: Action[] = [
     {
         kind: "GamePlay",
         playerId: 2,
-        piece: 5,
+        piece: 5, //
         location: { x: 15, y: 15 },
         rotate: 2,
         flip: false

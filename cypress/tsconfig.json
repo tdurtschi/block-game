@@ -1,8 +1,7 @@
 {
     "compilerOptions": {
-        "target": "es5",
-        "lib": ["es5", "dom"],
+        "target": "es2015",
         "types": ["cypress"]
     },
-    "include": ["**/*.ts"]
+    "include": ["**/*.ts", "../test/testGameFixture.ts"]
 }

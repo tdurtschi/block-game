@@ -1,3 +1,9 @@
+import {
+    clickPlayersPieceAtPosition,
+    pass,
+    rotateCounterclockwise
+} from "../util";
+
 describe("Block Game", () => {
     beforeEach(() => {
         cy.visit("/");
@@ -26,7 +32,7 @@ describe("Block Game", () => {
             cy.contains("Schwifty's Turn");
             pass();
         });
-    })
+    });
 
     describe("Gameplay", () => {
         beforeEach(() => {
@@ -91,7 +97,7 @@ describe("Block Game", () => {
                     "[data-game-board] [data-coord-x='0'][data-coord-y='0']"
                 ).click();
                 cy.get("[data-confirm-action]").click();
-            })
+            });
         });
 
         describe("Playing Pieces", () => {
@@ -126,7 +132,7 @@ describe("Block Game", () => {
 
             it("Can rotate a piece with the mouse wheel", () => {
                 clickPlayersFirstPiece();
-                cy.get("[data-game-board]").trigger("wheel", { deltaY: -4 });
+                rotateCounterclockwise();
                 cy.get(
                     "[data-game-board] [data-coord-x='16'][data-coord-y='0']"
                 ).click();
@@ -256,11 +262,11 @@ describe("Block Game", () => {
             cy.contains("Player 1's Turn");
             pass();
 
-            // If P1 passes and the other 3 players are automatic, 
+            // If P1 passes and the other 3 players are automatic,
             // the rest of the game will play out:
             cy.get("[data-game-over]");
-        })
-    })
+        });
+    });
 });
 
 function verifyBoardArea(xCoord, yCoord, expectedContents) {
@@ -286,12 +292,7 @@ function verifyBoardArea(xCoord, yCoord, expectedContents) {
 }
 
 function clickPlayersFirstPiece() {
-    cy.get("[data-game-piece]").eq(0).get(".row > div").eq(0).click();
-}
-
-function pass() {
-    cy.get("[data-player-pass-button]").click();
-    cy.get("[data-confirm-action]").click();
+    clickPlayersPieceAtPosition(0);
 }
 
 function startNewGame() {
