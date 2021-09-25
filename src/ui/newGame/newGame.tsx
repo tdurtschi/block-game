@@ -9,7 +9,7 @@ export function NewGame({ startLocalGame: startGame }: { startLocalGame: () => a
                 <h2>Click here to start a new game:</h2>
                 <div style={{ width: "16px" }} />
                 <NewGameButton startGame={startGame} />
-                <button className="btn-primary" data-new-online-game onClick={startGame}>
+                <button className="btn-primary" data-online-game onClick={startGame}>
                     New Online Game
                 </button>
             </div>

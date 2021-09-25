@@ -16,10 +16,12 @@ export interface BlockGameProps {
 }
 
 function BlockGame({ gameClient, errorDisplayTime }: BlockGameProps) {
+    const [gameType, setGameType] = useState<"LOCAL" | "ONLINE" | undefined>();
     const [gameState, setGameState] = useState<GameState>();
     const [error, setError] = useState<string>();
 
     const createNewLocalGame = () => {
+        setGameType("LOCAL");
         const initialGameState = gameClient.newGame();
         setGameState(initialGameState);
         gameClient.subscribe((gameState) => setGameState(gameState));
@@ -62,19 +64,24 @@ function BlockGame({ gameClient, errorDisplayTime }: BlockGameProps) {
                     return false;
                 }}
             >
-                {gameState && gameState.status === GameStatus.STARTED && (
-                    <GameContainer
-                        gameState={gameState}
-                        action={submitAction}
-                    />
-                )}
-                {gameState && gameState.status === GameStatus.CREATED && (
-                    <RegisterPlayers onPlayersRegistered={onPlayersRegistered} />
-                )}
-                {gameState && gameState.status === GameStatus.OVER && (
-                    <GameOver gameState={gameState} startGame={createNewLocalGame} />
-                )}
-                {!gameState && (
+                {gameType === "LOCAL" && gameState && <>
+                    {gameState.status === GameStatus.STARTED && (
+                        <GameContainer
+                            gameState={gameState}
+                            action={submitAction}
+                        />
+                    )}
+                    {gameState.status === GameStatus.CREATED && (
+                        <RegisterPlayers onPlayersRegistered={onPlayersRegistered} />
+                    )}
+                    {gameState.status === GameStatus.OVER && (
+                        <GameOver gameState={gameState} startGame={createNewLocalGame} />
+                    )}
+                </>}
+                {gameType === "ONLINE" && <>
+
+                </>}
+                {!gameType && (
                     <NewGame startLocalGame={createNewLocalGame} />
                 )}
             </div>
