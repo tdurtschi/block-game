@@ -21,10 +21,10 @@ function compileSass() {
 }
 
 function initHotReload() {
-    browserSync.init({ server: "./dist" });
+    browserSync.init({ server: "./dist", ghostMode: false });
 
-    fs.watch(PROJECT_ROOT, {recursive: true}, (_, filename) => {
-        if(filename.indexOf(".scss") > 0){
+    fs.watch(PROJECT_ROOT, { recursive: true }, (_, filename) => {
+        if (filename.indexOf(".scss") > 0) {
             try {
                 compileSass();
                 browserSync.reload("*.css");

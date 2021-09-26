@@ -51,7 +51,6 @@
 
 ## Server backlog (Draft 3)
 
--   User can select Online or Local mode (Same behavior).
--   4 Different clients can connect to one Online game (always joins the same game).
--   What happens when the game is over? Delete it from the list, close connections etc.
 -   In online mode, can select an existing game to join.
+-   What happens when the game is over? Delete it from the list, close connections etc.
+-   Server handles Game exceptions (eg register too many players)

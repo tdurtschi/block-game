@@ -85,6 +85,6 @@ const log = (str: any) => {
     console.log("");
 };
 
-const port = parseInt(process.env.PORT || "9999");
+const port = parseInt(process.env.SERVER_PORT || "9999");
 log("Running server");
 new SockJSGameServer().listen(port);

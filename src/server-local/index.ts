@@ -51,7 +51,7 @@ class GameServer {
                 game.action(payload);
                 this.sendUpdate(game.getState());
                 return {};
-            } catch (error) {
+            } catch (error: any) {
                 console.error(error);
                 console.log(payload);
                 return {

@@ -8,11 +8,11 @@
     "scripts": {
         "build": "node build.js",
         "deploy": "./scripts/deploy.sh",
-        "dev": "nf start",
+        "dev": "SERVER_PORT=9999 nf start",
+        "dev-server": "ts-node src/server-remote/index.ts",
         "e2e": "CYPRESS_BASE_URL='http://localhost:3000' cypress open",
         "e2e:ci": "CYPRESS_BASE_URL='http://localhost:5000' start-server-and-test start http://localhost:5000 'cypress run'",
         "prettier": "prettier --write \"./**/*.(js|ts|tsx|scss)\"",
-        "dev-server": "ts-node src/server-remote/index.ts",
         "start": "npm run build && serve dist/",
         "test": "npm-run-all build test-unit e2e:ci",
         "test-unit": "DEBUG_PRINT_LIMIT=200 jest",

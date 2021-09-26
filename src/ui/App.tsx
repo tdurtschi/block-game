@@ -2,6 +2,7 @@ import { useState } from "react";
 import React = require("react");
 import { IGameClient } from "../game-client";
 import { PlayerConfig } from "../game-client/playerConfig";
+import { IOnlineGamesClient } from "../server-remote/gamesClient";
 import Action from "../shared/types/Actions";
 import GameState from "../shared/types/GameState";
 import GameStatus from "../shared/types/GameStatus";
@@ -9,13 +10,15 @@ import GameContainer from "./game/gameContainer";
 import { GameOver } from "./gameOver";
 import { NewGame } from "./newGame/newGame";
 import { RegisterPlayers } from "./newGame/registerPlayers";
+import OnlineGame from "./onlineGame";
 
 export interface BlockGameProps {
     gameClient: IGameClient;
+    onlineGameClient: IOnlineGamesClient,
     errorDisplayTime?: number;
 }
 
-function BlockGame({ gameClient, errorDisplayTime }: BlockGameProps) {
+function BlockGame({ gameClient, onlineGameClient, errorDisplayTime }: BlockGameProps) {
     const [gameType, setGameType] = useState<"LOCAL" | "ONLINE" | undefined>();
     const [gameState, setGameState] = useState<GameState>();
     const [error, setError] = useState<string>();
@@ -26,6 +29,10 @@ function BlockGame({ gameClient, errorDisplayTime }: BlockGameProps) {
         setGameState(initialGameState);
         gameClient.subscribe((gameState) => setGameState(gameState));
     };
+
+    const onlineGameSelected = () => {
+        setGameType("ONLINE");
+    }
 
     const onPlayersRegistered = (playerConfig: PlayerConfig[]) => {
         gameClient.registerPlayer(playerConfig[0]);
@@ -79,10 +86,10 @@ function BlockGame({ gameClient, errorDisplayTime }: BlockGameProps) {
                     )}
                 </>}
                 {gameType === "ONLINE" && <>
-
+                    <OnlineGame gamesClient={onlineGameClient} />
                 </>}
                 {!gameType && (
-                    <NewGame startLocalGame={createNewLocalGame} />
+                    <NewGame startLocalGame={createNewLocalGame} startOnlineGame={onlineGameSelected} />
                 )}
             </div>
         </>

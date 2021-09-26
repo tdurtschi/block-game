@@ -1,17 +1,16 @@
 import * as SockJS from "sockjs-client";
 import { fork, ChildProcess } from "child_process";
 import GameStatus from "../../src/shared/types/GameStatus";
-import Action, { GamePlayAction } from "../../src/shared/types/Actions";
 import PlayerState from "../../src/shared/types/PlayerState";
 import GameState from "../../src/shared/types/GameState";
 import { GameMessage } from "../../src/server-remote/game-message";
 
-const PORT = 9999;
+const SERVER_PORT = 9999;
 
 describe("SockJS Server", () => {
     let server: ChildProcess;
     beforeAll(async () => {
-        server = await setupServer(9999);
+        server = await setupServer(SERVER_PORT);
     });
 
     afterAll(async (done) => {
@@ -168,7 +167,7 @@ describe("SockJS Server", () => {
 
 const setupServer = (port: number): Promise<ChildProcess> => {
     const env = {
-        PORT: port.toString(),
+        SERVER_PORT: port.toString(),
         FILENAME: "../../src/server-remote/index.ts"
     };
     return new Promise((resolve, reject) => {
@@ -194,7 +193,7 @@ class TestClient<TMessageType = any> {
     public sock: WebSocket;
     public messageQueue: string[] = [];
     constructor(prefix: string) {
-        this.sock = new SockJS(`http://localhost:${PORT}/${prefix}`);
+        this.sock = new SockJS(`http://localhost:${SERVER_PORT}/${prefix}`);
         this.sock.onmessage = this.onmessage;
     }
 
