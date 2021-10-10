@@ -14,18 +14,19 @@ Before running the app, install dependencies:
 npm install
 ```
 
-Dev mode spins up the app and opens cypress in watch mode.
+Dev mode spins up the app (frontend & server) and opens cypress in watch mode.
 
 ```bash
 npm run dev
 ```
 
-To start the app in watch mode without cypress, use `npm run watch` instead of `npm run dev`.
+To start the frontend in watch mode without cypress or the server, use `npm run watch` instead of `npm run dev`.
 
 ## Build
 
+Build the frontend:
 ```bash
-npm run build
+npm run build-frontend
 ```
 
 Static site output will be in `dist/` directory.

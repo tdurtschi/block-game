@@ -5,7 +5,7 @@ PROJECT_ROOT="$( cd "$(dirname "${BASH_SOURCE[0]}")" ; cd .. ; pwd -P )"
 
 main() {
     cd $PROJECT_ROOT
-    yarn build
+    yarn build-frontend
     yarn test
 }
 
