@@ -24,7 +24,6 @@
 
 ## Server backlog (Draft)
 
--   User can select "Local" game or "Online"
 -   Feature flag for "Online" mode
 -   If 4 players select "Online" mode, the game starts. No player access controls.
 -   Online players can't do actions on another player's turn.
@@ -37,8 +36,6 @@
 
 ## Server backlog (Draft 2)
 
--   User can enter custom player names before starting local game
--   User can select "Local" game or "Online"
 -   Feature flag for "Online" mode
 -   User can enter one player's info before starting online game
 -   Once 4 players enter player info and click start, game starts.

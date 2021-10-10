@@ -1,9 +1,9 @@
-import * as SockJS from "sockjs-client";
 import { fork, ChildProcess } from "child_process";
 import GameStatus from "../../src/shared/types/GameStatus";
 import PlayerState from "../../src/shared/types/PlayerState";
 import GameState from "../../src/shared/types/GameState";
 import { GameMessage } from "../../src/server-remote/game-message";
+import { TestClient } from "./testClient";
 
 const SERVER_PORT = 9999;
 
@@ -20,19 +20,19 @@ describe("SockJS Server", () => {
     });
     describe("Viewing and creating games", () => {
         it("Successfully connects to server", async () => {
-            const client = new TestClient("games");
+            const client = new TestClient("games", SERVER_PORT);
             await client.connected();
         });
 
         it("Can retrieve a list of games", async () => {
-            const client = new TestClient("games");
+            const client = new TestClient("games", SERVER_PORT);
 
             const message = await client.getNextMessage();
             expect(message.length).toBeDefined();
         });
 
         it("Can create a new game", async () => {
-            const client = new TestClient("games");
+            const client = new TestClient("games", SERVER_PORT);
 
             await client.getNextMessage();
             client.send("NEW_GAME");
@@ -46,11 +46,11 @@ describe("SockJS Server", () => {
         let gameClient: TestClient<GameMessage>;
         let gameId: number;
         beforeAll(async () => {
-            const gamesClient = new TestClient("games");
+            const gamesClient = new TestClient("games", SERVER_PORT);
             const message = await gamesClient.getNextMessage();
             gameId = message[0].id;
 
-            gameClient = new TestClient("game");
+            gameClient = new TestClient("game", SERVER_PORT);
             await gameClient.connected();
         });
 
@@ -123,8 +123,8 @@ describe("SockJS Server", () => {
 
     describe("Multiple clients", () => {
         it("Sends game list updates to multiple clients", async () => {
-            const gamesClient1 = new TestClient("games");
-            const gamesClient2 = new TestClient("games");
+            const gamesClient1 = new TestClient("games", SERVER_PORT);
+            const gamesClient2 = new TestClient("games", SERVER_PORT);
             await Promise.all([
                 gamesClient1.connected(),
                 gamesClient2.connected()
@@ -135,15 +135,15 @@ describe("SockJS Server", () => {
         });
 
         it("Sends game updates to multiple clients", async () => {
-            const client = new TestClient("games");
+            const client = new TestClient("games", SERVER_PORT);
 
             await client.getNextMessage();
             client.send("NEW_GAME");
             const message = await client.getNextMessage();
             const gameId = message[message.length - 1].id;
 
-            const gameClient1 = new TestClient("game");
-            const gameClient2 = new TestClient("game");
+            const gameClient1 = new TestClient("game", SERVER_PORT);
+            const gameClient2 = new TestClient("game", SERVER_PORT);
             await Promise.all([
                 gameClient1.connected(),
                 gameClient2.connected()
@@ -188,40 +188,3 @@ const setupServer = (port: number): Promise<ChildProcess> => {
         });
     });
 };
-
-class TestClient<TMessageType = any> {
-    public sock: WebSocket;
-    public messageQueue: string[] = [];
-    constructor(prefix: string) {
-        this.sock = new SockJS(`http://localhost:${SERVER_PORT}/${prefix}`);
-        this.sock.onmessage = this.onmessage;
-    }
-
-    connected() {
-        return new Promise((resolve) => {
-            this.sock.onopen = resolve;
-        });
-    }
-
-    send(data: TMessageType) {
-        this.sock.send(JSON.stringify(data));
-    }
-
-    getNextMessage(): Promise<any> {
-        if (this.messageQueue.length > 0) {
-            return new Promise((resolve) => resolve(this.messageQueue.shift()));
-        } else {
-            return new Promise((resolve) => {
-                this.sock.onmessage = (ev) => {
-                    resolve(JSON.parse(ev.data));
-
-                    this.sock.onmessage = this.onmessage;
-                };
-            });
-        }
-    }
-
-    private onmessage = (ev: MessageEvent) => {
-        this.messageQueue.push(JSON.parse(ev.data));
-    };
-}
