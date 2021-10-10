@@ -3,6 +3,7 @@ import App from "../../src/ui/App";
 import { IGameClient } from "../../src/game-client";
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import GameStatus from "../../src/shared/types/GameStatus";
+import { IOnlineGamesClient } from "../../src/server-remote/gamesClient";
 
 describe("App", () => {
     describe("Performing a game action", () => {
@@ -29,7 +30,14 @@ describe("App", () => {
                 startGame: jest.fn()
             };
 
-            render(<App gameClient={gameClient} />);
+            const onlineGameClient: IOnlineGamesClient = {
+                connect: jest.fn(),
+                createGame: jest.fn(),
+                joinGame: jest.fn(),
+                startGame: jest.fn(),
+            }
+
+            render(<App gameClient={gameClient} onlineGameClient={onlineGameClient} />);
 
             fireEvent.click(screen.getByText("New Game"));
             pass();
@@ -63,7 +71,14 @@ describe("App", () => {
                 startGame: jest.fn()
             };
 
-            render(<App gameClient={gameClient} errorDisplayTime={5} />);
+            const onlineGameClient: IOnlineGamesClient = {
+                connect: jest.fn(),
+                createGame: jest.fn(),
+                joinGame: jest.fn(),
+                startGame: jest.fn(),
+            }
+
+            render(<App gameClient={gameClient} onlineGameClient={onlineGameClient} errorDisplayTime={5} />);
 
             fireEvent.click(screen.getByText("New Game"));
 

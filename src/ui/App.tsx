@@ -1,15 +1,10 @@
 import { useState } from "react";
 import React = require("react");
 import { IGameClient } from "../game-client";
-import { PlayerConfig } from "../game-client/playerConfig";
 import { IOnlineGamesClient } from "../server-remote/gamesClient";
-import Action from "../shared/types/Actions";
 import GameState from "../shared/types/GameState";
-import GameStatus from "../shared/types/GameStatus";
-import GameContainer from "./game/gameContainer";
-import { GameOver } from "./gameOver";
+import { LocalGame } from "./localGame";
 import { NewGame } from "./newGame/newGame";
-import { RegisterPlayers } from "./newGame/registerPlayers";
 import OnlineGame from "./onlineGame";
 
 export interface BlockGameProps {
@@ -20,36 +15,15 @@ export interface BlockGameProps {
 
 function BlockGame({ gameClient, onlineGameClient, errorDisplayTime }: BlockGameProps) {
     const [gameType, setGameType] = useState<"LOCAL" | "ONLINE" | undefined>();
-    const [gameState, setGameState] = useState<GameState>();
     const [error, setError] = useState<string>();
 
     const createNewLocalGame = () => {
         setGameType("LOCAL");
-        const initialGameState = gameClient.newGame();
-        setGameState(initialGameState);
-        gameClient.subscribe((gameState) => setGameState(gameState));
     };
 
     const onlineGameSelected = () => {
         setGameType("ONLINE");
     }
-
-    const onPlayersRegistered = (playerConfig: PlayerConfig[]) => {
-        gameClient.registerPlayer(playerConfig[0]);
-        gameClient.registerPlayer(playerConfig[1]);
-        gameClient.registerPlayer(playerConfig[2]);
-        gameClient.registerPlayer(playerConfig[3]);
-        gameClient.startGame();
-    }
-
-    const submitAction = (action: Action) => {
-        const result = gameClient.action(action);
-
-        if (result.errorMessage) {
-            setError(result.errorMessage);
-        }
-        return result;
-    };
 
     return (
         <>
@@ -71,20 +45,7 @@ function BlockGame({ gameClient, onlineGameClient, errorDisplayTime }: BlockGame
                     return false;
                 }}
             >
-                {gameType === "LOCAL" && gameState && <>
-                    {gameState.status === GameStatus.STARTED && (
-                        <GameContainer
-                            gameState={gameState}
-                            action={submitAction}
-                        />
-                    )}
-                    {gameState.status === GameStatus.CREATED && (
-                        <RegisterPlayers onPlayersRegistered={onPlayersRegistered} />
-                    )}
-                    {gameState.status === GameStatus.OVER && (
-                        <GameOver gameState={gameState} startGame={createNewLocalGame} />
-                    )}
-                </>}
+                {gameType === "LOCAL" && <LocalGame gameClient={gameClient} setError={setError} />}
                 {gameType === "ONLINE" && <>
                     <OnlineGame gamesClient={onlineGameClient} />
                 </>}
