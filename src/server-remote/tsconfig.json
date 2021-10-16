@@ -1,0 +1,7 @@
+{
+    "include": ["**/*.ts"],
+    "module": "amd",
+    "compilerOptions": {
+        "outDir": "dist/"
+    }
+}

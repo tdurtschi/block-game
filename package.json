@@ -6,6 +6,8 @@
     "author": "Teagan Durtschi <teagan@tdurtschi.com>",
     "license": "MIT",
     "scripts": {
+        "build": "npm-run-all build-backend build-frontend",
+        "build-backend": "tsc -p src/server-remote/tsconfig.json",
         "build-frontend": "node build.js",
         "deploy": "./scripts/deploy.sh",
         "dev": "SERVER_PORT=9999 nf start",
@@ -13,7 +15,9 @@
         "e2e": "CYPRESS_BASE_URL='http://localhost:3000' cypress open",
         "e2e:ci": "CYPRESS_BASE_URL='http://localhost:5000' start-server-and-test start http://localhost:5000 'cypress run'",
         "prettier": "prettier --write \"./**/*.(js|ts|tsx|scss)\"",
-        "start": "npm run build-frontend && serve dist/",
+        "start": "npm run build && npm-run-all -p start-frontend start-backend",
+        "start-backend": "node src/server-remote/dist/server-remote/index.js",
+        "start-frontend": "serve dist/",
         "test": "npm-run-all build-frontend test-unit e2e:ci",
         "test-unit": "DEBUG_PRINT_LIMIT=200 jest",
         "watch": "node build.js --watch"
