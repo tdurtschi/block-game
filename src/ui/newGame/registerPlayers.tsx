@@ -1,6 +1,6 @@
 import React = require("react");
 import { PlayerConfig } from "../../game-client/playerConfig";
-import { ConfirmButton } from "../confirmButton";
+import { ConfirmButton } from "../shared/confirmButton";
 
 export const RegisterPlayers = ({ onPlayersRegistered }: { onPlayersRegistered: (players: PlayerConfig[]) => any }) => {
     const [players, setPlayers] = React.useState<PlayerConfig[]>([

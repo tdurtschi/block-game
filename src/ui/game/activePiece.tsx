@@ -1,6 +1,6 @@
 import React = require("react");
 import { ActiveGamePiece } from "../../shared/types/GamePiece";
-import { CELL_SIZE_PX } from "../constants";
+import { CELL_SIZE_PX } from "../shared/constants";
 import Piece from "./gamePiece";
 
 interface ActivePieceProps {

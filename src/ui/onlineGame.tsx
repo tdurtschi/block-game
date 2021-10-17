@@ -58,12 +58,28 @@ export function OnlineGame({ gamesClient }: OnlineGameProps) {
 
     return <>
         {connectionState === ConnectionState.CONNECTED && <>
-            <div>
-                {games.map((game) => <div key={game.id}>{game.id}</div>)}
+            <div className="left-pane">
+                <div className="inner">
+                    <h2>Online Games Lobby</h2>
+                    <div className="online-game-list">
+                        <table className="" data-games-list>
+                            <th>
+                                <td>Game ID</td>
+                            </th>
+                            <tbody>
+                                {games.map((game) => <tr key={game.id}>{game.id}</tr>)}
+                            </tbody>
+                        </table>
+                    </div>
+                    <button className="btn-primary" data-new-online-game onClick={createGame}>New Online Game</button>
+                </div>
             </div>
-            <button className="btn-primary" data-new-online-game onClick={createGame}>New Online Game</button>
-            <button className="btn-primary" data-join-game onClick={joinGame}>Join Game</button>
-            <button className="btn-primary" data-start-game onClick={startGame}>Start Game</button>
+            <div className="right-pane">
+                <div className="inner">
+                    <button className="btn-primary" data-join-game onClick={joinGame}>Join Game</button>
+                    <button className="btn-primary" data-start-game onClick={startGame}>Start Game</button>
+                </div>
+            </div>
         </>}
         {gameState?.status === GameStatus.STARTED && <GameContainer
             gameState={gameState}

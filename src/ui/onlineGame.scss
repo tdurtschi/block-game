@@ -1,0 +1,16 @@
+@import "../styles/colors.scss";
+
+.online-game-list {
+  margin: 0 auto 0 auto;
+  padding: 8px;
+  border-radius: 3px;
+  border: 2px solid $game-border-color;
+  height: 400px;
+  
+  table {
+    min-width: 600px;
+    max-width: 700px;
+
+    tr{}
+  }
+}

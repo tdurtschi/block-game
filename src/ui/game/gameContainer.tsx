@@ -8,7 +8,7 @@ import * as pieceUtils from "../../shared/pieceUtils";
 import GameState from "../../shared/types/GameState";
 import StagedPiece from "./StagedPiece";
 import { GameInfo } from "./gameInfo";
-import { ConfirmButton } from "../confirmButton";
+import { ConfirmButton } from "../shared/confirmButton";
 
 interface GameContainerProps {
     gameState: GameState;
