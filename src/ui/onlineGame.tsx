@@ -98,16 +98,18 @@ interface OnlineGamesTableProps {
 
 function OnlineGamesTable(props: OnlineGamesTableProps) {
     return <div className="online-game-list">
-        <table className="" data-games-list>
+        <table data-games-list>
             <thead>
                 <tr>
-                    <th>Game ID</th>
+                    <th><h3>Game ID</h3></th>
+                    <th><h3>Number of Players</h3></th>
                 </tr>
             </thead>
             <tbody>
                 {props.games.map((game) =>
                     <tr key={game.id} onClick={() => props.onGameSelected(game.id)}>
-                        <td>{game.id}</td>
+                        <td>Game {`${game.id}`.padStart(3, '0')}</td>
+                        <td>0/4</td>
                     </tr>)
                 }
             </tbody>
