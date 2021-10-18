@@ -49,5 +49,5 @@
 ## Server backlog (Draft 3)
 
 -   In online mode, can select an existing game to join.
+-   Create topic per game to eliminate subscribe step.
 -   What happens when the game is over? Delete it from the list, close connections etc.
--   Server handles Game exceptions (eg register too many players)

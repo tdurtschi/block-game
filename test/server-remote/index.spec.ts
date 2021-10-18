@@ -10,7 +10,6 @@ const SERVER_PORT = 9999;
 describe("SockJS Server", () => {
     let server: ChildProcess;
     beforeAll(async () => {
-        jest.setTimeout(15000);
         server = await setupServer(SERVER_PORT);
     });
 
@@ -21,6 +20,7 @@ describe("SockJS Server", () => {
     });
     describe("Viewing and creating games", () => {
         it("Successfully connects to server", async () => {
+            jest.setTimeout(15000);
             const client = new TestClient("games", SERVER_PORT);
             await client.connected();
         });
@@ -120,6 +120,17 @@ describe("SockJS Server", () => {
             const result: GameState = await gameClient.getNextMessage();
             expect(result.currentPlayerId).toEqual(2);
         });
+
+        it("Can handle an error", async () => {
+            gameClient.send({
+                kind: "ACTION",
+                id: gameId,
+                action: {
+                    kind: "Pass",
+                    playerId: 1
+                }
+            });
+        });
     });
 
     describe("Multiple clients", () => {
@@ -179,8 +190,9 @@ const setupServer = (port: number): Promise<ChildProcess> => {
         );
 
         process.on("spawn", () => {
-            console.log("Lol spawned the thing");
+            console.log("🕸 Spawned web server successfully.");
         });
+
         setTimeout(() => resolve(process), 2500);
 
         process.on("error", (err: Error) => {
