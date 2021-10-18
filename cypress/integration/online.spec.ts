@@ -29,6 +29,8 @@ describe("Online game", () => {
         cy.get("[data-player-name]").type("Phoector");
         cy.get("[data-join-game]").click();
         cy.get("[data-start-game]").click();
+
+        cy.get("[data-games-list]").should("not.exist");
         cy.get("[data-game-board]");
     });
 });

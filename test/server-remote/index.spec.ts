@@ -10,6 +10,7 @@ const SERVER_PORT = 9999;
 describe("SockJS Server", () => {
     let server: ChildProcess;
     beforeAll(async () => {
+        jest.setTimeout(15000);
         server = await setupServer(SERVER_PORT);
     });
 
