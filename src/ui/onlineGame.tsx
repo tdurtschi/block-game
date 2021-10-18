@@ -18,6 +18,7 @@ export function OnlineGame({ gamesClient }: OnlineGameProps) {
     const [connectionState, setConnectionState] = React.useState<ConnectionState>(ConnectionState.CONNECTING);
     const [games, setGames] = React.useState<GamesMessage>([]);
     const [gameState, setGameState] = React.useState<GameState>();
+    const [playerName, setPlayerName] = React.useState<string>("");
 
     React.useEffect(() => {
         const connect = async () => {
@@ -39,7 +40,7 @@ export function OnlineGame({ gamesClient }: OnlineGameProps) {
 
     const joinGame = () => {
         const selectedGameId = games[0].id;
-        gamesClient.joinGame(selectedGameId, "Player 1");
+        gamesClient.joinGame(selectedGameId, playerName);
     }
 
     const startGame = () => {
@@ -63,11 +64,15 @@ export function OnlineGame({ gamesClient }: OnlineGameProps) {
                     <h2>Online Games Lobby</h2>
                     <div className="online-game-list">
                         <table className="" data-games-list>
-                            <th>
-                                <td>Game ID</td>
-                            </th>
+                            <thead>
+                                <tr>
+                                    <th>Game ID</th>
+                                </tr>
+                            </thead>
                             <tbody>
-                                {games.map((game) => <tr key={game.id}>{game.id}</tr>)}
+                                {games.map((game) => <tr key={game.id}>
+                                    <td>{game.id}</td>
+                                </tr>)}
                             </tbody>
                         </table>
                     </div>
@@ -76,6 +81,8 @@ export function OnlineGame({ gamesClient }: OnlineGameProps) {
             </div>
             <div className="right-pane">
                 <div className="inner">
+                    <label htmlFor="player-name">Name:</label>
+                    <input data-player-name id="player-name" value={playerName} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPlayerName(e.target.value)} />
                     <button className="btn-primary" data-join-game onClick={joinGame}>Join Game</button>
                     <button className="btn-primary" data-start-game onClick={startGame}>Start Game</button>
                 </div>
