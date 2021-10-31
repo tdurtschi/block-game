@@ -1,8 +1,8 @@
 import SockJS = require("sockjs-client");
 
-export class TestClient<TMessageType = any> {
+export class TestClient<TRequestType = any, TResponseType = any> {
     public sock: WebSocket;
-    public messageQueue: string[] = [];
+    public messageQueue: TResponseType[] = [];
     constructor(prefix: string, port: number) {
         this.sock = new SockJS(`http://localhost:${port}/${prefix}`);
         this.sock.onmessage = this.onmessage;
@@ -14,13 +14,13 @@ export class TestClient<TMessageType = any> {
         });
     }
 
-    send(data: TMessageType) {
+    send(data: TRequestType) {
         this.sock.send(JSON.stringify(data));
     }
 
-    getNextMessage(): Promise<any> {
+    getNextMessage(): Promise<TResponseType> {
         if (this.messageQueue.length > 0) {
-            return new Promise((resolve) => resolve(this.messageQueue.shift()));
+            return new Promise((resolve) => resolve(this.messageQueue.shift()!));
         } else {
             return new Promise((resolve) => {
                 this.sock.onmessage = (ev) => {

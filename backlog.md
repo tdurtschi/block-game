@@ -2,6 +2,7 @@
 
 # Product Backlog
 
+-   Back Buttons (local player register page)
 -   Client validation: shouldn't be able to register player before creating new game.
 -   Checkmark -> Radio button for AI / human players
 -   Show if player has passed near score
@@ -22,32 +23,9 @@
     -   _Maybe this one makes sense to split up into multiple stories, i.e. different behavior to discourage different invalid moves? Maybe that's overkill_
 -   No Duplicate Names
 
-## Server backlog (Draft)
-
--   Feature flag for "Online" mode
--   If 4 players select "Online" mode, the game starts. No player access controls.
--   Online players can't do actions on another player's turn.
--   8 players can start 2 games.
--   Remove feature flag
--   Security (???)
--   ^^ **MVP!** ^^
--   Player can create a nickname before playing online game.
--   Private games
-
-## Server backlog (Draft 2)
-
--   Feature flag for "Online" mode
--   User can enter one player's info before starting online game
--   Once 4 players enter player info and click start, game starts.
--   Online players can't do actions on another player's turn.
--   8 players can start 2 games.
--   Remove feature flag
--   Security (???)
--   ^^ **MVP!** ^^
--   Private games
-
-## Server backlog (Draft 3)
+## Server backlog
 
 -   In online mode, can select an existing game to join.
+-   In online mode, can't select another game after joining game.
 -   Create topic per game to eliminate subscribe step.
 -   What happens when the game is over? Delete it from the list, close connections etc.

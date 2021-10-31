@@ -1,5 +1,6 @@
 import React = require("react");
-import { GamesMessage, IOnlineGamesClient } from "../server-remote/gamesClient";
+import { GamesMessage } from "../server-remote/games-message";
+import { IOnlineGamesClient } from "../server-remote/gamesClient";
 import Game from "../shared/Game";
 import GameState from "../shared/types/GameState";
 import GameStatus from "../shared/types/GameStatus";
@@ -20,7 +21,7 @@ export function OnlineGame({ gamesClient }: OnlineGameProps) {
     const [games, setGames] = React.useState<GamesMessage>([]);
     const [gameState, setGameState] = React.useState<GameState>();
     const [playerName, setPlayerName] = React.useState<string>("");
-    const [selectedGame, setSelectedGame] = React.useState<number>();
+    const [selectedGameId, setSelectedGameId] = React.useState<number>();
 
     React.useEffect(() => {
         const connect = async () => {
@@ -41,16 +42,19 @@ export function OnlineGame({ gamesClient }: OnlineGameProps) {
     };
 
     const joinGame = () => {
-        const selectedGameId = games[selectedGame ?? 0].id;
-        gamesClient.joinGame(selectedGameId, playerName);
+        if(selectedGameId !== undefined){
+            gamesClient.joinGame(selectedGameId, playerName);
+        }
     }
 
     const startGame = () => {
-        const selectedGameId = games[selectedGame ?? 0].id;
-        gamesClient.startGame(selectedGameId);
+        if(selectedGameId !== undefined){
+            gamesClient.startGame(selectedGameId);
+        }
     }
 
     const onGamesUpdate = (data: GamesMessage) => {
+        console.log(data);
         setGames(data);
     }
 
@@ -60,7 +64,7 @@ export function OnlineGame({ gamesClient }: OnlineGameProps) {
     }
 
     const onGameSelected = (id: number) => {
-        setSelectedGame(id);
+        setSelectedGameId(id);
     }
 
     return <>
@@ -71,6 +75,7 @@ export function OnlineGame({ gamesClient }: OnlineGameProps) {
                         <h2>Online Games Lobby</h2>
                         <OnlineGamesTable
                             games={games}
+                            selectedGameId={selectedGameId}
                             onGameSelected={onGameSelected} />
                         <button className="btn-primary" data-new-online-game onClick={createGame}>New Online Game</button>
                     </div>
@@ -92,13 +97,14 @@ export function OnlineGame({ gamesClient }: OnlineGameProps) {
 }
 
 interface OnlineGamesTableProps {
-    games: { id: number }[];
+    games: GamesMessage;
     onGameSelected: (id: number) => any;
+    selectedGameId: number | undefined;
 }
 
 function OnlineGamesTable(props: OnlineGamesTableProps) {
     return <div className="online-game-list">
-        <table data-games-list>
+        <table data-games-list cellSpacing={0}>
             <thead>
                 <tr>
                     <th><h3>Game ID</h3></th>
@@ -107,9 +113,11 @@ function OnlineGamesTable(props: OnlineGamesTableProps) {
             </thead>
             <tbody>
                 {props.games.map((game) =>
-                    <tr key={game.id} onClick={() => props.onGameSelected(game.id)}>
+                    <tr key={game.id} 
+                        className={props.selectedGameId === game.id ? "selected" : ""}
+                        onClick={() => props.onGameSelected(game.id)}>
                         <td>Game {`${game.id}`.padStart(3, '0')}</td>
-                        <td>0/4</td>
+                        <td>{`${game.players}/4`}</td>
                     </tr>)
                 }
             </tbody>

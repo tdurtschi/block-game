@@ -29,8 +29,7 @@ class SockJSGameServer {
         conn.write(JSON.stringify(this.getGames()));
         conn.on("data", (message: string) => {
             this.newGame();
-            const response = JSON.stringify(this.getGames());
-            this.gameListSubscribers.forEach((conn) => conn.write(response));
+            this.sendUpdateToGamesSubscribers();
         });
         conn.on("close", function () {});
     }
@@ -59,9 +58,10 @@ class SockJSGameServer {
 
     getGames() {
         const result: Array<any> = [];
-        this.games.forEach(({ id }: Game, key: number) => {
+        this.games.forEach(({ id, players }: Game, key: number) => {
             const game = {
-                id
+                id,
+                players: players.length
             };
             result.push(game);
         });
@@ -76,6 +76,7 @@ class SockJSGameServer {
                 subscribers.push(conn);
             } else if (message.kind === "REGISTER") {
                 game.registerPlayer(message.playerName);
+                this.sendUpdateToGamesSubscribers();
             } else if (message.kind === "START") {
                 game.start();
             } else if (message.kind === "ACTION") {
@@ -87,6 +88,11 @@ class SockJSGameServer {
                 conn.write(JSON.stringify(game.getState()))
             );
         }
+    }
+
+    sendUpdateToGamesSubscribers() {
+        const message = JSON.stringify(this.getGames());
+        this.gameListSubscribers.forEach((conn) => conn.write(message));
     }
 }
 

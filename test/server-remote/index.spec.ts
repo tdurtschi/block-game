@@ -4,6 +4,7 @@ import PlayerState from "../../src/shared/types/PlayerState";
 import GameState from "../../src/shared/types/GameState";
 import { GameMessage } from "../../src/server-remote/game-message";
 import { TestClient } from "./testClient";
+import { GamesMessage } from "../../src/server-remote/games-message";
 
 const SERVER_PORT = 9999;
 
@@ -45,9 +46,10 @@ describe("SockJS Server", () => {
 
     describe("Setting up and playing a single game", () => {
         let gameClient: TestClient<GameMessage>;
+        let gamesClient: TestClient<any, GamesMessage>;
         let gameId: number;
         beforeAll(async () => {
-            const gamesClient = new TestClient("games", SERVER_PORT);
+            gamesClient = new TestClient("games", SERVER_PORT);
             const message = await gamesClient.getNextMessage();
             gameId = message[0].id;
 
@@ -77,6 +79,13 @@ describe("SockJS Server", () => {
                     (player: PlayerState) => player.name === "Joe Biden"
                 )
             ).toBeDefined();
+        });
+
+        it("Updates the games list with the new player", async () => {
+            const result = await gamesClient.getNextMessage();
+            expect(
+                result.find(game => game.id == gameId)?.players
+            ).toEqual(1);
         });
 
         it("Can start a game with 4 players", async () => {

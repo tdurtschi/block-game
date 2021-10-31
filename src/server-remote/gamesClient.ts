@@ -1,7 +1,6 @@
 import GameState from "../shared/types/GameState";
+import { GamesMessage } from "./games-message";
 import { WSClient } from "./wsClient";
-
-export type GamesMessage = any[];
 
 export interface IOnlineGamesClient {
     connect: (
@@ -40,24 +39,24 @@ export class OnlineGamesClient {
             id: gameId,
             playerName
         });
-        this.gameConnection.send({
-            kind: "REGISTER",
-            id: gameId,
-            playerName: "Dummy"
-        });
-        this.gameConnection.send({
-            kind: "REGISTER",
-            id: gameId,
-            playerName: "Dummy"
-        });
-        this.gameConnection.send({
-            kind: "REGISTER",
-            id: gameId,
-            playerName: "Dummy"
-        });
     }
 
     startGame(gameId: number) {
+        this.gameConnection?.send({
+            kind: "REGISTER",
+            id: gameId,
+            playerName: "Dummy"
+        });
+        this.gameConnection?.send({
+            kind: "REGISTER",
+            id: gameId,
+            playerName: "Dummy"
+        });
+        this.gameConnection?.send({
+            kind: "REGISTER",
+            id: gameId,
+            playerName: "Dummy"
+        });
         this.gameConnection?.send({
             kind: "START",
             id: gameId
