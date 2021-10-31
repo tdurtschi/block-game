@@ -12,15 +12,17 @@ interface OnlineGamesLobbyProps {
 export function OnlineGamesLobby(props: OnlineGamesLobbyProps) {
     const [selectedGameId, setSelectedGameId] = React.useState<number>();
     const [playerName, setPlayerName] = React.useState<string>("");
+    const [hasJoinedGame, setHasJoinedGame] = React.useState<boolean>(false);
 
     const joinGame = () => {
         if(selectedGameId !== undefined){
             props.joinGame(selectedGameId, playerName);
+            setHasJoinedGame(true);
         }
     }
 
     const onGameSelected = (id: number) => {
-        setSelectedGameId(id);
+        if(!hasJoinedGame) setSelectedGameId(id);
     }
 
     return <>
