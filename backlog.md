@@ -25,7 +25,7 @@
 
 ## Server backlog
 
--   In online mode, can select an existing game to join.
 -   In online mode, can't select another game after joining game.
+-   Connection error handling (no blank screen)
 -   Create topic per game to eliminate subscribe step.
 -   What happens when the game is over? Delete it from the list, close connections etc.

@@ -33,6 +33,7 @@ export class OnlineGamesClient {
     async joinGame(gameId: number, playerName: string) {
         this.gameConnection = new WSClient<any>("game", this.onGameUpdate!);
         await this.gameConnection.connected();
+        
         this.gameConnection.send({ kind: "SUBSCRIBE", id: gameId });
         this.gameConnection.send({
             kind: "REGISTER",

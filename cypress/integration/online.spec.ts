@@ -35,6 +35,6 @@ describe("Online game", () => {
         cy.get("[data-start-game]").click();
 
         cy.get("[data-games-list]").should("not.exist");
-        cy.get("[data-game-board]");
+        cy.get("[data-game-board]").should("exist");
     });
 });
