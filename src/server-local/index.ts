@@ -3,6 +3,7 @@ import Game from "../shared/Game";
 import GameState from "../shared/types/GameState";
 import { generateId } from "../shared/idGenerator";
 
+export type ActionResult = { errorMessage?: string };
 type UpdateCallback = (gameState: Readonly<GameState>) => any;
 
 class GameServer {
@@ -43,8 +44,8 @@ class GameServer {
             gameSubscribers.push(onUpdate);
         }
     }
-
-    action(gameId: number, payload: Action) {
+    
+    action(gameId: number, payload: Action): ActionResult {
         const game = this.games.get(gameId);
         if (game) {
             try {

@@ -12,7 +12,7 @@ import { ConfirmButton } from "../shared/confirmButton";
 
 interface GameContainerProps {
     gameState: GameState;
-    action: (action: Action) => any;
+    action: (action: Action) => { errorMessage?: string };
 }
 
 function GameContainer({ gameState, action }: GameContainerProps) {

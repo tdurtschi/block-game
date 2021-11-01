@@ -25,7 +25,8 @@
 
 ## Server backlog
 
--   In online mode, can't select another game after joining game.
+-   Prompt user to create 4-(players) dummy/AI players when starting game
+-   Handle an error when playing a move
 -   Connection error handling (no blank screen)
 -   Create topic per game to eliminate subscribe step.
 -   What happens when the game is over? Delete it from the list, close connections etc.

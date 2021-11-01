@@ -1,6 +1,7 @@
 import React = require("react");
 import { GamesMessage } from "../server-remote/games-message";
 import { IOnlineGamesClient } from "../server-remote/gamesClient";
+import Action from "../shared/types/Actions";
 import GameState from "../shared/types/GameState";
 import GameStatus from "../shared/types/GameStatus";
 import GameContainer from "./game/gameContainer";
@@ -58,6 +59,11 @@ export function OnlineGame({ gamesClient }: OnlineGameProps) {
         console.log(data);
         setGameState(data);
     }
+    
+    const onGameAction = (action: Action) => {
+        gamesClient.gameAction(action);
+        return {};
+    }
 
     return <>
         {connectionState === ConnectionState.CONNECTED &&
@@ -70,7 +76,7 @@ export function OnlineGame({ gamesClient }: OnlineGameProps) {
             />}
         {gameState?.status === GameStatus.STARTED && <GameContainer
             gameState={gameState}
-            action={() => { }}
+            action={onGameAction}
         />}
     </>
 }

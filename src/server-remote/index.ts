@@ -84,9 +84,9 @@ class SockJSGameServer {
             }
 
             const subscribers = this.gameSubscribers.get(message.id)!;
-            subscribers.forEach((conn) =>
+            subscribers.forEach((conn) => {
                 conn.write(JSON.stringify(game.getState()))
-            );
+            });
         }
     }
 

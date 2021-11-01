@@ -1,3 +1,5 @@
+import { clickPlayersFirstPiece, verifyBoardArea } from "../util";
+
 describe("Online game", () => {
     let gameToJoinIdx: number;
     before(() => {
@@ -24,7 +26,7 @@ describe("Online game", () => {
         );
     });
 
-    it("joins the created online game.", () => {
+    it("Joins the created online game.", () => {
         cy.get("[data-games-list] tbody tr").eq(gameToJoinIdx).click();
         cy.get("[data-games-list] tbody tr").eq(gameToJoinIdx).contains("0/4");
         cy.get("[data-games-list] tbody tr").eq(gameToJoinIdx).should("have.class", "selected");
@@ -37,4 +39,19 @@ describe("Online game", () => {
         cy.get("[data-games-list]").should("not.exist");
         cy.get("[data-game-board]").should("exist");
     });
+
+    it("Plays the online game.", () => {
+        clickPlayersFirstPiece();
+        cy.get(
+            "[data-game-board] [data-coord-x='0'][data-coord-y='0']"
+        ).click();
+        cy.get("[data-confirm-action]").click();
+
+        verifyBoardArea(0, 0, [
+            [1, 0],
+            [1, 0],
+            [1, 1],
+            [0, 1]
+        ]);
+    })
 });

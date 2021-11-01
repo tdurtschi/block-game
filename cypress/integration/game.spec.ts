@@ -1,7 +1,9 @@
 import {
+    clickPlayersFirstPiece,
     clickPlayersPieceAtPosition,
     pass,
-    rotateCounterclockwise
+    rotateCounterclockwise,
+    verifyBoardArea
 } from "../util";
 
 describe("Block Game", () => {
@@ -268,32 +270,6 @@ describe("Block Game", () => {
         });
     });
 });
-
-function verifyBoardArea(xCoord, yCoord, expectedContents) {
-    expectedContents.forEach((row, yIdx) => {
-        row.forEach((cell, xIdx) => {
-            const playerId = cell;
-            let selector =
-                `[data-game-board] ` +
-                `[data-coord-x='${xCoord + xIdx}']` +
-                `[data-coord-y='${yCoord + yIdx}']`;
-            if (playerId > 0) {
-                selector = selector + `.player-${playerId}-color`;
-            } else {
-                [1, 2, 3, 4].forEach((pId) =>
-                    cy
-                        .get(selector + `.player-${pId}-color`)
-                        .should("not.exist")
-                );
-            }
-            cy.get(selector);
-        });
-    });
-}
-
-function clickPlayersFirstPiece() {
-    clickPlayersPieceAtPosition(0);
-}
 
 function startNewGame() {
     cy.get("[data-new-game]").click();
