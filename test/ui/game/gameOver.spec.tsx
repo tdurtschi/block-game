@@ -41,6 +41,7 @@ describe("Game Over", () => {
             createGame: jest.fn(),
             joinGame: jest.fn(),
             startGame: jest.fn(),
+            gameAction: jest.fn()
         }
 
         render(<App gameClient={gameClient} onlineGameClient={onlineGameClient} />);

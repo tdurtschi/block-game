@@ -34,6 +34,7 @@ describe("Online game", () => {
         cy.get("[data-join-game]").click();
         cy.get("[data-games-list] tbody tr").eq(gameToJoinIdx).contains("1/4");
 
+        cy.contains("3 AI Players").should("exist");
         cy.get("[data-start-game]").click();
 
         cy.get("[data-games-list]").should("not.exist");

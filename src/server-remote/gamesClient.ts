@@ -48,25 +48,10 @@ export class OnlineGamesClient {
     }
 
     gameAction(action: Action) {
-        this.gameConnection.send({ kind: "ACTION", id: this.gameId, action });
+        this.gameConnection?.send({ kind: "ACTION", id: this.gameId, action });
     }
 
     startGame(gameId: number) {
-        this.gameConnection?.send({
-            kind: "REGISTER",
-            id: gameId,
-            playerName: "Dummy"
-        });
-        this.gameConnection?.send({
-            kind: "REGISTER",
-            id: gameId,
-            playerName: "Dummy"
-        });
-        this.gameConnection?.send({
-            kind: "REGISTER",
-            id: gameId,
-            playerName: "Dummy"
-        });
         this.gameConnection?.send({
             kind: "START",
             id: gameId

@@ -42,6 +42,7 @@ export function OnlineGamesLobby(props: OnlineGamesLobbyProps) {
                 <input data-player-name id="player-name" value={playerName} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPlayerName(e.target.value)} />
                 <button className="btn-primary" data-join-game onClick={joinGame}>Join Game</button>
                 <button className="btn-primary" data-start-game onClick={props.startGame}>Start Game</button>
+                <span>with {4 - (props.games.find(game => game.id == selectedGameId)?.players ?? 0)} AI Players</span>
             </div>
         </div>
     </>

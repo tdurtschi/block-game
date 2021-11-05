@@ -4,6 +4,7 @@ import GameServer from "../../src/server-local";
 import Game from "../../src/shared/Game";
 import GameState from "../../src/shared/types/GameState";
 import GameStatus from "../../src/shared/types/GameStatus";
+import { testGameFixture } from "../../test/testGameFixture";
 
 interface FakeClient {
     action: jasmine.Spy;
@@ -74,7 +75,14 @@ describe("AI Player", () => {
         new AIPlayer(fakeClient, 1);
         triggerUpdate(fakeClient, getGameStateFirstTurn());
 
-        expect(fakeClient.action).toHaveBeenCalled();
+        expect(fakeClient.action).toHaveBeenCalledTimes(1);
+    });
+
+    it("Takes only one action when multiple are possible", () => {
+        new AIPlayer(fakeClient, 1);
+        triggerUpdate(fakeClient, getGameStateSecondTurn());
+
+        expect(fakeClient.action).toHaveBeenCalledTimes(1);
     });
 
     it("Takes no action when it receives an update and the player ID doesn't match", () => {
@@ -113,6 +121,18 @@ function getGameStateFirstTurn(): Partial<GameState> {
     game.registerPlayer("p3");
     game.registerPlayer("p4");
     game.start();
+
+    return game.getState();
+}
+
+function getGameStateSecondTurn(): Partial<GameState> {
+    const game = new Game(0);
+    game.registerPlayer("p1");
+    game.registerPlayer("p2");
+    game.registerPlayer("p3");
+    game.registerPlayer("p4");
+    game.start();
+    testGameFixture.slice(0, 4).forEach(action => game.action(action));
 
     return game.getState();
 }

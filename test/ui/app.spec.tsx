@@ -35,6 +35,7 @@ describe("App", () => {
                 createGame: jest.fn(),
                 joinGame: jest.fn(),
                 startGame: jest.fn(),
+                gameAction: jest.fn()
             }
 
             render(<App gameClient={gameClient} onlineGameClient={onlineGameClient} />);
@@ -76,6 +77,7 @@ describe("App", () => {
                 createGame: jest.fn(),
                 joinGame: jest.fn(),
                 startGame: jest.fn(),
+                gameAction: jest.fn()
             }
 
             render(<App gameClient={gameClient} onlineGameClient={onlineGameClient} errorDisplayTime={5} />);

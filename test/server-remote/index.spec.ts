@@ -19,6 +19,7 @@ describe("SockJS Server", () => {
 
         server.on("exit", done);
     });
+    
     describe("Viewing and creating games", () => {
         it("Successfully connects to server", async () => {
             jest.setTimeout(15000);
@@ -44,7 +45,7 @@ describe("SockJS Server", () => {
         });
     });
 
-    describe("Setting up and playing a single game", () => {
+    describe("Setting up and playing a single 4-player game", () => {
         let gameClient: TestClient<GameMessage>;
         let gamesClient: TestClient<any, GamesMessage>;
         let gameId: number;
@@ -140,6 +141,43 @@ describe("SockJS Server", () => {
                 }
             });
         });
+    });
+
+    describe("Setting up and playing a 1-player game with 3 AIs", () => {
+        let gameClient: TestClient<GameMessage>;
+        let gamesClient: TestClient<any, GamesMessage>;
+        let gameId: number;
+        beforeAll(async () => {
+            gamesClient = new TestClient("games", SERVER_PORT);
+            await gamesClient.getNextMessage();
+            gamesClient.send("NEW_GAME");
+            const message = await gamesClient.getNextMessage();
+            gameId = message[message.length - 1].id;
+
+            gameClient = new TestClient("game", SERVER_PORT);
+            await gameClient.connected();
+        });
+
+        it("Starts a game with 1 player and 3 AIs are auto registered", async () => {
+            gameClient.send({ kind: "SUBSCRIBE", id: gameId });
+            await gameClient.getNextMessage();
+
+            gameClient.send({
+                kind: "REGISTER",
+                id: gameId,
+                playerName: "Joe Biden"
+            });
+
+            await gameClient.getNextMessage();
+            gameClient.send({
+                kind: "START",
+                id: gameId
+            });
+
+            const result: GameState = await gameClient.getNextMessage();
+            expect(result.status).toEqual(GameStatus.STARTED);
+            expect(result.players.length).toEqual(4);
+        })
     });
 
     describe("Multiple clients", () => {

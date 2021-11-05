@@ -1,12 +1,19 @@
 import * as http from "http";
 import * as sockjs from "sockjs";
 import Game from "../shared/Game";
+import { AIPlayer } from "../ai-player/ai-player";
 import { generateId } from "../shared/idGenerator";
 import { GameMessage } from "./game-message";
+import GameState from "../shared/types/GameState";
+import Action from "../shared/types/Actions";
+
+interface Subscriber {
+    onUpdate: (gameState: GameState) => any;
+}
 
 class SockJSGameServer {
     private games: Map<number, Game> = new Map();
-    private gameSubscribers: Map<number, sockjs.Connection[]> = new Map();
+    private gameSubscribers: Map<number, Subscriber[]> = new Map();
     private gameListSubscribers: sockjs.Connection[] = [];
 
     listen(port: number) {
@@ -73,26 +80,61 @@ class SockJSGameServer {
         if (game) {
             if (message.kind === "SUBSCRIBE") {
                 const subscribers = this.gameSubscribers.get(message.id)!;
-                subscribers.push(conn);
+                const newSubscriber: Subscriber = {
+                    onUpdate: (gameState) => {
+                        conn.write(JSON.stringify(gameState));
+                    }
+                }
+                subscribers.push(newSubscriber);
             } else if (message.kind === "REGISTER") {
                 game.registerPlayer(message.playerName);
                 this.sendUpdateToGamesSubscribers();
             } else if (message.kind === "START") {
+                this.registerAIPlayers(game);
                 game.start();
             } else if (message.kind === "ACTION") {
                 game.action(message.action);
             }
 
-            const subscribers = this.gameSubscribers.get(message.id)!;
-            subscribers.forEach((conn) => {
-                conn.write(JSON.stringify(game.getState()))
-            });
+            this.sendUpdateToGameSubscribers(game);
         }
+    }
+
+    sendUpdateToGameSubscribers(game: Game) {
+        const newState = game.getState()
+        const subscribers = this.gameSubscribers.get(game.id)!;
+        subscribers.forEach((subscriber) => {
+            subscriber.onUpdate(newState)
+        });
     }
 
     sendUpdateToGamesSubscribers() {
         const message = JSON.stringify(this.getGames());
         this.gameListSubscribers.forEach((conn) => conn.write(message));
+    }
+
+    registerAIPlayers(game: Game) {
+        for(let i = game.players.length; i < 4; i++){
+            this.registerAIPlayer(game, i);
+        }
+    }
+
+    registerAIPlayer(game: Game, playerNumber: number) {
+        const playerId = game.registerPlayer(`Player ${playerNumber+1} 🎮`);
+        const subscribe = (onUpdate: (gameState: GameState) => any) => {
+            const subscribers = this.gameSubscribers.get(game.id)
+            subscribers?.push({onUpdate: (gameState: GameState) => setTimeout(() => onUpdate(gameState), 500)});
+        };
+
+        const action = (action: Action) => {
+            game.action(action);
+            this.sendUpdateToGameSubscribers(game);
+        }
+
+        new AIPlayer({
+            subscribe,
+            action
+        }, playerId);
     }
 }
 

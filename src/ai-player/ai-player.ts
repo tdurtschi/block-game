@@ -1,15 +1,19 @@
-import { IGameClient } from "../game-client";
 import { MoveValidations } from "../shared/moveValidations";
 import { applyPieceModifications } from "../shared/pieceUtils";
-import { BoardLocation, GamePlayAction } from "../shared/types/Actions";
+import Action, { BoardLocation, GamePlayAction } from "../shared/types/Actions";
 import BoardState from "../shared/types/BoardState";
 import GamePiece from "../shared/types/GamePiece";
 import GameState from "../shared/types/GameState";
 import GameStatus from "../shared/types/GameStatus";
 import PlayerId from "../shared/types/PlayerId";
 
+interface AIGameClient {
+    subscribe: (onUpdate: (gameState: Readonly<GameState>) => any) => any;
+    action: (action: Action) => any;
+}
+
 export class AIPlayer {
-    constructor(private gameClient: IGameClient, private playerId: PlayerId) {
+    constructor(private gameClient: AIGameClient, private playerId: PlayerId) {
         gameClient.subscribe(this.onUpdate.bind(this));
     }
 
@@ -17,8 +21,9 @@ export class AIPlayer {
         if (
             gameState.status !== GameStatus.STARTED ||
             gameState.currentPlayerId !== this.playerId
-        )
+        ) {
             return;
+        }
 
         if (this.isFirstTurn(gameState, this.playerId)) {
             const move = this.getFirstMove(gameState);
@@ -42,6 +47,7 @@ export class AIPlayer {
                     const cell = validOpenCells[i];
                     const action = this.getValidActionOrError(gameState, cell);
                     this.gameClient.action(action);
+                    return;
                 } catch (error) {
                     // Silently continue without finding valid move.
                 }
@@ -252,11 +258,11 @@ function shuffle(array: any[]) {
 
 function generatePermutations(pieceData: number[][], cell: BoardLocation) {
     const rotations: (0 | 1 | 2 | 3)[] = [0, 1, 2, 3];
-    const flipsAndRotations = rotations.flatMap((rotate) => [
+    const flipsAndRotations = flatMap(rotations, (rotate) => [
         { rotate, flip: true },
         { rotate, flip: false }
     ]);
-    const allPermutations = flipsAndRotations.flatMap(({ flip, rotate }) => {
+    const allPermutations = flatMap(flipsAndRotations, ({ flip, rotate }) => {
         const transformedPiece = applyPieceModifications(
             pieceData,
             rotate,
@@ -268,7 +274,7 @@ function generatePermutations(pieceData: number[][], cell: BoardLocation) {
         );
         const yCoordsToTry = transformedPiece.map((_, index) => cell.y - index);
 
-        const locations = xCoordsToTry.flatMap((x) =>
+        const locations = flatMap(xCoordsToTry, (x) =>
             yCoordsToTry.map((y) => ({ x, y }))
         );
 
@@ -280,6 +286,10 @@ function generatePermutations(pieceData: number[][], cell: BoardLocation) {
     });
 
     return shuffle(allPermutations);
+}
+
+function flatMap<T, U>(array: T[], mapFunc: (x: T) => U[]) : U[] {
+    return array.reduce((cumulus: U[], next: T) => [...mapFunc(next), ...cumulus], <U[]> []);
 }
 
 interface Move {
