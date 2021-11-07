@@ -5,7 +5,7 @@ import Action from "../shared/types/Actions";
 import GameState from "../shared/types/GameState";
 import GameStatus from "../shared/types/GameStatus";
 import GameContainer from "./game/gameContainer";
-import { GameOver } from "./gameOver";
+import { GameOver } from "./GameOver";
 import { RegisterPlayers } from "./newGame/registerPlayers";
 
 interface LocalGameProps {

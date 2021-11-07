@@ -7,6 +7,7 @@
 -   Checkmark -> Radio button for AI / human players
 -   Show if player has passed near score
 -   ^^ **Next Release!** ^^
+-   Figure out absolute paths for imports
 -   Figure out why contributions dont show up
 -   Improve logging/debug?
 -   Helper text for flip/rotate while piece is active
@@ -25,8 +26,15 @@
 
 ## Server backlog
 
+-   Show final score for Online Multiplayer
+-   Improve styling for online lobby.
+-   What happens when the game is over? Delete it from the list, close connections etc.
+
+## MVP??? 
+
+-   Fix test flakiness for server spec
+-   A player can only move when its their turn
 -   Prompt user to create 4-(players) dummy/AI players when starting game
 -   Handle an error when playing a move
 -   Connection error handling (no blank screen)
 -   Create topic per game to eliminate subscribe step.
--   What happens when the game is over? Delete it from the list, close connections etc.

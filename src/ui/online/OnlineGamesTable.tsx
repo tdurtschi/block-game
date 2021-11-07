@@ -1,5 +1,5 @@
 import React = require("react");
-import { GamesMessage } from "../server-remote/games-message";
+import { GamesMessage } from "../../server-remote/games-message";
 
 export interface OnlineGamesTableProps {
     games: GamesMessage;

@@ -1,13 +1,14 @@
 import React = require("react");
-import { GamesMessage } from "../server-remote/games-message";
-import { IOnlineGamesClient } from "../server-remote/gamesClient";
-import Action from "../shared/types/Actions";
-import GameState from "../shared/types/GameState";
-import GameStatus from "../shared/types/GameStatus";
-import GameContainer from "./game/gameContainer";
+import { GamesMessage } from "../../server-remote/games-message";
+import { IOnlineGamesClient } from "../../server-remote/gamesClient";
+import Action from "../../shared/types/Actions";
+import GameState from "../../shared/types/GameState";
+import GameStatus from "../../shared/types/GameStatus";
+import GameContainer from "../game/gameContainer";
+import { OnlineGame } from "./OnlineGame";
 import { OnlineGamesLobby } from "./OnlineGamesLobby";
 
-interface OnlineGameProps {
+interface OnlineGameContainerProps {
     gamesClient: IOnlineGamesClient;
 }
 
@@ -17,7 +18,7 @@ enum ConnectionState {
     ERROR
 }
 
-export function OnlineGame({ gamesClient }: OnlineGameProps) {
+export function OnlineGameContainer({ gamesClient }: OnlineGameContainerProps) {
     const [connectionState, setConnectionState] = React.useState<ConnectionState>(ConnectionState.CONNECTING);
     const [games, setGames] = React.useState<GamesMessage>([]);
     const [gameState, setGameState] = React.useState<GameState>();
@@ -65,20 +66,19 @@ export function OnlineGame({ gamesClient }: OnlineGameProps) {
         return {};
     }
 
-    return <>
-        {connectionState === ConnectionState.CONNECTED &&
-            gameState?.status !== GameStatus.STARTED &&
-            <OnlineGamesLobby
-                joinGame={joinGame}
+    switch(connectionState) {
+        case ConnectionState.CONNECTED:
+            return <OnlineGame
+                gameState={gameState}
+                games={games}
                 createGame={createGame}
                 startGame={startGame}
-                games={games}
-            />}
-        {gameState?.status === GameStatus.STARTED && <GameContainer
-            gameState={gameState}
-            action={onGameAction}
-        />}
-    </>
+                joinGame={joinGame}
+                action={onGameAction}
+            />
+        default:
+            return <></>
+    }
 }
 
-export default OnlineGame;
+export default OnlineGameContainer;

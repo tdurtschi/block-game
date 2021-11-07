@@ -3,9 +3,9 @@ import React = require("react");
 import { IGameClient } from "../game-client";
 import { IOnlineGamesClient } from "../server-remote/gamesClient";
 import GameState from "../shared/types/GameState";
-import { LocalGame } from "./localGame";
+import { LocalGame } from "./LocalGame";
 import { NewGame } from "./newGame/newGame";
-import OnlineGame from "./onlineGame";
+import OnlineGameContainer from "./online/OnlineGameContainer";
 import { Error } from "./Error";
 
 export interface BlockGameProps {
@@ -47,7 +47,7 @@ function BlockGame({ gameClient, onlineGameClient, errorDisplayTime }: BlockGame
                 }}
             >
                 {gameType === "LOCAL" && <LocalGame gameClient={gameClient} setError={setError} />}
-                {gameType === "ONLINE" && <OnlineGame gamesClient={onlineGameClient} />}
+                {gameType === "ONLINE" && <OnlineGameContainer gamesClient={onlineGameClient} />}
                 {!gameType && <NewGame startLocalGame={createNewLocalGame} startOnlineGame={onlineGameSelected} />}
             </div>
         </>
