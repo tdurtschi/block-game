@@ -6,10 +6,10 @@ import { NewGameButton } from "./newGame/newGameButton";
 
 export interface GameOverProps {
     gameState: GameState;
-    startGame: () => any;
+    goHome: () => any;
 }
 
-export function GameOver({ gameState, startGame }: GameOverProps) {
+export function GameOver({ gameState, goHome }: GameOverProps) {
     return <>
         <div data-game-over className={`left-pane game-over`}>
             <div className={"inner"}>
@@ -27,7 +27,7 @@ export function GameOver({ gameState, startGame }: GameOverProps) {
                 <h2>{winnerMessage(gameState)}</h2>
                 <h2>Click here to start a new game:</h2>
                 <div style={{ width: "16px" }} />
-                <NewGameButton startGame={startGame} />
+                <NewGameButton startGame={goHome} />
             </div>
         </div>
     </>

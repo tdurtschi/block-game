@@ -76,11 +76,6 @@ describe("Block Game", () => {
             it("Shows the final game board", () => {
                 cy.get("[data-game-board]");
             });
-
-            it("Allows a player to start a new game", () => {
-                cy.get("[data-new-game]").click();
-                cy.contains("Player 1");
-            });
         });
 
         describe("Passing", () => {

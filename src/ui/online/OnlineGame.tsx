@@ -33,7 +33,7 @@ export function OnlineGame({
             action={action}
             />;
         case GameStatus.OVER:
-            return <GameOver gameState={gameState} startGame={goHome}/>
+            return <GameOver gameState={gameState} goHome={goHome}/>
         default:
             return <OnlineGamesLobby
             joinGame={joinGame}

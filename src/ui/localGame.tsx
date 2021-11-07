@@ -11,9 +11,10 @@ import { RegisterPlayers } from "./newGame/registerPlayers";
 interface LocalGameProps {
     gameClient: IGameClient;
     setError: (error: any) => any;
+    goHome: () => any;
 }
 
-export function LocalGame({ gameClient, setError }: LocalGameProps) {
+export function LocalGame({ gameClient, setError, goHome }: LocalGameProps) {
     const [gameState, setGameState] = React.useState<GameState>();
 
     const createNewLocalGame = () => {
@@ -55,6 +56,6 @@ export function LocalGame({ gameClient, setError }: LocalGameProps) {
             <RegisterPlayers onPlayersRegistered={onPlayersRegistered} />
         )}
         {gameState.status === GameStatus.OVER && (
-            <GameOver gameState={gameState} startGame={createNewLocalGame} />
+            <GameOver gameState={gameState} goHome={goHome} />
         )}</>
 }

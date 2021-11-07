@@ -50,7 +50,7 @@ function BlockGame({ gameClient, onlineGameClient, errorDisplayTime }: BlockGame
                     return false;
                 }}
             >
-                {gameType === "LOCAL" && <LocalGame gameClient={gameClient} setError={setError} />}
+                {gameType === "LOCAL" && <LocalGame gameClient={gameClient} setError={setError} goHome={goHome} />}
                 {gameType === "ONLINE" && <OnlineGameContainer gamesClient={onlineGameClient} goHome={goHome}/>}
                 {!gameType && <NewGame startLocalGame={createNewLocalGame} startOnlineGame={onlineGameSelected} />}
             </div>

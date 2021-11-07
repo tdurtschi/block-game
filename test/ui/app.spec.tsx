@@ -141,6 +141,38 @@ describe("App", () => {
                 expect(document.querySelector("[data-home]")).not.toBeNull();
             });
         });
+
+        it("Clicks a button to return to the home screen", async () => {
+            const gameState = CreateGameState(GameStatus.OVER);
+
+            const gameClient: IGameClient = {
+                subscribe: (onUpdate => onUpdate(gameState)),
+                action: jest.fn(),
+                newGame: jest.fn(),
+                registerPlayer: jest.fn(),
+                startGame: jest.fn()
+            };
+
+            const onlineGameClient: IOnlineGamesClient = {
+                connect: jest.fn(),
+                createGame: jest.fn(),
+                joinGame: jest.fn(),
+                startGame: jest.fn(),
+                gameAction: jest.fn()
+            }
+
+            render(<App gameClient={gameClient} onlineGameClient={onlineGameClient} />);
+
+            fireEvent.click(screen.getByText("New Game"));
+            await waitFor(() => {
+                expect(document.querySelector("[data-game-over]")).not.toBeNull();
+            });
+
+            fireEvent.click(screen.getByText("New Game"));
+            await waitFor(() => {
+                expect(document.querySelector("[data-home]")).not.toBeNull();
+            });
+        });
     })
 });
 
