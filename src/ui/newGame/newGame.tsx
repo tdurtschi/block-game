@@ -4,7 +4,7 @@ import { NewGameButton } from "./newGameButton";
 
 export function NewGame({ startLocalGame, startOnlineGame }: { startLocalGame: () => any, startOnlineGame: () => any }) {
     return <>
-        <div className="new-game">
+        <div data-home className="new-game">
             <div className="flex-row">
                 <h2>Click here to start a new game:</h2>
                 <div style={{ width: "16px" }} />

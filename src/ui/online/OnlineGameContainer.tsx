@@ -7,6 +7,7 @@ import { OnlineGame } from "./OnlineGame";
 
 interface OnlineGameContainerProps {
     gamesClient: IOnlineGamesClient;
+    goHome: () => any;
 }
 
 enum ConnectionState {
@@ -15,7 +16,7 @@ enum ConnectionState {
     ERROR
 }
 
-export function OnlineGameContainer({ gamesClient }: OnlineGameContainerProps) {
+export function OnlineGameContainer({ gamesClient, goHome }: OnlineGameContainerProps) {
     const [connectionState, setConnectionState] = React.useState<ConnectionState>(ConnectionState.CONNECTING);
     const [games, setGames] = React.useState<GamesMessage>([]);
     const [gameState, setGameState] = React.useState<GameState>();
@@ -49,12 +50,10 @@ export function OnlineGameContainer({ gamesClient }: OnlineGameContainerProps) {
     }
 
     const onGamesUpdate = (data: GamesMessage) => {
-        console.log(data);
         setGames(data);
     }
 
     const onGameUpdate = (data: GameState) => {
-        console.log(data);
         setGameState(data);
     }
     
@@ -72,6 +71,7 @@ export function OnlineGameContainer({ gamesClient }: OnlineGameContainerProps) {
                 startGame={startGame}
                 joinGame={joinGame}
                 action={onGameAction}
+                goHome={goHome}
             />
         default:
             return <></>

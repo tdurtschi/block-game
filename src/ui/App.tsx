@@ -26,6 +26,10 @@ function BlockGame({ gameClient, onlineGameClient, errorDisplayTime }: BlockGame
         setGameType("ONLINE");
     }
 
+    const goHome = () => {
+        setGameType(undefined);
+    }
+
     return (
         <>
             <div className={"mobile-warning-banner"}>😭 Oh no, it looks like you're using a mobile device. Sorry, Block Game doesn't yet support mobile!</div>
@@ -47,7 +51,7 @@ function BlockGame({ gameClient, onlineGameClient, errorDisplayTime }: BlockGame
                 }}
             >
                 {gameType === "LOCAL" && <LocalGame gameClient={gameClient} setError={setError} />}
-                {gameType === "ONLINE" && <OnlineGameContainer gamesClient={onlineGameClient} />}
+                {gameType === "ONLINE" && <OnlineGameContainer gamesClient={onlineGameClient} goHome={goHome}/>}
                 {!gameType && <NewGame startLocalGame={createNewLocalGame} startOnlineGame={onlineGameSelected} />}
             </div>
         </>

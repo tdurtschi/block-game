@@ -14,6 +14,7 @@ export interface OnlineGameProps {
     startGame: () => any;
     joinGame: (selectedGameId: number, playerName: string) => any;
     action: (action: Action) => { errorMessage?: string };
+    goHome: () => any;
 }
 
 export function OnlineGame({ 
@@ -22,7 +23,8 @@ export function OnlineGame({
     createGame,
     startGame,
     joinGame,
-    action
+    action,
+    goHome
 }: OnlineGameProps) {
     switch(gameState?.status) {
         case GameStatus.STARTED:
@@ -31,7 +33,7 @@ export function OnlineGame({
             action={action}
             />;
         case GameStatus.OVER:
-            return <GameOver gameState={gameState} startGame={()=>{}}/>
+            return <GameOver gameState={gameState} startGame={goHome}/>
         default:
             return <OnlineGamesLobby
             joinGame={joinGame}

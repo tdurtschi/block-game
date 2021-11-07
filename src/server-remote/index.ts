@@ -6,6 +6,7 @@ import { generateId } from "../shared/idGenerator";
 import { GameMessage } from "./game-message";
 import GameState from "../shared/types/GameState";
 import Action from "../shared/types/Actions";
+import { SERVER__AI_PLAYER_DELAY } from "../shared/constants";
 
 interface Subscriber {
     onUpdate: (gameState: GameState) => any;
@@ -123,7 +124,7 @@ class SockJSGameServer {
         const playerId = game.registerPlayer(`Player ${playerNumber+1} 🎮`);
         const subscribe = (onUpdate: (gameState: GameState) => any) => {
             const subscribers = this.gameSubscribers.get(game.id)
-            subscribers?.push({onUpdate: (gameState: GameState) => setTimeout(() => onUpdate(gameState), 500)});
+            subscribers?.push({onUpdate: (gameState: GameState) => setTimeout(() => onUpdate(gameState), SERVER__AI_PLAYER_DELAY)});
         };
 
         const action = (action: Action) => {
