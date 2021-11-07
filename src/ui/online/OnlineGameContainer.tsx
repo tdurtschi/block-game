@@ -3,10 +3,7 @@ import { GamesMessage } from "../../server-remote/games-message";
 import { IOnlineGamesClient } from "../../server-remote/gamesClient";
 import Action from "../../shared/types/Actions";
 import GameState from "../../shared/types/GameState";
-import GameStatus from "../../shared/types/GameStatus";
-import GameContainer from "../game/gameContainer";
 import { OnlineGame } from "./OnlineGame";
-import { OnlineGamesLobby } from "./OnlineGamesLobby";
 
 interface OnlineGameContainerProps {
     gamesClient: IOnlineGamesClient;

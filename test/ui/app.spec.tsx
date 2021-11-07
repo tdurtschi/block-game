@@ -101,6 +101,10 @@ describe("App", () => {
             });
         });
     });
+
+    describe("Finishing a game", () => {
+        it("Returns to the home screen TODO!");
+    })
 });
 
 function pass() {

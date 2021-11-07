@@ -1,6 +1,6 @@
 import React = require("react");
 import { render, fireEvent, screen } from "@testing-library/react";
-import { OnlineGamesLobby } from "../../src/ui/online/OnlineGamesLobby";
+import { OnlineGamesLobby } from "../../../src/ui/online/OnlineGamesLobby";
 
 describe("OnlineGamesLobby", () => {
         it("Doesn't allow to select a game after joining", async () => {

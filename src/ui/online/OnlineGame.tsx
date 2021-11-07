@@ -4,6 +4,7 @@ import Action from "../../shared/types/Actions";
 import GameState from "../../shared/types/GameState"
 import GameStatus from "../../shared/types/GameStatus"
 import GameContainer from "../game/gameContainer";
+import { GameOver } from "../GameOver";
 import { OnlineGamesLobby } from "./OnlineGamesLobby";
 
 export interface OnlineGameProps {
@@ -28,7 +29,9 @@ export function OnlineGame({
             return <GameContainer
             gameState={gameState}
             action={action}
-            />;       
+            />;
+        case GameStatus.OVER:
+            return <GameOver gameState={gameState} startGame={()=>{}}/>
         default:
             return <OnlineGamesLobby
             joinGame={joinGame}
