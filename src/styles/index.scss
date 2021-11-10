@@ -9,7 +9,7 @@
 @import "../ui/newGame/newGame.scss";
 @import "../ui/newGame/registerPlayers.scss";
 @import "../ui/help/help.scss";
-@import "../ui/onlineGame.scss";
+@import "../ui/online/onlineGame.scss";
 
 @mixin krona-one-font {
     font-family: "Krona One", sans-serif;
@@ -40,6 +40,16 @@ a {
     &:visited {
         color: $text-color;
     }
+}
+
+input {
+    background-color: lighten($background-color, 15%);
+    color: $text-color;
+    border: 2px solid $game-border-color;
+    border-radius: 3px;
+    padding: 4px;
+    outline: none;
+    margin-right:16px;
 }
 
 @mixin button {
@@ -73,8 +83,21 @@ a {
     display: flex;
 }
 
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.space-around {
+    justify-content: space-around;
+}
+
 .space-between {
     justify-content: space-between;
+}
+
+.justify-center {
+    justify-content: center;
 }
 
 .align-center {

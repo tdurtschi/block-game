@@ -21,16 +21,6 @@
             margin-right: 8px;
         }
 
-        input {
-            background-color: lighten($background-color, 15%);
-            color: $text-color;
-            border: 2px solid $game-border-color;
-            border-radius: 3px;
-            padding: 4px;
-            outline: none;
-            margin-right:16px;
-        }
-
         &:last-child {
             margin-bottom: 32px;
         }

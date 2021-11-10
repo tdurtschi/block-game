@@ -26,9 +26,9 @@
 
 ## Server backlog
 
--   Show final score for Online Multiplayer
--   Improve styling for online lobby.
 -   What happens when the game is over? Delete it from the list, close connections etc.
+-   Show GameState on the games view.
+-   Enforce correct behavior on lobby screen (name first, then join/create, then start game)
 
 ## MVP??? 
 
@@ -36,5 +36,5 @@
 -   A player can only move when its their turn
 -   Prompt user to create 4-(players) dummy/AI players when starting game
 -   Handle an error when playing a move
--   Connection error handling (no blank screen)
+-   Handle a connection error (blank screen)
 -   Create topic per game to eliminate subscribe step.

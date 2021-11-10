@@ -1,4 +1,35 @@
-@import "../styles/colors.scss";
+@import "../../styles/colors.scss";
+
+.online-games-lobby
+{
+    &.left-pane { 
+        .inner{
+            height: 100%;
+        }
+
+        .online-game-list {
+            flex-grow: 1;
+        }
+    }
+
+
+    &.right-pane {
+
+        .inner {
+            display: flex;
+            flex-direction: column;
+            padding: 72px 0rem 1rem 1rem;
+        }
+
+        button {
+            margin-top: 8px;
+        }
+    }
+
+    .start-game-container {
+        margin-top: 24px;
+    }
+}
 
 .online-game-list {
     margin: 0 auto 0 auto;

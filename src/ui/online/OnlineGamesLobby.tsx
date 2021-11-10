@@ -26,23 +26,29 @@ export function OnlineGamesLobby(props: OnlineGamesLobbyProps) {
     }
 
     return <>
-        <div className="left-pane">
-            <div className="inner">
-                <h2>Online Games Lobby</h2>
+        <div className="online-games-lobby left-pane">
+            <div className="inner flex-column">
+                <div className="flex-row space-between">
+                    <h2>Online Games Lobby</h2>
+                    <div className="flex-column justify-center">
+                        <label htmlFor="player-name">Name:</label>
+                        <input data-player-name id="player-name" value={playerName} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPlayerName(e.target.value)} />
+                    </div>
+                </div>
                 <OnlineGamesTable
                     games={props.games}
                     selectedGameId={selectedGameId}
                     onGameSelected={onGameSelected} />
-                <button className="btn-primary" data-new-online-game onClick={props.createGame}>New Online Game</button>
             </div>
         </div>
-        <div className="right-pane">
+        <div className="online-games-lobby right-pane">
             <div className="inner">
-                <label htmlFor="player-name">Name:</label>
-                <input data-player-name id="player-name" value={playerName} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPlayerName(e.target.value)} />
+                <button className="btn-primary" data-new-online-game onClick={props.createGame}>New Online Game</button>
                 <button className="btn-primary" data-join-game onClick={joinGame}>Join Game</button>
-                <button className="btn-primary" data-start-game onClick={props.startGame}>Start Game</button>
-                <span>with {4 - (props.games.find(game => game.id == selectedGameId)?.players ?? 0)} AI Players</span>
+                <div className="start-game-container">
+                    <button className="btn-primary" data-start-game onClick={props.startGame}>Start Game</button>
+                    <p>(with {4 - (props.games.find(game => game.id == selectedGameId)?.players ?? 0)} AI Players)</p>
+                </div>
             </div>
         </div>
     </>
