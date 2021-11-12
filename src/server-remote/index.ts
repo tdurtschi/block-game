@@ -7,9 +7,11 @@ import { GameMessage } from "./game-message";
 import GameState from "../shared/types/GameState";
 import Action from "../shared/types/Actions";
 import { SERVER__AI_PLAYER_DELAY } from "../shared/constants";
+import GameStatus from "../shared/types/GameStatus";
 
 interface Subscriber {
     onUpdate: (gameState: GameState) => any;
+    onCloseConnection?: () => any;
 }
 
 class SockJSGameServer {
@@ -84,7 +86,8 @@ class SockJSGameServer {
                 const newSubscriber: Subscriber = {
                     onUpdate: (gameState) => {
                         conn.write(JSON.stringify(gameState));
-                    }
+                    },
+                    onCloseConnection: () => conn.close()
                 }
                 subscribers.push(newSubscriber);
             } else if (message.kind === "REGISTER") {
@@ -94,15 +97,22 @@ class SockJSGameServer {
                 this.registerAIPlayers(game);
                 game.start();
             } else if (message.kind === "ACTION") {
-                game.action(message.action);
+                this.applyGameAction(game, message.action);
             }
 
             this.sendUpdateToGameSubscribers(game);
         }
     }
 
+    applyGameAction(game: Game, action: Action) {
+        game.action(action);
+        if(game.status === GameStatus.OVER) {
+            this.handleGameOver(game);
+        }
+    }
+
     sendUpdateToGameSubscribers(game: Game) {
-        const newState = game.getState()
+        const newState: Readonly<GameState> = game.getState()
         const subscribers = this.gameSubscribers.get(game.id)!;
         subscribers.forEach((subscriber) => {
             subscriber.onUpdate(newState)
@@ -128,7 +138,7 @@ class SockJSGameServer {
         };
 
         const action = (action: Action) => {
-            game.action(action);
+            this.applyGameAction(game, action);
             this.sendUpdateToGameSubscribers(game);
         }
 
@@ -136,6 +146,17 @@ class SockJSGameServer {
             subscribe,
             action
         }, playerId);
+    }
+
+    handleGameOver(game: Game) {
+        setTimeout((() => {
+            this.games.delete(game.id);
+            this.sendUpdateToGamesSubscribers();
+            
+            const gameSubs: Subscriber[] = this.gameSubscribers.get(game.id)!;
+            gameSubs.forEach((subscriber: Subscriber) => subscriber.onCloseConnection !== undefined && subscriber.onCloseConnection());
+            this.gameSubscribers.delete(game.id);
+        }).bind(this), 0);
     }
 }
 

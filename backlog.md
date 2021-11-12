@@ -26,15 +26,13 @@
 
 ## Server backlog
 
--   What happens when the game is over? Delete it from the list, close connections etc.
 -   Show GameState on the games view.
 -   Enforce correct behavior on lobby screen (name first, then join/create, then start game)
 
 ## MVP??? 
 
--   Fix test flakiness for server spec
--   A player can only move when its their turn
--   Prompt user to create 4-(players) dummy/AI players when starting game
+-   Handle a connection error (blank screen) / show something while connecting
 -   Handle an error when playing a move
--   Handle a connection error (blank screen)
+-   A player can only move when its their turn
+-   Fix test flakiness for server spec
 -   Create topic per game to eliminate subscribe step.

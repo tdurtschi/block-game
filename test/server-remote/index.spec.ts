@@ -5,8 +5,10 @@ import GameState from "../../src/shared/types/GameState";
 import { GameMessage } from "../../src/server-remote/game-message";
 import { TestClient } from "./testClient";
 import { GamesMessage } from "../../src/server-remote/games-message";
+import Action from "../../src/shared/types/Actions";
+import PlayerId from "../../src/shared/types/PlayerId";
 
-const SERVER_PORT = 9999;
+const SERVER_PORT = 9998;
 
 describe("SockJS Server", () => {
     let server: ChildProcess;
@@ -46,7 +48,7 @@ describe("SockJS Server", () => {
     });
 
     describe("Setting up and playing a single 4-player game", () => {
-        let gameClient: TestClient<GameMessage>;
+        let gameClient: TestClient<GameMessage, GameState>;
         let gamesClient: TestClient<any, GamesMessage>;
         let gameId: number;
         beforeAll(async () => {
@@ -118,14 +120,7 @@ describe("SockJS Server", () => {
         });
 
         it("Can send a gameplay action to a game and get the resulting state", async () => {
-            gameClient.send({
-                kind: "ACTION",
-                id: gameId,
-                action: {
-                    kind: "Pass",
-                    playerId: 1
-                }
-            });
+            gameClient.send(passAction(gameId, 1));
 
             const result: GameState = await gameClient.getNextMessage();
             expect(result.currentPlayerId).toEqual(2);
@@ -141,6 +136,26 @@ describe("SockJS Server", () => {
                 }
             });
         });
+        
+        describe("The end of the game", () => {
+            it("Removes the game from the games list", async () => {
+                gameClient.send(passAction(gameId, 2));
+                gameClient.send(passAction(gameId, 3));
+                
+                await gameClient.flush();
+                await gamesClient.flush();
+                gameClient.send(passAction(gameId, 4));
+                const gameState = await gameClient.getNextMessage();
+                expect(gameState.status).toEqual(GameStatus.OVER);
+
+                const gamesList = await gamesClient.getNextMessage();
+                expect(gamesList.find(game => game.id === gameId)).toBeUndefined();
+            })
+
+            it("Closes the connection", async () => {
+                await gameClient.connectionClosed();
+            })
+        })
     });
 
     describe("Setting up and playing a 1-player game with 3 AIs", () => {
@@ -223,6 +238,15 @@ describe("SockJS Server", () => {
         });
     });
 });
+
+const passAction = (gameId: number, playerId: PlayerId): GameMessage => ({
+    kind: "ACTION",
+    id: gameId,
+    action: {
+        kind: "Pass",
+        playerId
+    }
+})
 
 const setupServer = (port: number): Promise<ChildProcess> => {
     const env = {

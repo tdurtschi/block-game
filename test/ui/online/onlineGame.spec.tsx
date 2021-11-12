@@ -12,6 +12,7 @@ describe("Online Game", () => {
             startGame={jest.fn()}
             action={jest.fn()}
             gameState={CreateGameState(GameStatus.OVER)}
+            goHome={jest.fn()}
         />);
         
         expect(document.querySelector("[data-game-over]")).not.toBeNull();
