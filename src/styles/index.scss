@@ -65,6 +65,11 @@ input {
         position: relative;
         top: 2px;
     }
+
+    &:disabled {
+        background-color: darken($game-container-color, 10%);
+        cursor: unset;
+    }
 }
 
 .btn-primary {
