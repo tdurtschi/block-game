@@ -76,7 +76,11 @@ export function OnlineGamesLobby(props: OnlineGamesLobbyProps) {
                         Join Game
                 </button>
                 <div className="start-game-container">
-                    <button className="btn-primary" data-start-game onClick={props.startGame}>Start Game</button>
+                    <button className="btn-primary" data-start-game 
+                        onClick={props.startGame} 
+                        disabled={!hasJoinedGame}>
+                            Start Game
+                    </button>
                     {
                         hasJoinedGame &&
                             <p>(with {4 - (selectedGame()?.players ?? 0)} AI Players)</p>

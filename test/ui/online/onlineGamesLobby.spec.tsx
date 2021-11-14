@@ -12,6 +12,13 @@ describe("OnlineGamesLobby", () => {
             expect(document.querySelector(".selected")?.textContent).toContain("Started");
         });
 
+        it("Doesn't allow starting a game without joining", () => {
+            renderLobby([{id: 0, players: 1, status: GameStatus.CREATED}]);
+            
+            const isStartButtonDisabled = isButtonDisabled("[data-start-game]");
+            expect(isStartButtonDisabled).toBeTruthy();
+        });
+
         it("Doesn't allow joining a game without a player name", () => {
             renderLobby([{id: 0, players: 1, status: GameStatus.CREATED}]);
             
@@ -59,6 +66,18 @@ describe("OnlineGamesLobby", () => {
             clickOn("Game 001");
 
             expect(document.querySelector(".selected")?.textContent).toContain("Game 000");
+        });
+
+        it("Allows starting a game after joining", async () => {
+            renderLobby([{id: 0, players: 0, status: GameStatus.CREATED}]);
+
+            enterName();
+
+            clickOn("Game 000");
+            clickOn("Join Game");
+
+            const isStartButtonDisabled = isButtonDisabled("[data-start-game]");
+            expect(isStartButtonDisabled).toBeFalsy();
         });
 
         it("Doesn't allow to join a game after joining", async () => {
