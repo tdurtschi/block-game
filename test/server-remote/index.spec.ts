@@ -84,11 +84,12 @@ describe("SockJS Server", () => {
             ).toBeDefined();
         });
 
-        it("Updates the games list with the new player", async () => {
+        it("Updates the games list with the new player and game status", async () => {
             const result = await gamesClient.getNextMessage();
             expect(
                 result.find(game => game.id == gameId)?.players
             ).toEqual(1);
+            expect(result.find(game => game.id == gameId)?.status).toBeDefined();
         });
 
         it("Can start a game with 4 players", async () => {

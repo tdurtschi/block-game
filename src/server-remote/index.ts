@@ -8,6 +8,7 @@ import GameState from "../shared/types/GameState";
 import Action from "../shared/types/Actions";
 import { SERVER__AI_PLAYER_DELAY } from "../shared/constants";
 import GameStatus from "../shared/types/GameStatus";
+import { GamesMessage, GamesMessageGame } from "./games-message";
 
 interface Subscriber {
     onUpdate: (gameState: GameState) => any;
@@ -66,12 +67,13 @@ class SockJSGameServer {
         return game.getState();
     }
 
-    getGames() {
-        const result: Array<any> = [];
-        this.games.forEach(({ id, players }: Game, key: number) => {
+    getGames(): GamesMessage {
+        const result: Array<GamesMessageGame> = [];
+        this.games.forEach(({ id, players, status }: Game, key: number) => {
             const game = {
                 id,
-                players: players.length
+                players: players.length,
+                status
             };
             result.push(game);
         });

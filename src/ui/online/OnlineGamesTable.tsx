@@ -1,5 +1,6 @@
 import React = require("react");
 import { GamesMessage } from "../../server-remote/games-message";
+import GameStatus from "../../shared/types/GameStatus";
 
 export interface OnlineGamesTableProps {
     games: GamesMessage;
@@ -14,6 +15,7 @@ export function OnlineGamesTable(props: OnlineGamesTableProps) {
                 <tr>
                     <th><h3>Game ID</h3></th>
                     <th><h3>Number of Players</h3></th>
+                    <th><h3>Status</h3></th>
                 </tr>
             </thead>
             <tbody>
@@ -23,9 +25,18 @@ export function OnlineGamesTable(props: OnlineGamesTableProps) {
                         onClick={() => props.onGameSelected(game.id)}>
                         <td>Game {`${game.id}`.padStart(3, '0')}</td>
                         <td>{`${game.players}/4`}</td>
+                        <td>{formatGameStatus(game.status)}</td>
                     </tr>)
                 }
             </tbody>
         </table>
     </div>
+}
+
+function formatGameStatus(status: GameStatus) {
+    switch (status) {
+        case GameStatus.CREATED: return "Unstarted";
+        case GameStatus.STARTED: return "Started";
+        default: return "Over";
+    }
 }
