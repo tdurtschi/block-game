@@ -68,10 +68,12 @@
             &.selected {
                 background-color: darken($game-board-squares-color, 10%);
             }
-
-            &:active {
-                background-color: darken($game-board-squares-color, 20%);
-            }
         }
+    }
+}
+
+.online-games-lobby:not(.joined) {
+    tr:active {
+        background-color: darken($game-board-squares-color, 20%);
     }
 }

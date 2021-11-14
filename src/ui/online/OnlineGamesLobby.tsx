@@ -1,5 +1,5 @@
 import React = require("react");
-import { GamesMessage } from "../../server-remote/games-message";
+import { GamesMessage, GamesMessageGame } from "../../server-remote/games-message";
 import { OnlineGamesTable } from "./OnlineGamesTable";
 
 interface OnlineGamesLobbyProps {
@@ -10,23 +10,34 @@ interface OnlineGamesLobbyProps {
 }
 
 export function OnlineGamesLobby(props: OnlineGamesLobbyProps) {
-    const [selectedGameId, setSelectedGameId] = React.useState<number>();
+    const [selectedGame, setSelectedGame] = React.useState<GamesMessageGame>();
     const [playerName, setPlayerName] = React.useState<string>("");
     const [hasJoinedGame, setHasJoinedGame] = React.useState<boolean>(false);
+    
+    const isJoinGameEnabled = () => {
+        return selectedGame !== undefined 
+            && selectedGame.players < 4
+            && playerName.length > 0;
+    }
 
     const joinGame = () => {
-        if(selectedGameId !== undefined){
-            props.joinGame(selectedGameId, playerName);
+        if(selectedGame !== undefined){
+            props.joinGame(selectedGame.id, playerName);
             setHasJoinedGame(true);
         }
     }
 
-    const onGameSelected = (id: number) => {
-        if(!hasJoinedGame) setSelectedGameId(id);
+    const onGameSelected = (game: GamesMessageGame) => {
+        if(!hasJoinedGame) setSelectedGame(game);
+    }
+
+    const hasJoinedGameStyle = () => {
+        if(hasJoinedGame) return "joined";
+        return "";
     }
 
     return <>
-        <div className="online-games-lobby left-pane">
+        <div className={`online-games-lobby left-pane ${hasJoinedGameStyle()}`}>
             <div className="inner flex-column">
                 <div className="flex-row space-between">
                     <h2>Online Games Lobby</h2>
@@ -37,17 +48,17 @@ export function OnlineGamesLobby(props: OnlineGamesLobbyProps) {
                 </div>
                 <OnlineGamesTable
                     games={props.games}
-                    selectedGameId={selectedGameId}
+                    selectedGameId={selectedGame?.id}
                     onGameSelected={onGameSelected} />
             </div>
         </div>
         <div className="online-games-lobby right-pane">
             <div className="inner">
                 <button className="btn-primary" data-new-online-game onClick={props.createGame}>New Online Game</button>
-                <button className="btn-primary" data-join-game onClick={joinGame}>Join Game</button>
+                <button className="btn-primary" data-join-game onClick={joinGame} disabled={!isJoinGameEnabled()}>Join Game</button>
                 <div className="start-game-container">
                     <button className="btn-primary" data-start-game onClick={props.startGame}>Start Game</button>
-                    <p>(with {4 - (props.games.find(game => game.id == selectedGameId)?.players ?? 0)} AI Players)</p>
+                    <p>(with {4 - (selectedGame?.players ?? 0)} AI Players)</p>
                 </div>
             </div>
         </div>

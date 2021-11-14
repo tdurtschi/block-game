@@ -27,13 +27,11 @@
 ## Server backlog
 
 -   Enforce correct behavior on lobby screen (name first, then join/create, then start game)
-    - Can't join game if 4/4 players registered
-    - Can't join game without selecting one first
-    - Can't join game with blank name
     - No hover on game list after joined game
     - Join game automatically on Create
     - Can't create game with blank name
     - Only show "with _ AIs" if _ > 0.
+    - Can't join game if joined game already.
 -   Security: Maximum concurrent games (100?)
 
 ## MVP??? 

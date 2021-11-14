@@ -1,15 +1,15 @@
 import React = require("react");
-import { GamesMessage } from "../../server-remote/games-message";
+import { GamesMessage, GamesMessageGame } from "../../server-remote/games-message";
 import GameStatus from "../../shared/types/GameStatus";
 
 export interface OnlineGamesTableProps {
     games: GamesMessage;
-    onGameSelected: (id: number) => any;
+    onGameSelected: (game: GamesMessageGame) => any;
     selectedGameId: number | undefined;
 }
 
 export function OnlineGamesTable(props: OnlineGamesTableProps) {
-    return <div className="online-game-list">
+    return <div className={`online-game-list`}>
         <table data-games-list cellSpacing={0}>
             <thead>
                 <tr>
@@ -22,7 +22,7 @@ export function OnlineGamesTable(props: OnlineGamesTableProps) {
                 {props.games.map((game) =>
                     <tr key={game.id} 
                         className={props.selectedGameId === game.id ? "selected" : ""}
-                        onClick={() => props.onGameSelected(game.id)}>
+                        onClick={() => props.onGameSelected(game)}>
                         <td>Game {`${game.id}`.padStart(3, '0')}</td>
                         <td>{`${game.players}/4`}</td>
                         <td>{formatGameStatus(game.status)}</td>
