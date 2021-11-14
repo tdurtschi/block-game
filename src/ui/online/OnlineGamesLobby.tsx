@@ -10,30 +10,41 @@ interface OnlineGamesLobbyProps {
 }
 
 export function OnlineGamesLobby(props: OnlineGamesLobbyProps) {
-    const [selectedGame, setSelectedGame] = React.useState<GamesMessageGame>();
+    const [selectedGameId, setSelectedGameId] = React.useState<number>();
     const [playerName, setPlayerName] = React.useState<string>("");
     const [hasJoinedGame, setHasJoinedGame] = React.useState<boolean>(false);
     
     const isJoinGameEnabled = () => {
-        return selectedGame !== undefined 
-            && selectedGame.players < 4
-            && playerName.length > 0;
+        const game = selectedGame();
+        return game !== undefined 
+            && game.players < 4
+            && playerName.length > 0
+            && !hasJoinedGame;
+    }
+
+    const isCreateGameEnabled = () => {
+        return playerName.length > 0;
     }
 
     const joinGame = () => {
-        if(selectedGame !== undefined){
-            props.joinGame(selectedGame.id, playerName);
+        if(selectedGameId !== undefined){
+            props.joinGame(selectedGameId, playerName);
+            // TODO move this up a level, shouldn't hold this state here:
             setHasJoinedGame(true);
         }
     }
 
     const onGameSelected = (game: GamesMessageGame) => {
-        if(!hasJoinedGame) setSelectedGame(game);
+        if(!hasJoinedGame) setSelectedGameId(game.id);
     }
 
     const hasJoinedGameStyle = () => {
         if(hasJoinedGame) return "joined";
         return "";
+    }
+
+    const selectedGame = () => {
+        return props.games.find(game => game.id == selectedGameId);
     }
 
     return <>
@@ -48,17 +59,28 @@ export function OnlineGamesLobby(props: OnlineGamesLobbyProps) {
                 </div>
                 <OnlineGamesTable
                     games={props.games}
-                    selectedGameId={selectedGame?.id}
+                    selectedGameId={selectedGameId}
                     onGameSelected={onGameSelected} />
             </div>
         </div>
         <div className="online-games-lobby right-pane">
             <div className="inner">
-                <button className="btn-primary" data-new-online-game onClick={props.createGame}>New Online Game</button>
-                <button className="btn-primary" data-join-game onClick={joinGame} disabled={!isJoinGameEnabled()}>Join Game</button>
+                <button className="btn-primary" data-new-online-game 
+                    onClick={props.createGame} 
+                    disabled={!isCreateGameEnabled()}>
+                        New Online Game
+                </button>
+                <button className="btn-primary" data-join-game 
+                    onClick={joinGame} 
+                    disabled={!isJoinGameEnabled()}>
+                        Join Game
+                </button>
                 <div className="start-game-container">
                     <button className="btn-primary" data-start-game onClick={props.startGame}>Start Game</button>
-                    <p>(with {4 - (selectedGame?.players ?? 0)} AI Players)</p>
+                    {
+                        hasJoinedGame &&
+                            <p>(with {4 - (selectedGame()?.players ?? 0)} AI Players)</p>
+                    }
                 </div>
             </div>
         </div>
