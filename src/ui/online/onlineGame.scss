@@ -25,10 +25,6 @@
             margin-top: 8px;
         }
     }
-
-    .start-game-container {
-        margin-top: 24px;
-    }
 }
 
 .online-game-list {
@@ -66,14 +62,20 @@
 
         tr{
             &.selected {
-                background-color: darken($game-board-squares-color, 10%);
+                background-color: $input-primary-color;
             }
         }
     }
 }
 
-.online-games-lobby:not(.joined) {
-    tr:active {
-        background-color: darken($game-board-squares-color, 20%);
+.online-games-lobby:not(.joined) tbody{
+    tr {
+        &:active {
+            background-color: darken($game-board-squares-color, 20%);
+        }
+
+        &.selected {
+            background-color: darken($game-board-squares-color, 10%);
+        }
     }
 }

@@ -9,6 +9,9 @@ describe("Online game", () => {
 
     it("Creates and views online games.", () => {
         cy.get("[data-online-game]").click();
+
+        cy.get("[data-player-name]").type("Hoector");
+
         cy.get("[data-games-list] tbody").then(
             (gamesList: JQuery<HTMLElement>) => {
                 const games = gamesList.children("tr");

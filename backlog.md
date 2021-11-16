@@ -28,7 +28,7 @@
 
 -   Enforce correct behavior on lobby screen (name first, then join/create, then start game)
     - Join game automatically on Create
-    - Can't start without joining a game
+    - no creating new game after joined game
 -   Security: Maximum concurrent games (50?)
 
 ## MVP??? 

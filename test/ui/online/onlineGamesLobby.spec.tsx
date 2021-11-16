@@ -5,17 +5,19 @@ import GameStatus from "../../../src/shared/types/GameStatus";
 import { GamesMessage } from "../../../src/server-remote/games-message";
 
 describe("OnlineGamesLobby", () => {
-        it("Shows the game status", async () => {
+        it("Selected game shows the game status", async () => {
             renderLobby([{id: 0, players: 1, status: GameStatus.STARTED}]);
 
             clickOn("Game 000");
+
             expect(document.querySelector(".selected")?.textContent).toContain("Started");
         });
 
         it("Doesn't allow starting a game without joining", () => {
             renderLobby([{id: 0, players: 1, status: GameStatus.CREATED}]);
+            enterName();
             
-            const isStartButtonDisabled = isButtonDisabled("[data-start-game]");
+            const isStartButtonDisabled = isButtonDisabledOrMissing("[data-start-game]");
             expect(isStartButtonDisabled).toBeTruthy();
         });
 
@@ -24,7 +26,7 @@ describe("OnlineGamesLobby", () => {
             
             clickOn("Game 000");
 
-            const isJoinButtonDisabled = isButtonDisabled("[data-join-game]");
+            const isJoinButtonDisabled = isButtonDisabledOrMissing("[data-join-game]");
             expect(isJoinButtonDisabled).toBeTruthy();
         });
 
@@ -33,7 +35,7 @@ describe("OnlineGamesLobby", () => {
             
             clickOn("Game 000");
 
-            const isCreateGameButtonDisabled = isButtonDisabled("[data-new-online-game]");
+            const isCreateGameButtonDisabled = isButtonDisabledOrMissing("[data-new-online-game]");
             expect(isCreateGameButtonDisabled).toBeTruthy();
         })
         
@@ -42,53 +44,60 @@ describe("OnlineGamesLobby", () => {
             
             enterName();
             
-            const isJoinButtonDisabled = isButtonDisabled("[data-join-game]");
+            const isJoinButtonDisabled = isButtonDisabledOrMissing("[data-join-game]");
             expect(isJoinButtonDisabled).toBeTruthy();
         });
 
         it("Doesn't allow joining a game if 4/4 players registered", () => {
             renderLobby([{id: 0, players: 4, status: GameStatus.CREATED}]);
-            
             enterName();
             clickOn("Game 000");
 
-            const isJoinButtonDisabled = isButtonDisabled("[data-join-game]");
+            const isJoinButtonDisabled = isButtonDisabledOrMissing("[data-join-game]");
             expect(isJoinButtonDisabled).toBeTruthy();
         });
 
         it("Doesn't allow to select a game after joining", async () => {
             renderLobby([{id: 0, players: 0, status: GameStatus.CREATED},{id: 1, players: 0, status: GameStatus.CREATED}]);
-
             enterName();
-
             clickOn("Game 000");
             clickOn("Join Game");
+            
             clickOn("Game 001");
 
             expect(document.querySelector(".selected")?.textContent).toContain("Game 000");
         });
 
-        it("Allows starting a game after joining", async () => {
-            renderLobby([{id: 0, players: 0, status: GameStatus.CREATED}]);
-
+        it("Doesn't allow creating a game after joining", () => {
+            renderLobby([{id: 0, players: 1, status: GameStatus.CREATED}]);
             enterName();
-
             clickOn("Game 000");
+
             clickOn("Join Game");
 
-            const isStartButtonDisabled = isButtonDisabled("[data-start-game]");
+            const isCreateGameButtonDisabled = isButtonDisabledOrMissing("[data-new-online-game]");
+            expect(isCreateGameButtonDisabled).toBeTruthy();
+        })
+
+        it("Allows starting a game after joining", async () => {
+            renderLobby([{id: 0, players: 0, status: GameStatus.CREATED}]);
+            enterName();
+            clickOn("Game 000");
+
+            clickOn("Join Game");
+
+            const isStartButtonDisabled = isButtonDisabledOrMissing("[data-start-game]");
             expect(isStartButtonDisabled).toBeFalsy();
         });
 
         it("Doesn't allow to join a game after joining", async () => {
             renderLobby([{id: 0, players: 0, status: GameStatus.CREATED}]);
-
             enterName();
-
             clickOn("Game 000");
+
             clickOn("Join Game");
 
-            const isJoinButtonDisabled = isButtonDisabled("[data-join-game]");
+            const isJoinButtonDisabled = isButtonDisabledOrMissing("[data-join-game]");
             expect(isJoinButtonDisabled).toBeTruthy();
         });
 
@@ -101,10 +110,9 @@ describe("OnlineGamesLobby", () => {
 
         it("Shows AI info after joining game", async () => {
             renderLobby([{id: 0, players: 0, status: GameStatus.CREATED}]);
-
             enterName();
-
             clickOn("Game 000");
+
             clickOn("Join Game");
 
             const aiInfo = document.body.textContent;
@@ -116,8 +124,9 @@ function clickOn(gameText: string) {
     fireEvent.click(screen.getByText(gameText));
 }
 
-function isButtonDisabled(selector: string): boolean {
-    return (document.querySelector(selector) as HTMLButtonElement).disabled;
+function isButtonDisabledOrMissing(selector: string): boolean {
+    var el = (document.querySelector(selector) as HTMLButtonElement);
+    return !el || el.disabled;
 }
 
 function enterName() {

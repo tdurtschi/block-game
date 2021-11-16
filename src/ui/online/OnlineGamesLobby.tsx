@@ -14,6 +14,10 @@ export function OnlineGamesLobby(props: OnlineGamesLobbyProps) {
     const [playerName, setPlayerName] = React.useState<string>("");
     const [hasJoinedGame, setHasJoinedGame] = React.useState<boolean>(false);
     
+    const createGame = () => {
+        props.createGame()
+    };
+
     const isJoinGameEnabled = () => {
         const game = selectedGame();
         return game !== undefined 
@@ -23,7 +27,8 @@ export function OnlineGamesLobby(props: OnlineGamesLobbyProps) {
     }
 
     const isCreateGameEnabled = () => {
-        return playerName.length > 0;
+        return playerName.length > 0
+            && hasJoinedGame == false;
     }
 
     const joinGame = () => {
@@ -65,27 +70,29 @@ export function OnlineGamesLobby(props: OnlineGamesLobbyProps) {
         </div>
         <div className="online-games-lobby right-pane">
             <div className="inner">
-                <button className="btn-primary" data-new-online-game 
-                    onClick={props.createGame} 
-                    disabled={!isCreateGameEnabled()}>
-                        New Online Game
-                </button>
-                <button className="btn-primary" data-join-game 
-                    onClick={joinGame} 
-                    disabled={!isJoinGameEnabled()}>
-                        Join Game
-                </button>
-                <div className="start-game-container">
-                    <button className="btn-primary" data-start-game 
-                        onClick={props.startGame} 
-                        disabled={!hasJoinedGame}>
-                            Start Game
-                    </button>
-                    {
-                        hasJoinedGame &&
-                            <p>(with {4 - (selectedGame()?.players ?? 0)} AI Players)</p>
-                    }
-                </div>
+                {hasJoinedGame
+                    ? <div className="start-game-container">
+                        <h3>You're in Game {selectedGame()?.id ?? "GAME_ID_ERROR"}</h3>
+                        <h4>Start now with {4 - (selectedGame()?.players ?? 0)} AI Players!</h4>
+                        <button className="btn-primary" data-start-game 
+                            onClick={props.startGame} 
+                            disabled={!hasJoinedGame}>
+                                Start Game
+                        </button>
+                    </div>
+                    : <>
+                        <button className="btn-primary" data-new-online-game 
+                            onClick={createGame} 
+                            disabled={!isCreateGameEnabled()}>
+                                New Online Game
+                        </button>
+                        <button className="btn-primary" data-join-game 
+                            onClick={joinGame} 
+                            disabled={!isJoinGameEnabled()}>
+                                Join Game
+                        </button>
+                    </>
+                }
             </div>
         </div>
     </>
