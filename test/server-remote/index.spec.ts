@@ -5,15 +5,15 @@ import GameState from "../../src/shared/types/GameState";
 import { GameMessage } from "../../src/server-remote/game-message";
 import { TestClient } from "./testClient";
 import { GamesMessage } from "../../src/server-remote/games-message";
-import Action from "../../src/shared/types/Actions";
 import PlayerId from "../../src/shared/types/PlayerId";
 
 const SERVER_PORT = 9998;
+const MAX_NUM_OF_GAMES = 5;
 
 describe("SockJS Server", () => {
     let server: ChildProcess;
     beforeAll(async () => {
-        server = await setupServer(SERVER_PORT);
+        server = await setupServer(SERVER_PORT, MAX_NUM_OF_GAMES);
     });
 
     afterAll(async (done) => {
@@ -238,6 +238,19 @@ describe("SockJS Server", () => {
             await gameClient2.getNextMessage();
         });
     });
+
+    it("Disallows creating too many games", async () => {
+        const client = new TestClient("games", SERVER_PORT);
+        
+        // Start i from n because we created n games already in above test
+        for(let i = 3; i <= MAX_NUM_OF_GAMES; i++){
+            await client.getNextMessage();
+            client.send("NEW_GAME");    
+        }
+
+        const message = await client.getNextMessage();
+        expect(message.length).toEqual(MAX_NUM_OF_GAMES);
+    });
 });
 
 const passAction = (gameId: number, playerId: PlayerId): GameMessage => ({
@@ -249,11 +262,13 @@ const passAction = (gameId: number, playerId: PlayerId): GameMessage => ({
     }
 })
 
-const setupServer = (port: number): Promise<ChildProcess> => {
+const setupServer = (port: number, maxNumOfGames: number): Promise<ChildProcess> => {
     const env = {
         SERVER_PORT: port.toString(),
-        FILENAME: "../../src/server-remote/index.ts"
+        FILENAME: "../../src/server-remote/index.ts",
+        MAX_NUM_OF_GAMES: maxNumOfGames.toString()
     };
+
     return new Promise((resolve, reject) => {
         const process = fork(
             "./test/server-remote/worker-thread-ts-adapter.js",

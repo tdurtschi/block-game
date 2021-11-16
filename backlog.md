@@ -26,13 +26,9 @@
 
 ## Server backlog
 
--   Enforce correct behavior on lobby screen (name first, then join/create, then start game)
-    - Join game automatically on Create
-    - no creating new game after joined game
--   Security: Maximum concurrent games (50?)
-
 ## MVP??? 
 
+-   Join game automatically on Create
 -   Handle a connection error (blank screen) / show something while connecting
 -   Handle an error when playing a move
 -   A player can only move when its their turn

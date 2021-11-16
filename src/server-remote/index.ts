@@ -15,6 +15,8 @@ interface Subscriber {
     onCloseConnection?: () => any;
 }
 
+const MAX_NUM_OF_GAMES = process.env.MAX_NUM_OF_GAMES || 25;
+
 class SockJSGameServer {
     private games: Map<number, Game> = new Map();
     private gameSubscribers: Map<number, Subscriber[]> = new Map();
@@ -39,8 +41,13 @@ class SockJSGameServer {
         this.gameListSubscribers.push(conn);
         conn.write(JSON.stringify(this.getGames()));
         conn.on("data", (message: string) => {
-            this.newGame();
-            this.sendUpdateToGamesSubscribers();
+            try {
+                this.newGame();
+            } catch(e) {
+                console.error(e);
+            } finally {
+                this.sendUpdateToGamesSubscribers();
+            }
         });
         conn.on("close", function () {});
     }
@@ -61,6 +68,8 @@ class SockJSGameServer {
     }
 
     newGame() {
+        if(this.games.size >= MAX_NUM_OF_GAMES) throw new Error(`Maximum load reached: ${MAX_NUM_OF_GAMES} concurrent games.`)
+
         const game = new Game(generateId());
         this.games.set(game.id, game);
         this.gameSubscribers.set(game.id, []);
