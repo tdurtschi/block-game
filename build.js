@@ -54,7 +54,8 @@ const config = {
     outfile: "dist/main.js",
     bundle: true,
     define: {
-        ["process.env.NODE_ENV"]: '"development"'
+        ["process.env.NODE_ENV"]: '"development"',
+        ["process.env.SERVER_URL"]: process.env.SERVER_URL ? `"${process.env.SERVER_URL}"` : undefined
     }
 };
 

@@ -23,7 +23,12 @@ class SockJSGameServer {
     private gameListSubscribers: sockjs.Connection[] = [];
 
     listen(port: number) {
-        const server = http.createServer();
+        const requestListener: http.RequestListener = function (req, res) {
+            res.setHeader("Access-Control-Allow-Origin", "*");
+            res.writeHead(200);
+            res.end("Server is Listening!");            
+        };
+        const server = http.createServer(requestListener);
 
         const games = sockjs.createServer({ prefix: "/games" });
         games.on("connection", this.handleNewGamesSubscriber.bind(this));
@@ -176,6 +181,6 @@ const log = (str: any) => {
     console.log("");
 };
 
-const port = parseInt(process.env.SERVER_PORT || "9999");
+const port = parseInt(process.env.SERVER_PORT || process.env.PORT || "9999");
 log("Running server");
 new SockJSGameServer().listen(port);

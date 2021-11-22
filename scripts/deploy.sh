@@ -45,10 +45,10 @@ publish_docker_image() {
 main() {
     cd $PROJECT_ROOT
     docker_running_guard
+    export_variables_from_file ./scripts/deploy.env
 
     ./scripts/ci.sh
 
-    export_variables_from_file ./scripts/deploy.env
     run_deploy_from_docker
     publish_docker_image
 }

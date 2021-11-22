@@ -28,9 +28,10 @@
 
 ## MVP??? 
 
--   Join game automatically on Create
 -   Handle a connection error (blank screen) / show something while connecting
 -   Handle an error when playing a move
+-   A player passes when their connection is closed
 -   A player can only move when its their turn
+-   Join game automatically on Create
 -   Fix test flakiness for server spec
 -   Create topic per game to eliminate subscribe step.

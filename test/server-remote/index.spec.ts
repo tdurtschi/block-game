@@ -280,7 +280,7 @@ const setupServer = (port: number, maxNumOfGames: number): Promise<ChildProcess>
             console.log("🕸 Spawned web server successfully.");
         });
 
-        setTimeout(() => resolve(process), 2500);
+        setTimeout(() => resolve(process), 3000);
 
         process.on("error", (err: Error) => {
             console.log(err);
