@@ -12,8 +12,10 @@ export class WSClient<TRequest = any, TResponse = any> {
     }
 
     connected() {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             this.sock.onopen = resolve;
+            this.sock.onerror = reject;
+            this.sock.onclose = reject;
         });
     }
 
@@ -21,4 +23,3 @@ export class WSClient<TRequest = any, TResponse = any> {
         this.sock.send(JSON.stringify(data));
     }
 }
-``

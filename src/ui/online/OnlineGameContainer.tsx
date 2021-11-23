@@ -3,7 +3,9 @@ import { GamesMessage } from "../../server-remote/games-message";
 import { IOnlineGamesClient } from "../../server-remote/gamesClient";
 import Action from "../../shared/types/Actions";
 import GameState from "../../shared/types/GameState";
+import { ConnectionError } from "./ConnectionError";
 import { OnlineGame } from "./OnlineGame";
+import { WSConnectingMessage } from "./WSConnectingMessage";
 
 interface OnlineGameContainerProps {
     gamesClient: IOnlineGamesClient;
@@ -73,6 +75,10 @@ export function OnlineGameContainer({ gamesClient, goHome }: OnlineGameContainer
                 action={onGameAction}
                 goHome={goHome}
             />
+        case ConnectionState.CONNECTING:
+            return <WSConnectingMessage />
+        case ConnectionState.ERROR:
+            return <ConnectionError />
         default:
             return <></>
     }
