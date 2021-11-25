@@ -2,14 +2,18 @@
 
 # Product Backlog
 
+-   Online: Handle an error when playing a move
+-   Online: A player passes when their connection is closed
+-   Online: A player can only move when its their turn
+-   Online: Join game automatically on Create
+-   Online: Fix test flakiness for server spec
 -   Back Buttons (local player register page)
 -   Client validation: shouldn't be able to register player before creating new game.
--   Checkmark -> Radio button for AI / human players
 -   Show if player has passed near score
 -   ^^ **Next Release!** ^^
--   Figure out absolute paths for imports
 -   Figure out why contributions dont show up
 -   Improve logging/debug?
+-   Figure out absolute paths for imports
 -   Helper text for flip/rotate while piece is active
 -   View all pieces while game is in progress
 -   Move server to backend with websockets. (See below)
@@ -23,15 +27,4 @@
 -   Message for invalid move - client validation
     -   _Maybe this one makes sense to split up into multiple stories, i.e. different behavior to discourage different invalid moves? Maybe that's overkill_
 -   No Duplicate Names
-
-## Server backlog
-
-## MVP??? 
-
--   Handle a connection error (blank screen) / show something while connecting
--   Handle an error when playing a move
--   A player passes when their connection is closed
--   A player can only move when its their turn
--   Join game automatically on Create
--   Fix test flakiness for server spec
--   Create topic per game to eliminate subscribe step.
+-   Online: Create topic per game to eliminate subscribe step.

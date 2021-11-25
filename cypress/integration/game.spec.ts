@@ -20,9 +20,13 @@ describe("Block Game", () => {
         it("Gives players custom names", () => {
             cy.get("[data-new-game]").click();
             cy.get("[data-player-1-name]").clear().type("Shleemies");
+            cy.get("[data-player-1-human]").click();
             cy.get("[data-player-2-name]").clear().type("Shoney's");
+            cy.get("[data-player-2-human]").click();
             cy.get("[data-player-3-name]").clear().type("Shelley");
+            cy.get("[data-player-3-human]").click();
             cy.get("[data-player-4-name]").clear().type("Schwifty");
+            cy.get("[data-player-4-human]").click();
             cy.get("[data-confirm-action]").click();
 
             cy.contains("Shleemies's Turn");
@@ -38,7 +42,7 @@ describe("Block Game", () => {
 
     describe("Gameplay", () => {
         beforeEach(() => {
-            startNewGame();
+            startNewGameWithHumanPlayers();
         });
 
         it("Shows a gameboard and all game pieces", () => {
@@ -259,14 +263,18 @@ describe("Block Game", () => {
             cy.contains("Player 1's Turn");
             pass();
 
-            // If P1 passes and the other 3 players are automatic,
+            // If P1 passes and the other 3 players are AI,
             // the rest of the game will play out:
             cy.get("[data-game-over]");
         });
     });
 });
 
-function startNewGame() {
+function startNewGameWithHumanPlayers() {
     cy.get("[data-new-game]").click();
+    cy.get("[data-player-1-human]").click();
+    cy.get("[data-player-2-human]").click();
+    cy.get("[data-player-3-human]").click();
+    cy.get("[data-player-4-human]").click();
     cy.get("[data-confirm-action]").click();
 }

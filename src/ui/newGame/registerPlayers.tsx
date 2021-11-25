@@ -5,9 +5,9 @@ import { ConfirmButton } from "../shared/confirmButton";
 export const RegisterPlayers = ({ onPlayersRegistered }: { onPlayersRegistered: (players: PlayerConfig[]) => any }) => {
     const [players, setPlayers] = React.useState<PlayerConfig[]>([
         { name: "Player 1", isAI: false },
-        { name: "Player 2", isAI: false },
-        { name: "Player 3", isAI: false },
-        { name: "Player 4", isAI: false }
+        { name: "Player 2", isAI: true },
+        { name: "Player 3", isAI: true },
+        { name: "Player 4", isAI: true }
     ])
 
     return <>
@@ -21,9 +21,14 @@ export const RegisterPlayers = ({ onPlayersRegistered }: { onPlayersRegistered: 
                         players[0].name = event.target.value;
                         setPlayers([...players]);
                     }} />
-                    <label>Computer Player:</label>
-                    <input data-player-1-ai type="checkbox" checked={players[0].isAI} onChange={() => {
-                        players[0].isAI = !players[0].isAI;
+                    <label>Human: </label>
+                    <input data-player-1-human type="radio" checked={!players[0].isAI} onChange={() => {
+                        players[0].isAI = false;
+                        setPlayers([...players]);
+                    }} />
+                    <label>AI Player: </label>
+                    <input data-player-1-ai type="radio" checked={players[0].isAI} onChange={() => {
+                        players[0].isAI = true;
                         setPlayers([...players]);
                     }} />
                 </div>
@@ -34,9 +39,14 @@ export const RegisterPlayers = ({ onPlayersRegistered }: { onPlayersRegistered: 
                         players[1].name = event.target.value;
                         setPlayers([...players]);
                     }} />
-                    <label>Computer Player:</label>
-                    <input data-player-2-ai type="checkbox" checked={players[1].isAI} onChange={() => {
-                        players[1].isAI = !players[1].isAI;
+                    <label>Human: </label>
+                    <input data-player-2-human type="radio" checked={!players[1].isAI} onChange={() => {
+                        players[1].isAI = false;
+                        setPlayers([...players]);
+                    }} />
+                    <label>AI Player: </label>
+                    <input data-player-2-ai type="radio" checked={players[1].isAI} onChange={() => {
+                        players[1].isAI = true;
                         setPlayers([...players]);
                     }} />
                 </div>
@@ -47,9 +57,14 @@ export const RegisterPlayers = ({ onPlayersRegistered }: { onPlayersRegistered: 
                         players[2].name = event.target.value;
                         setPlayers([...players]);
                     }} />
-                    <label>Computer Player:</label>
-                    <input data-player-3-ai type="checkbox" checked={players[2].isAI} onChange={() => {
-                        players[2].isAI = !players[2].isAI;
+                    <label>Human: </label>
+                    <input data-player-3-human type="radio" checked={!players[2].isAI} onChange={() => {
+                        players[2].isAI = false;
+                        setPlayers([...players]);
+                    }} />
+                    <label>AI Player: </label>
+                    <input data-player-3-ai type="radio" checked={players[2].isAI} onChange={() => {
+                        players[2].isAI = true;
                         setPlayers([...players]);
                     }} />
                 </div>
@@ -60,9 +75,14 @@ export const RegisterPlayers = ({ onPlayersRegistered }: { onPlayersRegistered: 
                         players[3].name = event.target.value;
                         setPlayers([...players]);
                     }} />
-                    <label>Computer Player:</label>
-                    <input data-player-4-ai type="checkbox" checked={players[3].isAI} onChange={() => {
-                        players[3].isAI = !players[3].isAI;
+                    <label>Human: </label>
+                    <input data-player-4-human type="radio" checked={!players[3].isAI} onChange={() => {
+                        players[3].isAI = false;
+                        setPlayers([...players]);
+                    }} />
+                    <label>AI Player: </label>
+                    <input data-player-4-ai type="radio" checked={players[3].isAI} onChange={() => {
+                        players[3].isAI = true;
                         setPlayers([...players]);
                     }} />
                 </div>
