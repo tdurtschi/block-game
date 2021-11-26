@@ -6,6 +6,7 @@ import { GameMessage } from "../../src/server-remote/game-message";
 import { TestClient } from "./testClient";
 import { GamesMessage } from "../../src/server-remote/games-message";
 import PlayerId from "../../src/shared/types/PlayerId";
+import * as waitOn from "wait-on";
 
 const SERVER_PORT = 9998;
 const MAX_NUM_OF_GAMES = 5;
@@ -14,6 +15,7 @@ describe("SockJS Server", () => {
     let server: ChildProcess;
     beforeAll(async () => {
         server = await setupServer(SERVER_PORT, MAX_NUM_OF_GAMES);
+        await waitOn({resources: [`http-get://localhost:${SERVER_PORT}`]});
     });
 
     afterAll(async (done) => {
@@ -280,11 +282,11 @@ const setupServer = (port: number, maxNumOfGames: number): Promise<ChildProcess>
             console.log("🕸 Spawned web server successfully.");
         });
 
-        setTimeout(() => resolve(process), 3000);
-
         process.on("error", (err: Error) => {
             console.log(err);
             reject(err);
         });
+
+        resolve(process);
     });
 };

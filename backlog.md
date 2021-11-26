@@ -3,14 +3,14 @@
 # Product Backlog
 
 -   Online: Handle an error when playing a move
--   Online: A player passes when their connection is closed
 -   Online: A player can only move when its their turn
+-   Online: A player passes when their connection is closed
 -   Online: Join game automatically on Create
--   Online: Fix test flakiness for server spec
 -   Back Buttons (local player register page)
 -   Client validation: shouldn't be able to register player before creating new game.
 -   Show if player has passed near score
 -   ^^ **Next Release!** ^^
+-   Refactor shared, server & UI source code heirarchy
 -   Figure out why contributions dont show up
 -   Improve logging/debug?
 -   Figure out absolute paths for imports
