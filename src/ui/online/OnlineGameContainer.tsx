@@ -78,7 +78,7 @@ export function OnlineGameContainer({ gamesClient, goHome }: OnlineGameContainer
         case ConnectionState.CONNECTING:
             return <WSConnectingMessage />
         case ConnectionState.ERROR:
-            return <ConnectionError />
+            return <ConnectionError goBack={goHome}/>
         default:
             return <></>
     }

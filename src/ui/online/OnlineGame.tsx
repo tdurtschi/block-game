@@ -39,6 +39,7 @@ export function OnlineGame({
             joinGame={joinGame}
             createGame={createGame}
             startGame={startGame}
+            goBack={goHome}
             games={games}
             />;
     }

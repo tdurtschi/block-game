@@ -6,6 +6,7 @@ interface OnlineGamesLobbyProps {
     createGame: () => any;
     startGame: () => any;
     joinGame: (selectedGameId: number, playerName: string) => any;
+    goBack: () => any;
     games: GamesMessage;
 }
 
@@ -57,9 +58,11 @@ export function OnlineGamesLobby(props: OnlineGamesLobbyProps) {
             <div className="inner flex-column">
                 <div className="flex-row space-between">
                     <h2>Online Games Lobby</h2>
-                    <div className="flex-column justify-center">
-                        <label htmlFor="player-name">Name:</label>
-                        <input data-player-name id="player-name" value={playerName} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPlayerName(e.target.value)} />
+                    <div className="action-buttons-container">
+                        <button className="btn-secondary"
+                            onClick={props.goBack}>
+                                Go Back
+                        </button>
                     </div>
                 </div>
                 <OnlineGamesTable
@@ -70,6 +73,10 @@ export function OnlineGamesLobby(props: OnlineGamesLobbyProps) {
         </div>
         <div className="online-games-lobby right-pane">
             <div className="inner">
+            <div className="flex-column justify-center">
+                <label htmlFor="player-name">Name:</label>
+                <input data-player-name id="player-name" value={playerName} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPlayerName(e.target.value)} />
+            </div>
                 {hasJoinedGame
                     ? <div className="start-game-container">
                         <h3>You're in Game {selectedGame()?.id ?? "GAME_ID_ERROR"}</h3>

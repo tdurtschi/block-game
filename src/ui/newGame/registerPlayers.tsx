@@ -2,7 +2,12 @@ import React = require("react");
 import { PlayerConfig } from "../../game-client/playerConfig";
 import { ConfirmButton } from "../shared/confirmButton";
 
-export const RegisterPlayers = ({ onPlayersRegistered }: { onPlayersRegistered: (players: PlayerConfig[]) => any }) => {
+export interface RegisterPlayersProps { 
+    onPlayersRegistered: (players: PlayerConfig[]) => any 
+    goBack: () => any
+}
+
+export const RegisterPlayers = ({ onPlayersRegistered, goBack }: RegisterPlayersProps) => {
     const [players, setPlayers] = React.useState<PlayerConfig[]>([
         { name: "Player 1", isAI: false },
         { name: "Player 2", isAI: true },
@@ -88,6 +93,9 @@ export const RegisterPlayers = ({ onPlayersRegistered }: { onPlayersRegistered: 
                 </div>
             </div>
             <div className={"action-buttons"}>
+                <button className="btn-secondary" onClick={goBack}>
+                    Go Back
+                </button>
                 <ConfirmButton label={"Start Game"} action={() => onPlayersRegistered(players)} />
             </div>
         </div>

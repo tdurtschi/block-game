@@ -53,7 +53,7 @@ export function LocalGame({ gameClient, setError, goHome }: LocalGameProps) {
         />
     )}
         {gameState.status === GameStatus.CREATED && (
-            <RegisterPlayers onPlayersRegistered={onPlayersRegistered} />
+            <RegisterPlayers onPlayersRegistered={onPlayersRegistered} goBack={goHome}/>
         )}
         {gameState.status === GameStatus.OVER && (
             <GameOver gameState={gameState} goHome={goHome} />
