@@ -2,15 +2,22 @@ pipeline {
     agent any
 
     stages {
+        stage('Check pipeline dependencies') {
+            steps {
+                sh "yarn -v"
+                sh "node -v"
+            }
+        }
+        
         stage('Install dependencies') {
             steps {
-                sh "npm install"
+                sh "yarn install"
             }
         }
 
         stage('Run tests') {
             steps {
-                sh "npm test"
+                sh "yarn test"
             }
         }
 
