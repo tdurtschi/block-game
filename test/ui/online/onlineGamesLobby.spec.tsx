@@ -138,5 +138,6 @@ function renderLobby(games: GamesMessage = []){
         createGame={jest.fn()}
         joinGame={jest.fn()}
         startGame={jest.fn()}
+        goBack={jest.fn()}
         />);
 }
