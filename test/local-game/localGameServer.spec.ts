@@ -1,13 +1,13 @@
-import GameServer from "../../src/server-local";
+import LocalGameServer from "../../src/local-game/localGameServer";
 import { GamePlayAction } from "../../src/shared/types/Actions";
 import GameStatus from "../../src/shared/types/GameStatus";
 import PlayerId from "../../src/shared/types/PlayerId";
 
 describe("server", () => {
-    let server: GameServer;
+    let server: LocalGameServer;
 
     beforeEach(() => {
-        server = new GameServer();
+        server = new LocalGameServer();
     });
 
     it("Creates a game", () => {

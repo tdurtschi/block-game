@@ -1,4 +1,4 @@
-import InvalidActionError from "../server-local/errors/InvalidActionError";
+import InvalidActionError from "../local-game/errors/InvalidActionError";
 import { GAMEBOARD_SIZE } from "./constants";
 import { applyPieceModifications } from "./pieceUtils";
 import { BoardLocation, GamePlayAction } from "./types/Actions";

@@ -1,6 +1,6 @@
 import React = require("react");
-import { IGameClient } from "../game-client";
-import { PlayerConfig } from "../game-client/playerConfig";
+import { IGameClient } from "../local-game/gameClient";
+import { PlayerConfig } from "../local-game/playerConfig";
 import Action from "../shared/types/Actions";
 import GameState from "../shared/types/GameState";
 import GameStatus from "../shared/types/GameStatus";

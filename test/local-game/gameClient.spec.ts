@@ -1,9 +1,9 @@
-import GameClient from "../../src/game-client";
-import GameServer from "../../src/server-local";
+import GameClient from "../../src/local-game/gameClient";
+import LocalGameServer from "../../src/local-game/localGameServer";
 
 describe('Game Client', () => {
     it("Subscribes an AI to game for an AI Player", () => {
-        const server = new GameServer();
+        const server = new LocalGameServer();
         jest.spyOn(server, "subscribe");
         const gameClient = new GameClient(server);
         gameClient.newGame();

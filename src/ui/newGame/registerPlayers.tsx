@@ -1,5 +1,5 @@
 import React = require("react");
-import { PlayerConfig } from "../../game-client/playerConfig";
+import { PlayerConfig } from "../../local-game/playerConfig";
 import { ConfirmButton } from "../shared/confirmButton";
 
 export interface RegisterPlayersProps { 

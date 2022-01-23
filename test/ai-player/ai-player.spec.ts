@@ -1,6 +1,6 @@
 import { AIPlayer } from "../../src/ai-player/ai-player";
-import GameClient from "../../src/game-client";
-import GameServer from "../../src/server-local";
+import GameClient from "../../src/local-game/gameClient";
+import LocalGameServer from "../../src/local-game/localGameServer";
 import Game from "../../src/shared/Game";
 import GameState from "../../src/shared/types/GameState";
 import GameStatus from "../../src/shared/types/GameStatus";
@@ -29,7 +29,7 @@ describe("AI Player", () => {
 
     describe("First turn", () => {
         it("Plays the first piece in an available corner", (done) => {
-            const client = new GameClient(new GameServer());
+            const client = new GameClient(new LocalGameServer());
             client.newGame();
             client.registerPlayer({ name: "p1", isAI: true });
             client.registerPlayer({ name: "p2", isAI: true });

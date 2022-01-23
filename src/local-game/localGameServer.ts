@@ -6,7 +6,7 @@ import { generateId } from "../shared/idGenerator";
 export type ActionResult = { errorMessage?: string };
 type UpdateCallback = (gameState: Readonly<GameState>) => any;
 
-class GameServer {
+class LocalGameServer {
     private games: Map<number, Game> = new Map<number, Game>();
     private subscribers: Map<number, UpdateCallback[]> = new Map<
         number,
@@ -82,4 +82,4 @@ class GameServer {
     }
 }
 
-export default GameServer;
+export default LocalGameServer;

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import React = require("react");
-import { IGameClient } from "../game-client";
+import { IGameClient } from "../local-game/gameClient";
 import { IOnlineGamesClient } from "../server-remote/gamesClient";
 import GameState from "../shared/types/GameState";
 import { LocalGame } from "./LocalGame";

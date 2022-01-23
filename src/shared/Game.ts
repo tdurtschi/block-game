@@ -1,6 +1,6 @@
 import Action, { GamePlayAction } from "./types/Actions";
 import GameStatus from "./types/GameStatus";
-import InvalidActionError from "../server-local/errors/InvalidActionError";
+import InvalidActionError from "../local-game/errors/InvalidActionError";
 import Player from "./Player";
 import PlayerId from "./types/PlayerId";
 import { GamePiecesData } from "./types/GamePiece";

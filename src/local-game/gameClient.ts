@@ -1,5 +1,5 @@
 import { AIPlayer } from "../ai-player/ai-player";
-import GameServer from "../server-local";
+import LocalGameServer from "./localGameServer";
 import Action from "../shared/types/Actions";
 import GameState from "../shared/types/GameState";
 import { PlayerConfig } from "./playerConfig";
@@ -15,7 +15,7 @@ export interface IGameClient {
 class GameClient implements IGameClient {
     private gameId: number | undefined;  
 
-    constructor(private server: GameServer) {}
+    constructor(private server: LocalGameServer) {}
 
     newGame() {
         const result = this.server.newGame();
