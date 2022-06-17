@@ -24,17 +24,14 @@ export function OnlineGameContainer({ gamesClient, goHome }: OnlineGameContainer
     const [gameState, setGameState] = React.useState<GameState>();
 
     React.useEffect(() => {
-        const connect = async () => {
-            gamesClient.connect(onGamesUpdate, onGameUpdate)
-                .then(() => {
-                    setConnectionState(ConnectionState.CONNECTED)
-                })
-                .catch(() => {
-                    setConnectionState(ConnectionState.ERROR);
-                });
-        }
-
-        connect();
+        // todo why is this wrapped in a fn?
+        gamesClient.connect(onGamesUpdate, onGameUpdate)
+            .then(() => {
+                setConnectionState(ConnectionState.CONNECTED)
+            })
+            .catch(() => {
+                setConnectionState(ConnectionState.ERROR);
+            });
     }, []);
 
     const createGame = () => {
@@ -58,13 +55,13 @@ export function OnlineGameContainer({ gamesClient, goHome }: OnlineGameContainer
     const onGameUpdate = (data: GameState) => {
         setGameState(data);
     }
-    
+
     const onGameAction = (action: Action) => {
         gamesClient.gameAction(action);
         return {};
     }
 
-    switch(connectionState) {
+    switch (connectionState) {
         case ConnectionState.CONNECTED:
             return <OnlineGame
                 gameState={gameState}
@@ -78,7 +75,7 @@ export function OnlineGameContainer({ gamesClient, goHome }: OnlineGameContainer
         case ConnectionState.CONNECTING:
             return <WSConnectingMessage />
         case ConnectionState.ERROR:
-            return <ConnectionError goBack={goHome}/>
+            return <ConnectionError goBack={goHome} />
         default:
             return <></>
     }

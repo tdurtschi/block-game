@@ -14,9 +14,11 @@ export interface BlockGameProps {
     errorDisplayTime?: number;
 }
 
+
 function BlockGame({ gameClient, onlineGameClient, errorDisplayTime }: BlockGameProps) {
     const [gameType, setGameType] = useState<"LOCAL" | "ONLINE" | undefined>();
     const [error, setError] = useState<string>();
+    const [showRejoinPrompt, setShowRejoinPrompt] = useState<boolean>(onlineGameClient.canRejoinGame());
 
     const createNewLocalGame = () => {
         setGameType("LOCAL");
@@ -28,6 +30,12 @@ function BlockGame({ gameClient, onlineGameClient, errorDisplayTime }: BlockGame
 
     const goHome = () => {
         setGameType(undefined);
+    }
+
+    const rejoinGame = async () => {
+        onlineGameSelected();
+        onlineGameClient.rejoinGame();
+        setShowRejoinPrompt(false)
     }
 
     return (
@@ -51,9 +59,12 @@ function BlockGame({ gameClient, onlineGameClient, errorDisplayTime }: BlockGame
                 }}
             >
                 {gameType === "LOCAL" && <LocalGame gameClient={gameClient} setError={setError} goHome={goHome} />}
-                {gameType === "ONLINE" && <OnlineGameContainer gamesClient={onlineGameClient} goHome={goHome}/>}
+                {gameType === "ONLINE" && <OnlineGameContainer gamesClient={onlineGameClient} goHome={goHome} />}
                 {!gameType && <NewGame startLocalGame={createNewLocalGame} startOnlineGame={onlineGameSelected} />}
             </div>
+            {showRejoinPrompt && !gameType && <div className="rejoin-prompt">
+                Were you in the middle of an online game? <button data-rejoin-game onClick={rejoinGame} className="btn-primary">Click here</button> to rejoin.
+            </div>}
         </>
     );
 }

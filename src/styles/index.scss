@@ -51,7 +51,7 @@ input {
     border-radius: 3px;
     padding: 6px;
     outline: none;
-    margin-right:16px;
+    margin-right: 16px;
 }
 
 @mixin button {
@@ -127,11 +127,22 @@ input {
     border-radius: 5px;
     padding: 0.3rem 1rem;
 
-    @media screen and (any-pointer: fine){
+    @media screen and (any-pointer: fine) {
         display: none;
     }
 }
 
 .help-button {
     margin-left: 8px;
+}
+
+.app-container {
+    margin: 0 auto 0 auto;
+
+    min-width: 900px;
+    max-width: 1000px;
+}
+
+.rejoin-prompt {
+    margin-top: 16px;
 }

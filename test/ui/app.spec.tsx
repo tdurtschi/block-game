@@ -7,28 +7,29 @@ import { IOnlineGamesClient } from "../../src/server-remote/gamesClient";
 import _ = require("cypress/types/lodash");
 import { CreateGameState } from "../gameStateFixture";
 import { testGameFixture } from "../testGameFixture";
+import { fakeOnlineClient } from "../fakes";
 
 describe("App", () => {
     describe("Performing a game action", () => {
         it("Displays an error response from the server", async () => {
             const gameClient: IGameClient = fakeLocalClient({
-                    action: jest.fn().mockReturnValue({ 
-                        errorMessage: "Test Error" 
-                    }),
-                    newGame: jest.fn().mockReturnValue({
-                        id: 0,
-                        currentPlayerId: 1,
-                        players: [
-                            {
-                                playerPieces: [],
-                                hasPassed: false,
-                                playerId: 1
-                            }
-                        ],
-                        boardState: [],
-                        status: GameStatus.STARTED
-                    })
-                });
+                action: jest.fn().mockReturnValue({
+                    errorMessage: "Test Error"
+                }),
+                newGame: jest.fn().mockReturnValue({
+                    id: 0,
+                    currentPlayerId: 1,
+                    players: [
+                        {
+                            playerPieces: [],
+                            hasPassed: false,
+                            playerId: 1
+                        }
+                    ],
+                    boardState: [],
+                    status: GameStatus.STARTED
+                })
+            });
 
             const onlineGameClient: IOnlineGamesClient = fakeOnlineClient();
 
@@ -44,8 +45,8 @@ describe("App", () => {
 
         it("Error stops displaying after delay", async () => {
             const gameClient: IGameClient = fakeLocalClient({
-                action: jest.fn().mockReturnValue({ 
-                    errorMessage: "Test Error" 
+                action: jest.fn().mockReturnValue({
+                    errorMessage: "Test Error"
                 }),
                 newGame: jest.fn().mockReturnValue({
                     id: 0,
@@ -95,7 +96,7 @@ describe("App", () => {
             const onlineGameClient: IOnlineGamesClient = fakeOnlineClient();
             render(<App gameClient={gameClient} onlineGameClient={onlineGameClient} />);
             fireEvent.click(screen.getByText("New Game"));
-            
+
             fireEvent.click(await screen.findByText("Go Back"));
 
             await screen.findByText("New Game");
@@ -111,7 +112,7 @@ describe("App", () => {
 
             render(<App gameClient={gameClient} onlineGameClient={onlineGameClient} />);
             fireEvent.click(screen.getByText("New Online Game"));
-            
+
             fireEvent.click(await screen.findByText("Go Back"));
 
             await screen.findByText("New Online Game");
@@ -127,7 +128,7 @@ describe("App", () => {
 
             render(<App gameClient={gameClient} onlineGameClient={onlineGameClient} />);
             fireEvent.click(screen.getByText("New Online Game"));
-            
+
             fireEvent.click(await screen.findByText("Go Back"));
 
             await screen.findByText("New Online Game");
@@ -141,12 +142,12 @@ describe("App", () => {
             const gameClient: IGameClient = fakeLocalClient();
 
             const onlineGameClient: IOnlineGamesClient = fakeOnlineClient({
-                    connect: ((_, onGameUpdate: (...args: any[]) => any) => {
-                        onGameUpdate(gameState);
+                connect: ((_, onGameUpdate: (...args: any[]) => any) => {
+                    onGameUpdate(gameState);
 
-                        return new Promise((resolve, reject) => setTimeout(() => resolve(undefined), 0));
-                    })
-                });
+                    return new Promise((resolve, reject) => setTimeout(() => resolve(undefined), 0));
+                })
+            });
 
             render(<App gameClient={gameClient} onlineGameClient={onlineGameClient} />);
 
@@ -190,17 +191,7 @@ function pass() {
     fireEvent.click(screen.getByText("Confirm Pass"));
 }
 
-function fakeOnlineClient(config: Partial<IOnlineGamesClient> = {}){
-    return Object.assign({
-        subscribe: jest.fn(),
-        action: jest.fn(),
-        newGame: jest.fn(),
-        registerPlayer: jest.fn(),
-        startGame: jest.fn()
-    }, config) as IOnlineGamesClient;
-}
-
-function fakeLocalClient(config: Partial<IGameClient> = {}){
+function fakeLocalClient(config: Partial<IGameClient> = {}) {
     return Object.assign({
         subscribe: jest.fn(),
         action: jest.fn(),

@@ -4,6 +4,7 @@ import { IGameClient } from "../../../src/local-game/gameClient";
 import GameStatus from "../../../src/shared/types/GameStatus";
 import App from "../../../src/ui/App";
 import { IOnlineGamesClient } from "../../../src/server-remote/gamesClient";
+import { fakeOnlineClient } from "../../fakes";
 
 describe("Game Over", () => {
     it("Displays the winner", async () => {
@@ -36,13 +37,7 @@ describe("Game Over", () => {
             startGame: jest.fn()
         };
 
-        const onlineGameClient: IOnlineGamesClient = {
-            connect: jest.fn(),
-            createGame: jest.fn(),
-            joinGame: jest.fn(),
-            startGame: jest.fn(),
-            gameAction: jest.fn()
-        }
+        const onlineGameClient: IOnlineGamesClient = fakeOnlineClient()
 
         render(<App gameClient={gameClient} onlineGameClient={onlineGameClient} />);
 

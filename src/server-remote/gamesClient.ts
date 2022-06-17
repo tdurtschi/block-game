@@ -13,6 +13,8 @@ export interface IOnlineGamesClient {
     joinGame: (gameId: number, playerName: string) => any;
     startGame: (gameId: number) => any;
     gameAction: (action: Action) => any;
+    canRejoinGame: () => boolean;
+    rejoinGame: () => Promise<unknown>;
 }
 
 export class OnlineGamesClient {
@@ -20,6 +22,10 @@ export class OnlineGamesClient {
     private gameConnection: WSClient<GameMessage, any> | undefined;
     private onGameUpdate: ((state: GameState) => any) | undefined;
     private gameId: number = 0;
+    private connectionSucceeded!: (value: any) => any;
+    private waitForConnection = new Promise((res) => {
+        this.connectionSucceeded = res;
+    });
 
     public connect(
         onGamesUpdate: (games: GamesMessage) => any,
@@ -27,7 +33,7 @@ export class OnlineGamesClient {
     ) {
         this.gamesConnection = new WSClient<any>("games", onGamesUpdate);
         this.onGameUpdate = onGameUpdate;
-        return this.gamesConnection.connected();
+        return this.gamesConnection.connected().then(this.connectionSucceeded);
     }
 
     createGame() {
@@ -35,20 +41,39 @@ export class OnlineGamesClient {
     }
 
     async joinGame(gameId: number, playerName: string) {
-        this.gameId = gameId;
-        this.gameConnection = new WSClient<GameMessage, any>("game", this.onGameUpdate!);
-        await this.gameConnection.connected();
-        
-        this.gameConnection.send({ kind: "SUBSCRIBE", id: this.gameId });
-        this.gameConnection.send({
+        await this.connectAndSubscribeToGame(gameId);
+
+        this.gameConnection!.send({
             kind: "REGISTER",
             id: this.gameId,
             playerName
         });
+
+        window.sessionStorage.setItem("onlineGame", `${gameId}`);
+    }
+
+    canRejoinGame() {
+        const onlineGame = window.sessionStorage.getItem("onlineGame");
+        return onlineGame !== null;
+    }
+
+    async rejoinGame() {
+        if (this.canRejoinGame()) {
+            const onlineGameId = window.sessionStorage.getItem("onlineGame")!;
+            const gameId = parseInt(onlineGameId);
+
+            await this.waitForConnection;
+            this.connectAndSubscribeToGame(gameId);
+        } else {
+            throw new Error("Tried to rejoin game but couldn't find game ID");
+        }
     }
 
     gameAction(action: Action) {
         this.gameConnection?.send({ kind: "ACTION", id: this.gameId, action });
+        if (action.kind == "Pass") {
+            window.sessionStorage.clear();
+        }
     }
 
     startGame(gameId: number) {
@@ -56,5 +81,16 @@ export class OnlineGamesClient {
             kind: "START",
             id: gameId
         });
+    }
+
+    private async connectAndSubscribeToGame(gameId: number) {
+        this.gameId = gameId;
+        this.gameConnection = new WSClient<GameMessage, any>(
+            "game",
+            this.onGameUpdate!
+        );
+        await this.gameConnection.connected();
+
+        this.gameConnection.send({ kind: "SUBSCRIBE", id: this.gameId });
     }
 }
