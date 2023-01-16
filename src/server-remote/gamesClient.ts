@@ -17,6 +17,9 @@ export interface IOnlineGamesClient {
     rejoinGame: () => Promise<unknown>;
 }
 
+const RETRY_LENGTH = 5 * 60000; // 5 minutes * 60000 ms/min
+const RETRY_TIMEOUT = 500;
+
 export class OnlineGamesClient {
     private gamesConnection: WSClient<any, GamesMessage> | undefined;
     private gameConnection: WSClient<GameMessage, any> | undefined;
@@ -31,9 +34,15 @@ export class OnlineGamesClient {
         onGamesUpdate: (games: GamesMessage) => any,
         onGameUpdate: (state: GameState) => any
     ) {
-        this.gamesConnection = new WSClient<any>("games", onGamesUpdate);
-        this.onGameUpdate = onGameUpdate;
-        return this.gamesConnection.connected().then(this.connectionSucceeded);
+        const connect = async () => {
+            this.gamesConnection = new WSClient<any>("games", onGamesUpdate);
+            this.onGameUpdate = onGameUpdate;
+            await this.gamesConnection.connected();
+        };
+
+        return withRetry(connect, RETRY_LENGTH, RETRY_TIMEOUT).then(
+            this.connectionSucceeded
+        );
     }
 
     createGame() {
@@ -94,3 +103,26 @@ export class OnlineGamesClient {
         this.gameConnection.send({ kind: "SUBSCRIBE", id: this.gameId });
     }
 }
+
+const withRetry = async (
+    fn: () => Promise<any>,
+    retryLength: number,
+    retryTimeout: number
+) => {
+    const startTime = Date.now();
+    const endTime = startTime + retryLength;
+    let success = false;
+    while (Date.now() < endTime && !success) {
+        try {
+            await fn();
+            success = true;
+        } catch (error) {
+            await new Promise((r) => setTimeout(r, retryTimeout));
+            if (Date.now() >= endTime) {
+                console.error(error);
+
+                throw error;
+            }
+        }
+    }
+};
