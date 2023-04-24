@@ -4,7 +4,7 @@ set -e
 PROJECT_ROOT="$( cd "$(dirname "${BASH_SOURCE[0]}")" ; cd .. ; pwd -P )"
 
 export_variables_from_file() {
-    if [ ! -f $PROJECT_ROOT/scripts/deploy.env ]; then
+    if [ ! -f $1 ]; then
         echo "😭 ERROR!"
         echo "🔴 File 'deploy.env' does not exist in directory $PROJECT_ROOT/scripts"
         echo ""
@@ -20,7 +20,7 @@ run_deploy_from_docker() {
     docker run -it --rm \
         -v $PROJECT_ROOT:$PROJECT_TARGET_DIR \
         -w=$PROJECT_TARGET_DIR \
-        --env-file=$PROJECT_ROOT/scripts/deploy.env \
+        --env-file=$1 \
         frolvlad/alpine-bash \
         /bin/bash $PROJECT_TARGET_DIR/scripts/docker/do-static-upload.sh
 }
@@ -49,8 +49,8 @@ main() {
 
     ./scripts/ci.sh
 
-    run_deploy_from_docker
-    publish_docker_image
+    run_deploy_from_docker ./scripts/deploy.env
+    # publish_docker_image
 }
 
 main
