@@ -1,22 +1,22 @@
 $background-color: #232422;
-$text-color: #d8d8d8;
+$text-color: #f5f5f5;
 $game-border-color: $text-color;
 $btn-border-color: $text-color;
-$btn-primary-color: #4e9000;
+$btn-primary-color: #05a200;
 $input-primary-color: #637251;
 $btn-secondary-color: #88009a;
 $btn-help-color: #dc1600;
-$p1-color: rgba(254, 12, 12, 0.68);
-$p2-color: rgba(0, 204, 0, 0.748);
+$p1-color: rgba(255, 30, 30, 0.779);
+$p2-color: rgba(0, 219, 0, 0.767);
 $p3-color: rgba(0, 0, 255, 0.568);
-$p4-color: #f0e000c4;
-$p1-border-color: rgba(103, 0, 0, 0.865);
-$p2-border-color: rgba(6, 87, 6, 0.577);
-$p3-border-color: rgba(9, 9, 75, 0.365);
-$p4-border-color: rgba(99, 93, 12, 0.515);
+$p4-color: #f7eb0ad9;
+$p1-border-color: rgba(108, 0, 0, 0.886);
+$p2-border-color: rgba(3, 83, 3, 0.728);
+$p3-border-color: rgba(9, 9, 75, 0.63);
+$p4-border-color: rgba(111, 105, 13, 0.86);
 
-$game-container-color: #747474;
-$game-board-color: #9d9d9d;
+$game-container-color: #3e3e3e;
+$game-board-color: #b2b2b2;
 $game-board-squares-color: #8c8c8c;
 
 @mixin tmp {

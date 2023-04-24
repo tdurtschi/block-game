@@ -111,11 +111,11 @@ describe("App", () => {
             });
 
             render(<App gameClient={gameClient} onlineGameClient={onlineGameClient} />);
-            fireEvent.click(screen.getByText("New Online Game"));
+            fireEvent.click(screen.getByText("Online Game Lobby"));
 
             fireEvent.click(await screen.findByText("Go Back"));
 
-            await screen.findByText("New Online Game");
+            await screen.findByText("Online Game Lobby");
         })
 
         it("Returns home after a connection failure", async () => {
@@ -127,11 +127,11 @@ describe("App", () => {
             });
 
             render(<App gameClient={gameClient} onlineGameClient={onlineGameClient} />);
-            fireEvent.click(screen.getByText("New Online Game"));
+            fireEvent.click(screen.getByText("Online Game Lobby"));
 
             fireEvent.click(await screen.findByText("Go Back"));
 
-            await screen.findByText("New Online Game");
+            await screen.findByText("Online Game Lobby");
         })
     })
 
@@ -151,7 +151,7 @@ describe("App", () => {
 
             render(<App gameClient={gameClient} onlineGameClient={onlineGameClient} />);
 
-            fireEvent.click(screen.getByText("New Online Game"));
+            fireEvent.click(screen.getByText("Online Game Lobby"));
             await waitFor(() => {
                 expect(document.querySelector("[data-game-over]")).not.toBeNull();
             });

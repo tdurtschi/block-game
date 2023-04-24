@@ -2,14 +2,15 @@
 
 # Product Backlog
 
+-   Online: Handle connection error & reconnect
+-   Online: Push game status updates
 -   Online: A player passes when their connection is closed (for x seconds)
 -   Observability
     -   See metrics on Azure usage
 -   Online: Handle an error when playing a move
 -   Online: A player can only move when its their turn
 -   Online: Join game automatically on Create
--   Online: Handle connection error & reconnect
--   Refactor Buttons to be UI-component instead of unique component per button
+-   Return piece to the side if clicked
 -   Client validation: shouldn't be able to register player before creating new game.
 -   Show if player has passed near score
 -   ^^ **Next Release!** ^^
