@@ -2,7 +2,7 @@
 
 This is a clone of a board game with a similar name.
 
-**MVP Is Live!** Check it out [Here](https://tdurtschi.com/block-game)
+**MVP Is Live!** Check it out [Here](https://tdurtschi.github.io/block-game/)
 
 ## Run in Dev Mode
 

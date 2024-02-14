@@ -35900,7 +35900,7 @@ To play a tile, click on it to pick it up, and place it on the gameboard.
 
   // src/server-remote/wsClient.ts
   var SockJS = require_entry();
-  var SERVER_URL = "https://tdurfschi-express-app.azurewebsites.net";
+  var SERVER_URL = "https://block-game-server.azurewebsites.net";
   console.log("SERVER_URL", SERVER_URL);
   var WSClient = class {
     constructor(prefix, onMessage) {
