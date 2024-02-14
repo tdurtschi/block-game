@@ -38,7 +38,3 @@ _Prerequisites: NodeJS, Docker, remote ftp directory to copy files to, deploymen
 ```bash
 npm run deploy
 ```
-
-## Product Backlog
-
-[Link](./backlog.md)

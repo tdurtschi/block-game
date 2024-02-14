@@ -1,0 +1,1 @@
+This folder serves the GitHub Pages site.
